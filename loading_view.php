@@ -53,11 +53,7 @@ $date=date("Y-m-d");
         </ol>
       </section>
 
-
-
-
       <!-- SELECT2 EXAMPLE -->
-
 
       <form action="loading_view.php" method="get">
         <center>
@@ -226,18 +222,19 @@ $date=date("Y-m-d");
 
                 <tbody>
 
-                  <?php $id=$_GET['id'];
-                  $result = $db->prepare("SELECT * FROM sales WHERE loading_id=:id AND action='1'  ORDER by transaction_id DESC");
+                  <?php $id=$_GET['id']; $data = array();
+                  $result = $db->prepare("SELECT * FROM sales_list WHERE loading_id=:id AND action='1'  GROUP BY  invoice_no DESC ");
                   $result->bindParam(':id', $id);
                   $result->execute();
-                  for($i=0; $row = $result->fetch(); $i++){
-                  $invo=$row['invoice_number'];?>
+                  for($i=0; $row = $result->fetch(); $i++){ 
+                    $code = $row['code'];
+                    ?>
 
                   <tr>
                     <td>
 
                       <?php
-                      $cus_id=$row['customer_id'];
+                      $cus_id=$row['cus_id'];
                       $cus_id_1=0;
                       $res1 = $db->prepare("SELECT * FROM special_price WHERE customer_id=:id  ");
                       $res1->bindParam(':id', $cus_id);
@@ -246,42 +243,90 @@ $date=date("Y-m-d");
                       
                       if($cus_id_1 >'0'){?><span style="font-size: 12px" class="label label-danger">special</span><?php } ?>
 
-                      <?php echo $row['transaction_id'];?>
+                      <?php echo $row['invoice_no'];?>
 
                     </td>
+
                     <td><?php echo $row['name'];?></td>
 
-                    <?php
-                    $ter=4;
-
-                    for($pro_id1 = 0; $pro_id1 < (int)$ter; $pro_id1++) {
-                      $pro_id=$pro_id1+1;
-                      $pro_id_e=$pro_id1+5;
-                    ?>
-
                     <td>
-                      <span class="pull-right badge bg-muted"><?php
+                      <?php if($code == '1001'){ ?>
 
-                      $res1 = $db->prepare("SELECT * FROM sales_list WHERE  invoice_no='$invo' and product_id='$pro_id_e' and action='0' ");
-                      $res1->bindParam(':id', $d1);
-                      $res1->execute();
-                      for($i=0; $ro1 = $res1->fetch(); $i++){
-                        echo $ro1['qty'];
-                      } ?>
+                      <span class="pull-right badge bg-muted">
+                        <?php  echo $row['qty'];  ?>
                       </span>
+
+                      <?php } ?>
                     </td>
 
                     <td>
-                      <span class="pull-right badge bg-yellow">
-                        <?php
+                      <?php if($code == '101'){ ?>
 
-                        $res1 = $db->prepare("SELECT * FROM sales_list WHERE  invoice_no='$invo' and product_id='$pro_id' and action='0' ");
-                        $res1->bindParam(':id', $d1);
-                        $res1->execute();
-                        for($i=0; $ro1 = $res1->fetch(); $i++){
-                          echo $ro1['qty'];
-                        } ?>
+                      <span class="pull-right badge bg-yellow">
+                        <?php  echo $row['qty'];  ?>
                       </span>
+
+                      <?php } ?>
+                    </td>
+
+                    <td>
+                      <?php if($code == '1002'){ ?>
+
+                      <span class="pull-right badge bg-muted">
+                        <?php  echo $row['qty'];  ?>
+                      </span>
+
+                      <?php } ?>
+                    </td>
+
+                    <td>
+                      <?php if($code == '102'){ ?>
+
+                      <span class="pull-right badge bg-yellow">
+                        <?php  echo $row['qty'];  ?>
+                      </span>
+
+                      <?php } ?>
+                    </td>
+
+                    <td>
+                      <?php if($code == '1003'){ ?>
+
+                      <span class="pull-right badge bg-muted">
+                        <?php  echo $row['qty'];  ?>
+                      </span>
+
+                      <?php } ?>
+                    </td>
+
+                    <td>
+                      <?php if($code == '103'){ ?>
+
+                      <span class="pull-right badge bg-yellow">
+                        <?php  echo $row['qty'];  ?>
+                      </span>
+
+                      <?php } ?>
+                    </td>
+
+                    <td>
+                      <?php if($code == '1004'){ ?>
+
+                      <span class="pull-right badge bg-muted">
+                        <?php  echo $row['qty'];  ?>
+                      </span>
+
+                      <?php } ?>
+                    </td>
+
+                    <td>
+                      <?php if($code == '104'){ ?>
+
+                      <span class="pull-right badge bg-yellow">
+                        <?php  echo $row['qty'];  ?>
+                      </span>
+
+                      <?php } ?>
                     </td>
 
                     <?php } ?>
@@ -304,18 +349,11 @@ $date=date("Y-m-d");
                       <span class="pull-right badge bg-muted">
                       <?php
 
-                      $res2 = $db->prepare("SELECT * FROM sales_list WHERE  invoice_no='$invo' and product_id='$pro_id' and action='0' ");
-
-                      $res2->bindParam(':id', $id);
-                      $res2->execute();
-                      for($i=0; $ro2 = $res2->fetch(); $i++){
-                        echo $ro2['qty'];
-                      } ?>
+                       ?>
                       </span>
                     </td>
 
                     <?php } ?>
-                  <?php 	}?>
                   </tr>
 
                 </tbody>
@@ -324,7 +362,7 @@ $date=date("Y-m-d");
                   <tr>
                     <td  colspan="2" >Total</td>
 
-                    <?php $invo="2520011210105934";
+                    <?php //$invo="2520011210105934";
                     $ter=4;
                     for($pro_id1 = 0; $pro_id1 < (int)$ter; $pro_id1++) {
                       $pro_id=$pro_id1+1;
@@ -382,7 +420,7 @@ $date=date("Y-m-d");
                         $result->execute();
                         for($i=0; $row = $result->fetch(); $i++){
                           echo $row['sum(qty)'];
-                        } ?>;
+                        } ?>
                       </span>
                     </td>
 
