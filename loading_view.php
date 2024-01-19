@@ -222,42 +222,48 @@ $date=date("Y-m-d");
 
                 <tbody>
 
-                  <?php $id=$_GET['id']; $sales_list = array();
-                  $result = $db->prepare("SELECT * FROM sales_list WHERE loading_id=:id AND action='1'  ");
+                  <?php $id=$_GET['id']; $sales_list = array(); 
+
+                  $result = $db->prepare("SELECT * FROM sales_list WHERE loading_id=:id AND action='1' ORDER BY product_id ");
                   $result->bindParam(':id', $id);
                   $result->execute();
                   for($i=0; $row = $result->fetch(); $i++){ 
-                    $invo = $row['invoice_no'];
-                    $code = $row['code'];
+
+                    $data = [$row['invoice_no'] ,$row['product_id'],$row['qty']];
+
+                    array_push($sales_list,$data);
+
+                  }
+
                     
-                    if($i ==0){array_push($sales_list,'<span style="font-size: 12px" class="label label-danger">special</span><br>'.$row['invoice_no']);}
+                    // if($i ==0){array_push($sales_list,'<span style="font-size: 12px" class="label label-danger">special</span><br>'.$row['invoice_no']);}
 
-                    if($i ==0){$cus_id=$row['cus_id'];
-                    $cus_id_1=0;
-                    $res1 = $db->prepare("SELECT * FROM special_price WHERE customer_id=:id  ");
-                    $res1->bindParam(':id', $cus_id);
-                    $res1->execute();
-                    for($i=0; $ro1 = $res1->fetch(); $i++){ $cus_id_1=$ro1['customer_id'];  }
+                    // if($i ==0){$cus_id=$row['cus_id'];
+                    // $cus_id_1=0;
+                    // $res1 = $db->prepare("SELECT * FROM special_price WHERE customer_id=:id  ");
+                    // $res1->bindParam(':id', $cus_id);
+                    // $res1->execute();
+                    // for($i=0; $ro1 = $res1->fetch(); $i++){ $cus_id_1=$ro1['customer_id'];  }
 
-                    if($cus_id_1 >'0'){array_push($sales_list,$row['cus_id']);}}
+                    // if($cus_id_1 >'0'){array_push($sales_list,$row['cus_id']);}}
 
-                    if($code == '1001'){array_push($sales_list,'<span class="pull-right badge bg-muted">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
+                    // if($code == '1001'){array_push($sales_list,'<span class="pull-right badge bg-muted">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
 
-                    if($code == '101'){array_push($sales_list,'<span class="pull-right badge bg-yellow">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
+                    // if($code == '101'){array_push($sales_list,'<span class="pull-right badge bg-yellow">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
 
-                    if($code == '1002'){array_push($sales_list,'<span class="pull-right badge bg-muted">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
+                    // if($code == '1002'){array_push($sales_list,'<span class="pull-right badge bg-muted">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
 
-                    if($code == '102'){array_push($sales_list,'<span class="pull-right badge bg-yellow">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
+                    // if($code == '102'){array_push($sales_list,'<span class="pull-right badge bg-yellow">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
 
-                    if($code == '1003'){array_push($sales_list,'<span class="pull-right badge bg-muted">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
+                    // if($code == '1003'){array_push($sales_list,'<span class="pull-right badge bg-muted">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
 
-                    if($code == '103'){array_push($sales_list,'<span class="pull-right badge bg-yellow">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
+                    // if($code == '103'){array_push($sales_list,'<span class="pull-right badge bg-yellow">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
 
-                    if($code == '1004'){array_push($sales_list,'<span class="pull-right badge bg-muted">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
+                    // if($code == '1004'){array_push($sales_list,'<span class="pull-right badge bg-muted">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
 
-                    if($code == '104'){array_push($sales_list,'<span class="pull-right badge bg-yellow">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
+                    // if($code == '104'){array_push($sales_list,'<span class="pull-right badge bg-yellow">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
 
-                  } print_r($sales_list)?>
+                  //} print_r($sales_list)?>
 
                   <tr>
 
@@ -267,10 +273,10 @@ $date=date("Y-m-d");
 
                     <?php }  ?>
 
+                    <?php for ($x = 0; $x < count($sales_list); $x++)  { ?>
+                    <?php //$invo = $sales_list[0];
 
-                    <?php 
-
-                    $result = $db->prepare("SELECT * FROM sales_list WHERE loading_id=:id AND product_id >'9' AND action='1' AND invoice_no = '$invo' ORDER BY product_id DESC ");
+                    $result = $db->prepare("SELECT * FROM sales_list WHERE loading_id=:id AND product_id >'9' AND action='1' AND invoice_no = '$sales_list[0]' ORDER BY product_id DESC ");
                     $result->bindParam(':id', $id);
                     $result->execute();
                     for($i=0; $row = $result->fetch(); $i++){  ?>
@@ -283,6 +289,7 @@ $date=date("Y-m-d");
                       </span>
                     </td>
 
+                    <?php } ?>
                     <?php } ?>
                   </tr>
 
