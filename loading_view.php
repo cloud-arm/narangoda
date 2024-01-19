@@ -222,133 +222,63 @@ $date=date("Y-m-d");
 
                 <tbody>
 
-                  <?php $id=$_GET['id']; $data = array();
-                  $result = $db->prepare("SELECT * FROM sales_list WHERE loading_id=:id AND action='1'  GROUP BY  invoice_no DESC ");
+                  <?php $id=$_GET['id']; $sales_list = array();
+                  $result = $db->prepare("SELECT * FROM sales_list WHERE loading_id=:id AND action='1'  ");
                   $result->bindParam(':id', $id);
                   $result->execute();
                   for($i=0; $row = $result->fetch(); $i++){ 
+                    $invo = $row['invoice_no'];
                     $code = $row['code'];
-                    ?>
+                    
+                    if($i ==0){array_push($sales_list,'<span style="font-size: 12px" class="label label-danger">special</span><br>'.$row['invoice_no']);}
+
+                    if($i ==0){$cus_id=$row['cus_id'];
+                    $cus_id_1=0;
+                    $res1 = $db->prepare("SELECT * FROM special_price WHERE customer_id=:id  ");
+                    $res1->bindParam(':id', $cus_id);
+                    $res1->execute();
+                    for($i=0; $ro1 = $res1->fetch(); $i++){ $cus_id_1=$ro1['customer_id'];  }
+
+                    if($cus_id_1 >'0'){array_push($sales_list,$row['cus_id']);}}
+
+                    if($code == '1001'){array_push($sales_list,'<span class="pull-right badge bg-muted">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
+
+                    if($code == '101'){array_push($sales_list,'<span class="pull-right badge bg-yellow">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
+
+                    if($code == '1002'){array_push($sales_list,'<span class="pull-right badge bg-muted">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
+
+                    if($code == '102'){array_push($sales_list,'<span class="pull-right badge bg-yellow">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
+
+                    if($code == '1003'){array_push($sales_list,'<span class="pull-right badge bg-muted">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
+
+                    if($code == '103'){array_push($sales_list,'<span class="pull-right badge bg-yellow">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
+
+                    if($code == '1004'){array_push($sales_list,'<span class="pull-right badge bg-muted">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
+
+                    if($code == '104'){array_push($sales_list,'<span class="pull-right badge bg-yellow">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
+
+                  } print_r($sales_list)?>
 
                   <tr>
-                    <td>
 
-                      <?php
-                      $cus_id=$row['cus_id'];
-                      $cus_id_1=0;
-                      $res1 = $db->prepare("SELECT * FROM special_price WHERE customer_id=:id  ");
-                      $res1->bindParam(':id', $cus_id);
-                      $res1->execute();
-                      for($i=0; $ro1 = $res1->fetch(); $i++){ $cus_id_1=$ro1['customer_id']; }
-                      
-                      if($cus_id_1 >'0'){?><span style="font-size: 12px" class="label label-danger">special</span><?php } ?>
+                    <?php for ($x = 0; $x < 10; $x++)  { ?>
 
-                      <?php echo $row['invoice_no'];?>
+                      <td> <?php echo ''; ?> </td>
 
-                    </td>
-
-                    <td><?php echo $row['name'];?></td>
-
-                    <td>
-                      <?php if($code == '1001'){ ?>
-
-                      <span class="pull-right badge bg-muted">
-                        <?php  echo $row['qty'];  ?>
-                      </span>
-
-                      <?php } ?>
-                    </td>
-
-                    <td>
-                      <?php if($code == '101'){ ?>
-
-                      <span class="pull-right badge bg-yellow">
-                        <?php  echo $row['qty'];  ?>
-                      </span>
-
-                      <?php } ?>
-                    </td>
-
-                    <td>
-                      <?php if($code == '1002'){ ?>
-
-                      <span class="pull-right badge bg-muted">
-                        <?php  echo $row['qty'];  ?>
-                      </span>
-
-                      <?php } ?>
-                    </td>
-
-                    <td>
-                      <?php if($code == '102'){ ?>
-
-                      <span class="pull-right badge bg-yellow">
-                        <?php  echo $row['qty'];  ?>
-                      </span>
-
-                      <?php } ?>
-                    </td>
-
-                    <td>
-                      <?php if($code == '1003'){ ?>
-
-                      <span class="pull-right badge bg-muted">
-                        <?php  echo $row['qty'];  ?>
-                      </span>
-
-                      <?php } ?>
-                    </td>
-
-                    <td>
-                      <?php if($code == '103'){ ?>
-
-                      <span class="pull-right badge bg-yellow">
-                        <?php  echo $row['qty'];  ?>
-                      </span>
-
-                      <?php } ?>
-                    </td>
-
-                    <td>
-                      <?php if($code == '1004'){ ?>
-
-                      <span class="pull-right badge bg-muted">
-                        <?php  echo $row['qty'];  ?>
-                      </span>
-
-                      <?php } ?>
-                    </td>
-
-                    <td>
-                      <?php if($code == '104'){ ?>
-
-                      <span class="pull-right badge bg-yellow">
-                        <?php  echo $row['qty'];  ?>
-                      </span>
-
-                      <?php } ?>
-                    </td>
-
-                    <?php } ?>
-
-                    <?php
-                    $res1 = $db->prepare("SELECT count(product_id) FROM products WHERE product_id >'9' ");
-                    $res1->bindParam(':id', $d1);
-                    $res1->execute();
-                    for($i=0; $ro1 = $res1->fetch(); $i++){ $ter1= $ro1['count(product_id)'];}
+                    <?php }  ?>
 
 
+                    <?php 
 
-                    $res1 = $db->prepare("SELECT * FROM products WHERE  product_id>='9' ORDER by product_id DESC");
-                    $res1->bindParam(':id', $d2);
-                    $res1->execute();
-                    for($i=0; $ro1 = $res1->fetch(); $i++){
-                      $pro_id=$ro1['product_id']; ?>
+                    $result = $db->prepare("SELECT * FROM sales_list WHERE loading_id=:id AND product_id >'9' AND action='1' AND invoice_no = '$invo' ORDER BY product_id DESC ");
+                    $result->bindParam(':id', $id);
+                    $result->execute();
+                    for($i=0; $row = $result->fetch(); $i++){  ?>
 
                     <td>
                       <span class="pull-right badge bg-muted">
                       <?php
-
+                          echo $row['qty'];
                        ?>
                       </span>
                     </td>
