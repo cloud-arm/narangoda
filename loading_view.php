@@ -188,7 +188,7 @@ $date=date("Y-m-d");
                     <th colspan="2" >2kg</th>
 
                     <?php
-                    $result = $db->prepare("SELECT * FROM products WHERE  type='accessory' ORDER by product_id ASC");
+                    $result = $db->prepare("SELECT * FROM products WHERE  type='accessory' ");
                     $result->bindParam(':id', $d2);
                     $result->execute();
                     for($i=0; $row = $result->fetch(); $i++){ ?>
@@ -209,11 +209,11 @@ $date=date("Y-m-d");
                     <th>R</th>
 
                     <?php  $qty=0;
-                    $result = $db->prepare("SELECT * FROM products WHERE  type='accessory' ORDER by product_id DESC");
+                    $result = $db->prepare("SELECT * FROM products WHERE  type='accessory' ORDER by list_order ");
                     $result->bindParam(':id', $d2);
                     $result->execute();
                     for($i=0; $row = $result->fetch(); $i++){ ?>
-                      <th><?php echo $row['gen_name']; ?></th>
+                      <th><?php echo $row['list_order']; ?></th>
                     <?php } ?>
 
                   <tr>
@@ -224,17 +224,18 @@ $date=date("Y-m-d");
 
                   <?php $id=$_GET['id']; $sales_list = array(); 
 
-                  $result = $db->prepare("SELECT * FROM sales_list WHERE loading_id=:id AND action='1' ORDER BY product_id ");
+                  $result = $db->prepare("SELECT * , sales_list.qty as qty2  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE sales_list.loading_id=:id  ORDER BY products.list_order ");
                   $result->bindParam(':id', $id);
                   $result->execute();
                   for($i=0; $row = $result->fetch(); $i++){ 
 
-                    $data = [$row['invoice_no'] ,$row['product_id'],$row['qty']];
+                    $data = [ $row['invoice_no'], $row['product_id'], $row['qty2'] ];
 
                     array_push($sales_list,$data);
 
                   }
 
+                  //echo json_encode($sales_list);
                     
                     // if($i ==0){array_push($sales_list,'<span style="font-size: 12px" class="label label-danger">special</span><br>'.$row['invoice_no']);}
 
@@ -265,33 +266,65 @@ $date=date("Y-m-d");
 
                   //} print_r($sales_list)?>
 
-                  <tr>
 
-                    <?php for ($x = 0; $x < 10; $x++)  { ?>
+                    <?php  $sales = array();  $product = array(); 
 
-                      <td> <?php echo ''; ?> </td>
-
-                    <?php }  ?>
-
-                    <?php for ($x = 0; $x < count($sales_list); $x++)  { ?>
-                    <?php //$invo = $sales_list[0];
-
-                    $result = $db->prepare("SELECT * FROM sales_list WHERE loading_id=:id AND product_id >'9' AND action='1' AND invoice_no = '$sales_list[0]' ORDER BY product_id DESC ");
+                    $result = $db->prepare("SELECT * FROM products  ORDER BY list_order  ");
                     $result->bindParam(':id', $id);
                     $result->execute();
-                    for($i=0; $row = $result->fetch(); $i++){  ?>
+                    for($i=0; $row = $result->fetch(); $i++){ array_push($product,$row['product_id']); }
 
-                    <td>
-                      <span class="pull-right badge bg-muted">
-                      <?php
-                          echo $row['qty'];
-                       ?>
-                      </span>
-                    </td>
+                    $result = $db->prepare("SELECT * FROM sales WHERE loading_id=:id  ");
+                    $result->bindParam(':id', $id);
+                    $result->execute();
+                    for($i=0; $row = $result->fetch(); $i++){ //row
+                      $invo = $row['invoice_number'];
+                      $cus = $row['customer_id'];
+                      $temp = array();
+                      array_push($temp,$invo);
+                      array_push($temp,$cus);
 
+                      foreach($sales_list as $list){ 
+
+                        if($list[0]==$invo){
+
+                          foreach($product as $p_id){ //colum
+
+                            if($p_id==$list[1]){
+
+                              array_push($temp,$list[2]);
+
+                            }else{
+
+                              array_push($temp,'');
+
+                            }
+
+                          } 
+
+                        }
+
+                      }
+
+                      array_push($sales,$temp);
+
+                     }
+                     
+                     echo json_encode($sales);
+                    ?>
+
+                     <?php foreach($sales as $list){ ?>
+
+                    <tr>
+                      <?php  foreach($list as $data){  ?>
+
+                      <td>  <?php echo $data; ?> </td>
+
+                      <?php } ?>
+
+                    </tr>
                     <?php } ?>
-                    <?php } ?>
-                  </tr>
+
 
                 </tbody>
 
