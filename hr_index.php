@@ -7,11 +7,11 @@ include("head.php");
 include("connect.php");
 ?>
 
-<body class="hold-transition skin-yellow sidebar-mini">
+<body class="hold-transition skin-green sidebar-mini">
 <?php
 include_once("auth.php");
 $r=$_SESSION['SESS_LAST_NAME'];
-$_SESSION['SESS_DEPARTMENT'] = 'logistic';
+$_SESSION['SESS_DEPARTMENT'] = 'hr';
 
 if($r =='lorry'){
 
