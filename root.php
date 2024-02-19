@@ -5,10 +5,11 @@ include("head.php");
 include("connect.php");
 ?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-yellow sidebar-mini">
   <?php
   include_once("auth.php");
   $r = $_SESSION['SESS_LAST_NAME'];
+  $_SESSION['SESS_FORM'] = 'root.php';
 
   if ($r == 'Cashier') {
 
@@ -52,11 +53,6 @@ include("connect.php");
         Root
         <small>Preview</small>
       </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">Forms</a></li>
-        <li class="active">Root</li>
-      </ol>
     </section>
 
     <section class="content">
