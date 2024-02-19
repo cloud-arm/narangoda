@@ -22,17 +22,8 @@
 
       $date =  date("Y-m-d");
       $dep = $_SESSION['SESS_DEPARTMENT'];
+      $f = $_SESSION['SESS_FORM'];
       ?>
-
-      <style>
-        .navbar-menu {
-          color: white;
-          display: inline-flex;
-          float: left;
-          height: 50px;
-          align-items: center;
-        }
-      </style>
       <div class="navbar-menu">
         <ul class="nav navbar-nav">
           <li class="<?php if ($dep == 'logistic') {
@@ -70,7 +61,6 @@
           }
 
           ?>
-
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -118,6 +108,19 @@
           </li>
         </ul>
       </div>
+
+      <div class="navbar-search">
+        <!-- search form -->
+        <form action="#" method="get" class="sidebar-form">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Search...">
+            <span class="input-group-btn">
+              <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+              </button>
+            </span>
+          </div>
+        </form>
+      </div>
     </nav>
   </header>
 
@@ -127,39 +130,29 @@
   <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
-      <!-- Sidebar user panel -->
-      <div class="user-panel">
-        <div class="pull-left image">
-          <img src="<?php echo $upic1; ?>" class="img-circle" alt="User Image">
-        </div>
-        <div class="pull-left info">
-          <p><?php echo $_SESSION['SESS_FIRST_NAME']; ?></p>
-          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-        </div>
-      </div>
-      <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search...">
-          <span class="input-group-btn">
-            <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-            </button>
-          </span>
-        </div>
-      </form>
-      <!-- /.search form -->
+
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
         <li class="header">MAIN NAVIGATION</li>
+
+
+        <!-- -------------------- Logistic Section ----------------------- -->
         <?php if ($dep == 'logistic') { ?>
 
-          <li>
+          <li class="<?php if ($f == 'index.php') {
+                        echo 'active';
+                      } ?>">
             <a href="index.php">
               <i class="fa fa-dashboard"></i> <span>Dashboard</span>
             </a>
           </li>
 
-          <li class="treeview">
+          <?php $co = '';
+          if ($f == 'loading' || $f == 'loading_view' || $f == 'lorry_sales_view') {
+            $co = 'active';
+          } ?>
+
+          <li class="treeview <?php echo $co; ?>">
             <a href="#">
               <i class="fa fa-truck"></i>
               <span>Loading</span>
@@ -169,16 +162,80 @@
             </a>
 
             <ul class="treeview-menu">
-              <li><a href="loading.php"><i class="fa fa-circle-o text-aqua "></i> New Loading</a></li>
-              <li><a rel="facebox" href="emty_loading.php"><i class="fa fa-circle-o text-aqua "></i> Empty cylinder Loading</a></li>
+              <li class="<?php if ($f == 'loading') {
+                            echo 'active';
+                          } ?>"><a href="loading.php"><i class="fa fa-circle-o text-aqua "></i> New Loading</a></li>
+              <li><a rel="facebox" href="emty_loading.php"><i class="fa fa-circle-o text-aqua "></i> Empty Loading</a></li>
               <li><a rel="facebox" href="unloading.php"><i class="fa fa-circle-o text-aqua "></i> Unloading</a></li>
-              <li><a href="loading_view.php?d1=<?php echo $date; ?>&lorry=0"><i class="fa fa-circle-o text-aqua "></i> View Loading</a></li>
-              <li><a href="lorry_sales_view.php?d1=<?php echo $date; ?>&lorry=0"><i class="fa fa-circle-o text-aqua "></i> View Lorry Sales</a></li>
+              <li class="<?php if ($f == 'loading_view') {
+                            echo 'active';
+                          } ?>"><a href="loading_view.php?d1=<?php echo $date; ?>&lorry=0"><i class="fa fa-circle-o text-aqua "></i> View Loading</a></li>
+              <li class="<?php if ($f == 'lorry_sales_view') {
+                            echo 'active';
+                          } ?>"><a href="lorry_sales_view.php?d1=<?php echo $date; ?>&lorry=0"><i class="fa fa-circle-o text-aqua "></i> View Lorry Sales</a></li>
               </a>
             </ul>
           </li>
 
+          <?php $co = '';
+          $co0 = '';
+          $dis = 'none';
+          if ($f == 'grn' || $f == 'grn_supply' || $f == 'grn_payment' || $f == 'grn_return' || $f == 'grn_order' || $f == 'grn_rp' || $f == 'grn_payment_rp' || $f == 'grn_return_rp' || $f == 'grn_order_rp') {
+            $co = 'active';
+            $co0 = 'menu-open';
+            $dis = 'block';
+          } ?>
 
+          <li class="treeview <?php echo $co; ?>">
+            <a href="#"><i class="fa fa-cubes"></i><span>Purchases</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
+              <li class="<?php if ($f == 'grn') {
+                            echo 'active';
+                          } ?>"><a href="grn.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> GRN</a></li>
+              <li class="<?php if ($f == 'grn_supply') {
+                            echo 'active';
+                          } ?>"><a href="grn_supply.php?id=0"><i class="fa fa-circle-o text-aqua"></i> Suppliers</a></li>
+              <li class="<?php if ($f == 'grn_payment') {
+                            echo 'active';
+                          } ?>"><a href="grn_payment.php"><i class="fa fa-circle-o text-aqua"></i> Payment</a></li>
+              <li class="<?php if ($f == 'grn_return') {
+                            echo 'active';
+                          } ?>"><a href="grn_return.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> GRN Return</a></li>
+              <li class="<?php if ($f == 'grn_order') {
+                            echo 'active';
+                          } ?>"><a href="grn_order.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> Purchase Order</a></li>
+
+              <?php $co = '';
+              if ($f == 'grn_rp' || $f == 'grn_payment_rp' || $f == 'grn_return_rp' || $f == 'grn_order_rp') {
+                $co = 'active';
+              } ?>
+              <li class="treeview <?php echo $co; ?>">
+                <a href="#">
+                  <i class="fa fa-line-chart"></i>
+                  <span>Report</span>
+                  <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                  <li class="<?php if ($f == 'grn_rp') {
+                                echo 'active';
+                              } ?>"><a href="grn_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> GRN Record</a></li>
+                  <li class="<?php if ($f == 'grn_payment_rp') {
+                                echo 'active';
+                              } ?>"><a href="grn_payment_rp.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>"><i class="fa fa-circle-o text-red"></i> Payment Record</a></li>
+                  <li class="<?php if ($f == 'grn_return_rp') {
+                                echo 'active';
+                              } ?>"><a href="grn_return_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Return Record</a></li>
+                  <li class="<?php if ($f == 'grn_order_rp') {
+                                echo 'active';
+                              } ?>"><a href="grn_order_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Order Record</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
 
 
         <?php } ?>
@@ -186,6 +243,7 @@
 
 
 
+        <!-- -------------------- HR Section ----------------------- -->
 
         <?php if ($dep == 'hr') { ?>
 
@@ -238,37 +296,57 @@
             </ul>
           </li>
 
-          <li class="treeview">
-            <a href="#">
-              <i class="fa fa-exchange"></i>
-              <span>Purchases</span>
+          <?php $co = '';
+          $co0 = '';
+          $dis = 'none';
+          if ($f == 'acc_transfer' || $f == 'acc_bank_transfer' || $f == 'bank_loan' || $f == 'acc_chq_realizing' || $f == 'acc_regeneration' || $f == 'acc_bank_regeneration') {
+            $co = 'active';
+            $co0 = 'menu-open';
+            $dis = 'block';
+          } ?>
+
+          <li class="treeview <?php echo $co; ?>">
+            <a href="#"><i class="fa fa-pie-chart"></i><span>Accounting</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
             </a>
+            <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
+              <li class="<?php if ($f == 'acc_transfer') {
+                            echo 'active';
+                          } ?>"><a href="acc_transfer.php"><i class="fa fa-circle-o text-yellow"></i> Account Transfer</a></li>
+              <li class="<?php if ($f == 'acc_bank_transfer') {
+                            echo 'active';
+                          } ?>"><a href="acc_bank_transfer.php"><i class="fa fa-circle-o text-yellow"></i> Bank Transfer</a>
+              </li>
+              <!-- <li class="<?php if ($f == 'bank_loan') {
+                                echo 'active';
+                              } ?>"><a href="bank_loan.php"><i class="fa fa-circle-o text-yellow"></i> Bank Loan</a>
+                    </li> -->
+              <li class="<?php if ($f == 'acc_chq_realizing') {
+                            echo 'active';
+                          } ?>"><a href="acc_chq_realizing.php"><i class="fa fa-circle-o text-yellow"></i> Chq Realizing</a>
+              </li>
 
-            <ul class="treeview-menu">
-
-              <li><a href="purchase.php"><i class="fa fa-circle-o text-aqua "></i> Add Purchases</a></li>
-              <li><a rel="facebox" href="distributor_lorry_pur.php"><i class="fa fa-circle-o text-aqua "></i> Distributor Lorry Purchases</a></li>
-              <li><a href="purchase_view.php?d1=<?php echo $date; ?>&d2=<?php echo $date; ?>"><i class="fa fa-circle-o text-aqua "></i> View Purchase</a></li>
-
-            </ul>
-          </li>
-
-          <li class="treeview">
-            <a href="#">
-              <i class="fa fa-bank"></i>
-              <span>Bank</span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
-            </a>
-            <ul class="treeview-menu">
-              <li><a href="deposit.php"><i class="fa fa-circle-o text-aqua "></i>Deposit</a></li>
-              <li><a href="withdraw.php"><i class="fa fa-circle-o text-red "></i>Withdraw </a></li>
-              <li><a href="chq_return.php"><i class="fa fa-circle-o text-red "></i>CHQ Return </a></li>
-              <li><a href="chq_action.php"><i class="fa fa-circle-o text-red "></i>CHQ Realiz </a></li>
+              <?php $co = '';
+              if ($f == 'acc_regeneration' || $f == 'acc_bank_regeneration') {
+                $co = 'active';
+              } ?>
+              <li class="treeview <?php echo $co; ?>">
+                <a href="#">
+                  <i class="fa fa-line-chart"></i>
+                  <span>Report</span>
+                  <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                  <li class="<?php if ($f == 'acc_regeneration') {
+                                echo 'active';
+                              } ?>"><a href="acc_regeneration.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>&account=1"><i class="fa fa-circle-o text-aqua"></i> Transfer Recode</a></li>
+                  <li class="<?php if ($f == 'acc_bank_regeneration') {
+                                echo 'active';
+                              } ?>"><a href="acc_bank_regeneration.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>&bank=1"><i class="fa fa-circle-o text-aqua"></i> Bank Reconciliation</a></li>
+                </ul>
+              </li>
             </ul>
           </li>
 
@@ -313,21 +391,64 @@
             </ul>
           </li>
 
-          <li class="treeview">
-            <a href="#">
-              <i class="fa fa-exchange"></i>
-              <span>Purchases</span>
+
+          <?php $co = '';
+          $co0 = '';
+          $dis = 'none';
+          if ($f == 'grn' || $f == 'grn_supply' || $f == 'grn_payment' || $f == 'grn_return' || $f == 'grn_order' || $f == 'grn_rp' || $f == 'grn_payment_rp' || $f == 'grn_return_rp' || $f == 'grn_order_rp') {
+            $co = 'active';
+            $co0 = 'menu-open';
+            $dis = 'block';
+          } ?>
+
+          <li class="treeview <?php echo $co; ?>">
+            <a href="#"><i class="fa fa-cubes"></i><span>Purchases</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
             </a>
+            <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
+              <li class="<?php if ($f == 'grn') {
+                            echo 'active';
+                          } ?>"><a href="grn.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> GRN</a></li>
+              <li class="<?php if ($f == 'grn_supply') {
+                            echo 'active';
+                          } ?>"><a href="grn_supply.php?id=0"><i class="fa fa-circle-o text-aqua"></i> Suppliers</a></li>
+              <li class="<?php if ($f == 'grn_payment') {
+                            echo 'active';
+                          } ?>"><a href="grn_payment.php"><i class="fa fa-circle-o text-aqua"></i> Payment</a></li>
+              <li class="<?php if ($f == 'grn_return') {
+                            echo 'active';
+                          } ?>"><a href="grn_return.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> GRN Return</a></li>
+              <li class="<?php if ($f == 'grn_order') {
+                            echo 'active';
+                          } ?>"><a href="grn_order.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> Purchase Order</a></li>
 
-            <ul class="treeview-menu">
-
-              <li><a href="purchase.php"><i class="fa fa-circle-o text-aqua "></i> Add Purchases</a></li>
-              <li><a rel="facebox" href="distributor_lorry_pur.php"><i class="fa fa-circle-o text-aqua "></i> Distributor Lorry Purchases</a></li>
-              <li><a href="purchase_view.php?d1=<?php echo $date; ?>&d2=<?php echo $date; ?>"><i class="fa fa-circle-o text-aqua "></i> View Purchase</a></li>
-              </a>
+              <?php $co = '';
+              if ($f == 'grn_rp' || $f == 'grn_payment_rp' || $f == 'grn_return_rp' || $f == 'grn_order_rp') {
+                $co = 'active';
+              } ?>
+              <li class="treeview <?php echo $co; ?>">
+                <a href="#">
+                  <i class="fa fa-line-chart"></i>
+                  <span>Report</span>
+                  <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                  <li class="<?php if ($f == 'grn_rp') {
+                                echo 'active';
+                              } ?>"><a href="grn_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> GRN Record</a></li>
+                  <li class="<?php if ($f == 'grn_payment_rp') {
+                                echo 'active';
+                              } ?>"><a href="grn_payment_rp.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>"><i class="fa fa-circle-o text-red"></i> Payment Record</a></li>
+                  <li class="<?php if ($f == 'grn_return_rp') {
+                                echo 'active';
+                              } ?>"><a href="grn_return_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Return Record</a></li>
+                  <li class="<?php if ($f == 'grn_order_rp') {
+                                echo 'active';
+                              } ?>"><a href="grn_order_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Order Record</a></li>
+                </ul>
+              </li>
             </ul>
           </li>
 
@@ -344,6 +465,28 @@
               <li><a href="withdraw.php"><i class="fa fa-circle-o text-red "></i>Withdraw </a></li>
               <li><a href="chq_return.php"><i class="fa fa-circle-o text-red "></i>CHQ Return </a></li>
               <li><a href="chq_action.php"><i class="fa fa-circle-o text-red "></i>CHQ Realiz </a></li>
+            </ul>
+          </li>
+
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-group"></i>
+              <span>Profile</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+
+
+
+            <ul class="treeview-menu">
+
+              <li><a href="customer.php"><i class="fa fa-circle-o text-aqua "></i> Customer</a></li>
+              <li><a href="product.php"><i class="fa fa-circle-o text-aqua "></i> Product</a></li>
+              <li><a href="rep.php"><i class="fa fa-circle-o text-aqua "></i> Rep</a></li>
+              <li><a href="lorry.php"><i class="fa fa-circle-o text-aqua "></i>Lorry </a></li>
+              <li><a href="root.php"><i class="fa fa-circle-o text-aqua "></i>Root</a></li>
+              </a>
             </ul>
           </li>
 
