@@ -60,6 +60,12 @@ include("connect.php");
 
         .container-up .box {
             padding: 7px 15px;
+            width: max-content;
+            min-width: 500px;
+        }
+
+        .select2-container {
+            width: 100% !important;
         }
     </style>
 
@@ -151,46 +157,44 @@ include("connect.php");
 
     <div class="container-up d-none" id="container_up">
         <div class="container-close" onclick="click_cl()"></div>
-        <div class="row">
-            <div class="col-md-12">
 
-                <div class="box box-success popup d-none" id="popup_1">
-                    <div class="box-header with-border">
-                        <h3 class="box-title w-100">New Customer <i onclick="click_cl()" class="btn p-0 me-2  pull-right fa fa-remove" style="font-size: 25px;"></i></h3>
-                    </div>
+        <div class="box box-success popup d-none" id="popup_1">
+            <div class="box-header with-border">
+                <h3 class="box-title w-100">New Customer <i onclick="click_cl()" class="btn p-0 me-2  pull-right fa fa-remove" style="font-size: 25px;"></i></h3>
+            </div>
 
-                    <div class="box-body">
-                        <form method="POST" action="root_customer_save.php" class="w-100">
-                            <div class="row" style="display: flex; align-items: end;">
-                                <div class="col-md-9">
-                                    <div class="form-group">
-                                        <label>Customer</label>
-                                        <select class="form-control select2" name="id" style="padding:4px;">
-                                            <?php
-                                            include("connect.php");
-                                            $result = $db->prepare("SELECT * FROM customer  ");
-                                            $result->bindParam(':userid', $res);
-                                            $result->execute();
-                                            for ($i = 0; $row = $result->fetch(); $i++) {
-                                            ?>
-                                                <option value="<?php echo $row['customer_id']; ?>"><?php echo $row['customer_name']; ?> </option>
-                                            <?php } ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <input class="btn btn-info" type="submit" value="Add">
-                                        <input type="hidden" name="root" value="<?php echo $_GET['id']; ?>">
-                                    </div>
-                                </div>
+            <div class="box-body">
+                <form method="POST" action="root_customer_save.php" class="w-100">
+                    <div class="row">
+
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label>Customer</label>
+                                <select class="form-control select2 w-100" name="id">
+                                    <?php
+                                    $result = $db->prepare("SELECT * FROM customer  ");
+                                    $result->bindParam(':userid', $res);
+                                    $result->execute();
+                                    for ($i = 0; $row = $result->fetch(); $i++) {
+                                    ?>
+                                        <option value="<?php echo $row['customer_id']; ?>"><?php echo $row['customer_name']; ?> </option>
+                                    <?php } ?>
+                                </select>
                             </div>
-                        </form>
-                    </div>
-                </div>
+                        </div>
 
+                        <div class="col-md-3" style="height: 75px;display: flex;align-items: end;justify-content: center;">
+                            <div class="form-group">
+                                <input class="btn btn-info" type="submit" value="Add">
+                                <input type="hidden" name="root" value="<?php echo $_GET['id']; ?>">
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
             </div>
         </div>
+
     </div>
 
     </div>
@@ -200,6 +204,8 @@ include("connect.php");
     <script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
     <!-- Bootstrap 3.3.6 -->
     <script src="../../bootstrap/js/bootstrap.min.js"></script>
+    <!-- Select2 -->
+    <script src="../../plugins/select2/select2.full.min.js"></script>
     <!-- DataTables -->
     <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="../../plugins/datatables/dataTables.bootstrap.min.js"></script>
@@ -227,6 +233,9 @@ include("connect.php");
             $("#container_up").addClass("d-none");
         }
         $(function() {
+            //Initialize Select2 Elements
+            $(".select2").select2();
+
             $("#example1").DataTable({
                 "language": {
                     "paginate": {
