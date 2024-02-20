@@ -5,7 +5,7 @@ include("head.php");
 include("connect.php");
 ?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-yellow sidebar-mini">
     <?php
     include_once("auth.php");
     $r = $_SESSION['SESS_LAST_NAME'];
@@ -21,8 +21,45 @@ include("connect.php");
     ?>
 
     <style>
-        .popup .content {
-            min-height: unset;
+        .d-none {
+            display: none !important;
+        }
+
+        .mx-2 {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        .w-100 {
+            width: 100%;
+        }
+
+        .fa-remove {
+            font-size: 20px !important;
+            padding: 0;
+        }
+
+        .container-up {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            background-color: rgb(0, 0, 0, 0.3);
+        }
+
+        .container-up .container-close {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .container-up .box {
+            padding: 7px 15px;
         }
     </style>
 
@@ -50,10 +87,12 @@ include("connect.php");
 
             <div class="box box-success">
                 <div class="box-header">
-                    <h3 class="box-title">Root Customer</h3>
-                    <a rel="facebox" href="root_customer_add.php?id=<?php echo $_GET['id']; ?>">
-                        <button class="btn btn-info">Add Customer</button>
-                    </a>
+                    <h3 class="box-title">
+                        Root Customer
+
+                        <small class="btn btn-info mx-2" style="padding: 5px 10px;" title="Add Customer" onclick="click_new('1')">Add Customer</small>
+                    </h3>
+
                 </div>
                 <!-- /.box-header -->
 
@@ -109,6 +148,51 @@ include("connect.php");
     <!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
+
+    <div class="container-up d-none" id="container_up">
+        <div class="container-close" onclick="click_cl()"></div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="box box-success popup d-none" id="popup_1">
+                    <div class="box-header with-border">
+                        <h3 class="box-title w-100">New Customer <i onclick="click_cl()" class="btn p-0 me-2  pull-right fa fa-remove" style="font-size: 25px;"></i></h3>
+                    </div>
+
+                    <div class="box-body">
+                        <form method="POST" action="root_customer_save.php" class="w-100">
+                            <div class="row" style="display: flex; align-items: end;">
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <label>Customer</label>
+                                        <select class="form-control select2" name="id" style="padding:4px;">
+                                            <?php
+                                            include("connect.php");
+                                            $result = $db->prepare("SELECT * FROM customer  ");
+                                            $result->bindParam(':userid', $res);
+                                            $result->execute();
+                                            for ($i = 0; $row = $result->fetch(); $i++) {
+                                            ?>
+                                                <option value="<?php echo $row['customer_id']; ?>"><?php echo $row['customer_name']; ?> </option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <input class="btn btn-info" type="submit" value="Add">
+                                        <input type="hidden" name="root" value="<?php echo $_GET['id']; ?>">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     </div>
     <!-- ./wrapper -->
     <script src="js/jquery.js"></script>
@@ -129,6 +213,19 @@ include("connect.php");
     <script src="../../dist/js/demo.js"></script>
     <!-- page script -->
     <script>
+        function click_new(i) {
+            if (i == '1') {
+                $("#popup_" + i).removeClass("d-none");
+            } else {
+                $("#popup_" + i).addClass("d-none");
+            }
+
+            $("#container_up").removeClass("d-none");
+        }
+
+        function click_cl() {
+            $("#container_up").addClass("d-none");
+        }
         $(function() {
             $("#example1").DataTable({
                 "language": {
