@@ -9,6 +9,7 @@ include("connect.php");
     <?php
     include_once("auth.php");
     $r = $_SESSION['SESS_LAST_NAME'];
+    $_SESSION['SESS_FORM'] = 'root';
 
     if ($r == 'Cashier') {
 

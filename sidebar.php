@@ -44,7 +44,7 @@
           <li class="<?php if ($dep == 'management') {
                         echo 'open';
                       } ?>">
-            <a href="#manage_index.php">Management</a>
+            <a href="manage_index.php">Management</a>
           </li>
         </ul>
       </div>
@@ -372,7 +372,7 @@
 
         <?php if ($dep == 'management') { ?>
           <li>
-            <a href="#manage_index.php">
+            <a href="manage_index.php">
               <i class="fa fa-dashboard"></i> <span>Dashboard</span>
             </a>
           </li>
@@ -468,7 +468,16 @@
             </ul>
           </li>
 
-          <li class="treeview">
+          <?php $co = '';
+          $co0 = '';
+          $dis = 'none';
+          if ($f == 'customer' || $f == 'product' || $f == 'rep' || $f == 'lorry' || $f == 'root' ) {
+            $co = 'active';
+            $co0 = 'menu-open';
+            $dis = 'block';
+          } ?>
+
+          <li class="treeview <?php echo $co; ?>">
             <a href="#">
               <i class="fa fa-group"></i>
               <span>Profile</span>
@@ -477,15 +486,14 @@
               </span>
             </a>
 
-
-
-            <ul class="treeview-menu">
-
+            <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
               <li><a href="customer.php"><i class="fa fa-circle-o text-aqua "></i> Customer</a></li>
               <li><a href="product.php"><i class="fa fa-circle-o text-aqua "></i> Product</a></li>
               <li><a href="rep.php"><i class="fa fa-circle-o text-aqua "></i> Rep</a></li>
               <li><a href="lorry.php"><i class="fa fa-circle-o text-aqua "></i>Lorry </a></li>
-              <li><a href="root.php"><i class="fa fa-circle-o text-aqua "></i>Root</a></li>
+              <li class="<?php if ($f == 'root') {
+                            echo 'active';
+                          } ?>"><a href="root.php"><i class="fa fa-circle-o text-aqua "></i>Root</a></li>
               </a>
             </ul>
           </li>
