@@ -1,9 +1,10 @@
 <html class="no-js">
+
 <head>
 
   <link rel="stylesheet" href="css/normalize.css">
-  	<link rel="stylesheet" href="css/main.css">
-  	<script src="js/vendor/modernizr-2.6.2.min.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+  <script src="js/vendor/modernizr-2.6.2.min.js"></script>
 
 
 
@@ -19,8 +20,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
   <!-- Ionicons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- Morris charts -->
-    <link rel="stylesheet" href="../../plugins/morris/morris.css">
+  <!-- Morris charts -->
+  <link rel="stylesheet" href="../../plugins/morris/morris.css">
   <!-- daterange picker -->
   <link rel="stylesheet" href="../../plugins/daterangepicker/daterangepicker.css">
   <!-- bootstrap datepicker -->
@@ -35,7 +36,8 @@
   <link rel="stylesheet" href="../../plugins/select2/select2.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
-  <link rel="stylesheet" href="../../dist/css/AdminLTENew.css">
+  <!-- <link rel="stylesheet" href="../../dist/css/AdminLTENew.css"> -->
+  <link rel="stylesheet" href="https://dev.colorbiz.org/ashen/cdn/main/dist/css/AdminLTENew.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
@@ -51,17 +53,17 @@
 
 
 
-<link href="src/facebox.css" media="screen" rel="stylesheet" type="text/css" />
-<script src="lib/jquery.js" type="text/javascript"></script>
-<script src="src/facebox.js" type="text/javascript"></script>
-<script type="text/javascript">
-  jQuery(document).ready(function($) {
-    $('a[rel*=facebox]').facebox({
-      loadingImage : 'src/loading.gif',
+  <link href="src/facebox.css" media="screen" rel="stylesheet" type="text/css" />
+  <script src="lib/jquery.js" type="text/javascript"></script>
+  <script src="src/facebox.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    jQuery(document).ready(function($) {
+      $('a[rel*=facebox]').facebox({
+        loadingImage: 'src/loading.gif',
 
+      })
     })
-  })
-</script>
+  </script>
 
 
 
