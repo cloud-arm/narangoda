@@ -50,7 +50,7 @@ for ($i = 0; $row = $result->fetch(); $i++) {
     $sn = $row['supplier_name'];
 }
 
-$result = $db->prepare("SELECT * FROM bank WHERE id=:id ");
+$result = $db->prepare("SELECT * FROM bank_balance WHERE id=:id ");
 $result->bindParam(':id', $bank);
 $result->execute();
 for ($i = 0; $row = $result->fetch(); $i++) {

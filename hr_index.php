@@ -7,7 +7,7 @@ include("head.php");
 include("connect.php");
 ?>
 
-<body class="hold-transition skin-green sidebar-mini">
+<body class="hold-transition skin-yellow sidebar-mini">
 <?php
 include_once("auth.php");
 $r=$_SESSION['SESS_LAST_NAME'];
@@ -498,6 +498,8 @@ include_once("sidebar.php");
 <script src="../../dist/js/app.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="../../dist/js/demo.js"></script>
+    <!-- Dark Theme Btn-->
+    <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
 <!-- page script -->
 
 <script>

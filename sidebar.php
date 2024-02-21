@@ -113,9 +113,9 @@
         <!-- search form -->
         <form action="#" method="get" class="sidebar-form">
           <div class="input-group">
-            <input type="text" name="q" class="form-control" placeholder="Search...">
+            <input type="text" name="" id="search-txt" class="form-control" placeholder="Search...">
             <span class="input-group-btn">
-              <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+              <button type="submit" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
               </button>
             </span>
           </div>
@@ -299,7 +299,7 @@
           <?php $co = '';
           $co0 = '';
           $dis = 'none';
-          if ($f == 'acc_transfer' || $f == 'acc_bank_transfer' || $f == 'bank_loan' || $f == 'acc_chq_realizing' || $f == 'acc_regeneration' || $f == 'acc_bank_regeneration') {
+          if ($f == 'acc_transfer' || $f == 'acc_bank_transfer' || $f == 'acc_bank_loan' || $f == 'acc_chq_realizing' || $f == 'acc_regeneration' || $f == 'acc_bank_regeneration') {
             $co = 'active';
             $co0 = 'menu-open';
             $dis = 'block';
@@ -314,18 +314,18 @@
             <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
               <li class="<?php if ($f == 'acc_transfer') {
                             echo 'active';
-                          } ?>"><a href="acc_transfer.php"><i class="fa fa-circle-o text-yellow"></i> Account Transfer</a></li>
+                          } ?>"><a href="acc_transfer.php"><i class="fa fa-circle-o text-aqua"></i> Account Transfer</a></li>
               <li class="<?php if ($f == 'acc_bank_transfer') {
                             echo 'active';
-                          } ?>"><a href="acc_bank_transfer.php"><i class="fa fa-circle-o text-yellow"></i> Bank Transfer</a>
+                          } ?>"><a href="acc_bank_transfer.php"><i class="fa fa-circle-o text-aqua"></i> Bank Transfer</a>
               </li>
-              <!-- <li class="<?php if ($f == 'bank_loan') {
-                                echo 'active';
-                              } ?>"><a href="bank_loan.php"><i class="fa fa-circle-o text-yellow"></i> Bank Loan</a>
-                    </li> -->
+              <li class="<?php if ($f == 'acc_bank_loan') {
+                            echo 'active';
+                          } ?>"><a href="acc_bank_loan.php"><i class="fa fa-circle-o text-aqua"></i> Bank Loan</a>
+              </li>
               <li class="<?php if ($f == 'acc_chq_realizing') {
                             echo 'active';
-                          } ?>"><a href="acc_chq_realizing.php"><i class="fa fa-circle-o text-yellow"></i> Chq Realizing</a>
+                          } ?>"><a href="acc_chq_realizing.php"><i class="fa fa-circle-o text-aqua"></i> Chq Realizing</a>
               </li>
 
               <?php $co = '';
@@ -341,10 +341,10 @@
                 <ul class="treeview-menu">
                   <li class="<?php if ($f == 'acc_regeneration') {
                                 echo 'active';
-                              } ?>"><a href="acc_regeneration.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>&account=1"><i class="fa fa-circle-o text-aqua"></i> Transfer Recode</a></li>
+                              } ?>"><a href="acc_regeneration.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>&account=1"><i class="fa fa-circle-o text-red"></i> Transfer Recode</a></li>
                   <li class="<?php if ($f == 'acc_bank_regeneration') {
                                 echo 'active';
-                              } ?>"><a href="acc_bank_regeneration.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>&bank=1"><i class="fa fa-circle-o text-aqua"></i> Bank Reconciliation</a></li>
+                              } ?>"><a href="acc_bank_regeneration.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>&bank=1"><i class="fa fa-circle-o text-red"></i> Bank Reconciliation</a></li>
                 </ul>
               </li>
             </ul>
