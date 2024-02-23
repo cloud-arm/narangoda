@@ -11,7 +11,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 
 
-
+$result_array[]='';
 
 $result = $db->prepare("SELECT * FROM products ");
 $result->bindParam(':userid', $res);
