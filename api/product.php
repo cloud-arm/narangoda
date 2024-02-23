@@ -11,19 +11,16 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 
 
-$result_array[]='';
-
 $result = $db->prepare("SELECT * FROM products ");
 $result->bindParam(':userid', $res);
 $result->execute();
-for($i=0; $row = $result->fetch(); $i++){ 
+for($i=0; $row = $result->fetch(); $i++){
     $result_array[] = array (
         "id" => $row['product_id'],
         "name" => $row['gen_name'],
         "price" =>$row['price'],
-        'qty' =>$row['qty']
-);
- }
+        'qty' =>$row['qty']);
+    }
  
 
 
