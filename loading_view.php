@@ -204,12 +204,12 @@ include("connect.php");
                 <th>N</th>
                 <th>R</th>
 
-                <?php $qty = 0;
-                $result = $db->prepare("SELECT * FROM products WHERE  type='accessory' ORDER by list_order ");
-                $result->bindParam(':id', $d2);
+                <?php
+                $result = $db->prepare("SELECT *  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE sales_list.loading_id=:id AND products.type='accessory' GROUP BY products.product_id ");
+                $result->bindParam(':id', $id);
                 $result->execute();
                 for ($i = 0; $row = $result->fetch(); $i++) { ?>
-                  <th><?php echo $row['list_order']; ?></th>
+                  <th><?php echo $row['product_id']; ?></th>
                 <?php } ?>
 
               <tr>
@@ -226,48 +226,17 @@ include("connect.php");
               $result->execute();
               for ($i = 0; $row = $result->fetch(); $i++) {
 
-                $data = [$row['invoice_no'], $row['product_id'], $row['qty2']];
+                $data = array('invo' => $row['invoice_no'], 'pid' => $row['product_id'], 'qty' => $row['qty2']);
 
                 array_push($sales_list, $data);
               }
-
-              //echo json_encode($sales_list);
-
-              // if($i ==0){array_push($sales_list,'<span style="font-size: 12px" class="label label-danger">special</span><br>'.$row['invoice_no']);}
-
-              // if($i ==0){$cus_id=$row['cus_id'];
-              // $cus_id_1=0;
-              // $res1 = $db->prepare("SELECT * FROM special_price WHERE customer_id=:id  ");
-              // $res1->bindParam(':id', $cus_id);
-              // $res1->execute();
-              // for($i=0; $ro1 = $res1->fetch(); $i++){ $cus_id_1=$ro1['customer_id'];  }
-
-              // if($cus_id_1 >'0'){array_push($sales_list,$row['cus_id']);}}
-
-              // if($code == '1001'){array_push($sales_list,'<span class="pull-right badge bg-muted">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
-
-              // if($code == '101'){array_push($sales_list,'<span class="pull-right badge bg-yellow">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
-
-              // if($code == '1002'){array_push($sales_list,'<span class="pull-right badge bg-muted">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
-
-              // if($code == '102'){array_push($sales_list,'<span class="pull-right badge bg-yellow">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
-
-              // if($code == '1003'){array_push($sales_list,'<span class="pull-right badge bg-muted">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
-
-              // if($code == '103'){array_push($sales_list,'<span class="pull-right badge bg-yellow">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
-
-              // if($code == '1004'){array_push($sales_list,'<span class="pull-right badge bg-muted">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
-
-              // if($code == '104'){array_push($sales_list,'<span class="pull-right badge bg-yellow">'.$row['qty'].'</span>');}else{array_push($sales_list,'');}
-
-              //} print_r($sales_list)
               ?>
 
 
               <?php $sales = array();
               $product = array();
 
-              $result = $db->prepare("SELECT * FROM products  ORDER BY list_order  ");
+              $result = $db->prepare("SELECT * FROM products WHERE product_id < 9  ORDER BY list_order  ");
               $result->bindParam(':id', $id);
               $result->execute();
               for ($i = 0; $row = $result->fetch(); $i++) {
@@ -280,22 +249,26 @@ include("connect.php");
               for ($i = 0; $row = $result->fetch(); $i++) { //row
                 $invo = $row['invoice_number'];
                 $cus = $row['customer_id'];
+
                 $temp = array();
-                array_push($temp, $invo);
-                array_push($temp, $cus);
+
+                $temp['invo'] =  $invo;
+                $temp['cus'] =  $cus;
+
+                foreach ($product as $p_id) { //colum
+                  $temp[$p_id] = '';
+                }
 
                 foreach ($sales_list as $list) {
 
-                  if ($list[0] == $invo) {
+                  if ($list['invo'] == $invo) {
 
                     foreach ($product as $p_id) { //colum
 
-                      if ($p_id == $list[1]) {
+                      if ($p_id == $list['pid']) {
 
-                        array_push($temp, $list[2]);
+                        $temp[$p_id] = $list['qty'];
                       } else {
-
-                        array_push($temp, '');
                       }
                     }
                   }
@@ -303,88 +276,82 @@ include("connect.php");
 
                 array_push($sales, $temp);
               }
-
-              echo json_encode($sales);
               ?>
+
+              <?php
+
+              $result = $db->prepare("SELECT *, sales_list.qty as qty2  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE sales_list.loading_id=:id AND products.product_id > 9 AND sales_list.action = 0 ORDER BY products.product_id ");
+              $result->bindParam(':id', $id);
+              $result->execute();
+              for ($i = 0; $row = $result->fetch(); $i++) { ?>
+                <!-- <td>
+                  <span class="pull-right badge bg-muted"> -->
+                <?php
+                //$row['sum(sales_list.qty)'];
+                ?>
+                <!-- </span>
+                </td> -->
+
+              <?php } ?>
 
               <?php foreach ($sales as $list) { ?>
 
                 <tr>
-                  <?php foreach ($list as $data) {  ?>
 
-                    <td> <?php echo $data; ?> </td>
-
-                  <?php } ?>
+                  <td> <?php echo $list['invo']; ?> </td>
+                  <td> <?php echo $list['cus']; ?> </td>
+                  <td> <span class="pull-right badge bg-muted"> <?php echo $list['1']; ?> </span> </td>
+                  <td> <span class="pull-right badge bg-yellow"> <?php echo $list['5']; ?> </span> </td>
+                  <td> <span class="pull-right badge bg-muted"> <?php echo $list['2']; ?> </span> </td>
+                  <td> <span class="pull-right badge bg-yellow"> <?php echo $list['6']; ?> </span> </td>
+                  <td> <span class="pull-right badge bg-muted"> <?php echo $list['3']; ?> </span> </td>
+                  <td> <span class="pull-right badge bg-yellow"> <?php echo $list['7']; ?> </span> </td>
+                  <td> <span class="pull-right badge bg-muted"> <?php echo $list['4']; ?> </span> </td>
+                  <td> <span class="pull-right badge bg-yellow"> <?php echo $list['8']; ?> </span> </td>
 
                 </tr>
               <?php } ?>
-
-
             </tbody>
+
+            <?php $id = $_GET['id'];
+            $total = array();
+
+            foreach ($product as $p_id) {
+              $total[$p_id] = '';
+            }
+
+            $result = $db->prepare("SELECT * , sum(sales_list.qty)  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE sales_list.loading_id=:id AND sales_list.action = 0 GROUP BY products.product_id ");
+            $result->bindParam(':id', $id);
+            $result->execute();
+            for ($i = 0; $row = $result->fetch(); $i++) {
+              $total[$row['product_id']] = $row['sum(sales_list.qty)'];
+            }
+            ?>
 
             <tfoot class=" bg-black">
               <tr>
                 <td colspan="2">Total</td>
 
-                <?php //$invo="2520011210105934";
-                $ter = 4;
-                for ($pro_id1 = 0; $pro_id1 < (int)$ter; $pro_id1++) {
-                  $pro_id = $pro_id1 + 1;
-                  $pro_id_e = $pro_id1 + 5; ?>
-                  <td>
-                    <span class="pull-right badge bg-muted">
-                      <?php
-
-                      $result = $db->prepare("SELECT sum(qty) FROM sales_list WHERE  loading_id='$id' and product_id='$pro_id_e' and action='0' ");
-                      $result->bindParam(':id', $d1);
-                      $result->execute();
-                      for ($i = 0; $row = $result->fetch(); $i++) {
-                        echo $row['sum(qty)'];
-                      } ?>
-                    </span>
-                  </td>
-
-                  <td>
-                    <span class="pull-right badge bg-yellow">
-
-                      <?php
-                      $result = $db->prepare("SELECT sum(qty) FROM sales_list WHERE  loading_id='$id' and product_id='$pro_id' and action='0' ");
-                      $result->bindParam(':id', $d1);
-                      $result->execute();
-                      for ($i = 0; $row = $result->fetch(); $i++) {
-                        echo $row['sum(qty)'];
-                      } ?>
-                    </span>
-                  </td>
-                <?php } ?>
+                <td> <span class="pull-right badge bg-muted"> <?php echo $total['1']; ?> </span> </td>
+                <td> <span class="pull-right badge bg-yellow"> <?php echo $total['5']; ?> </span> </td>
+                <td> <span class="pull-right badge bg-muted"> <?php echo $total['2']; ?> </span> </td>
+                <td> <span class="pull-right badge bg-yellow"> <?php echo $total['6']; ?> </span> </td>
+                <td> <span class="pull-right badge bg-muted"> <?php echo $total['3']; ?> </span> </td>
+                <td> <span class="pull-right badge bg-yellow"> <?php echo $total['7']; ?> </span> </td>
+                <td> <span class="pull-right badge bg-muted"> <?php echo $total['4']; ?> </span> </td>
+                <td> <span class="pull-right badge bg-yellow"> <?php echo $total['8']; ?> </span> </td>
 
                 <?php
-                $result = $db->prepare("SELECT count(product_id) FROM products WHERE product_id >'9' ");
-                $result->bindParam(':id', $d1);
+
+                $result = $db->prepare("SELECT * , sum(sales_list.qty)  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE sales_list.loading_id=:id AND products.product_id > 9 AND sales_list.action = 0 GROUP BY products.product_id ");
+                $result->bindParam(':id', $id);
                 $result->execute();
-                for ($i = 0; $row = $result->fetch(); $i++) {
-                  $ter1 = $row['count(product_id)'];
-                }
-
-                $result1 = $db->prepare("SELECT * FROM products WHERE  product_id>='9' ORDER by product_id DESC");
-                $result1->bindParam(':id', $d2);
-                $result1->execute();
-                for ($i = 0; $row = $result1->fetch(); $i++) {
-                  $pro_id = $row['product_id'];
-                ?>
-
-
-
+                for ($i = 0; $row = $result->fetch(); $i++) { ?>
                   <td>
                     <span class="pull-right badge bg-muted">
                       <?php
-
-                      $result = $db->prepare("SELECT sum(qty) FROM sales_list WHERE  loading_id='$id' and product_id='$pro_id' and action='0' ");
-                      $result->bindParam(':id', $d1);
-                      $result->execute();
-                      for ($i = 0; $row = $result->fetch(); $i++) {
-                        echo $row['sum(qty)'];
-                      } ?>
+                      echo $row['sum(sales_list.qty)'];
+                      ?>
                     </span>
                   </td>
 
