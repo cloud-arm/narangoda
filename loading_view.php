@@ -170,7 +170,7 @@ include("connect.php");
           </h3>
         </div>
 
-        <div class="box-body">
+        <div class="box-body" style="overflow-x: scroll;">
 
           <table id="example1" class="table table-bordered table-striped">
 
@@ -209,7 +209,7 @@ include("connect.php");
                 $result->bindParam(':id', $id);
                 $result->execute();
                 for ($i = 0; $row = $result->fetch(); $i++) { ?>
-                  <th><?php echo $row['product_id']; ?></th>
+                  <th><?php echo $row['gen_name']; ?></th>
                 <?php } ?>
 
               <tr>
