@@ -221,7 +221,7 @@ include("connect.php");
               <?php $id = $_GET['id'];
               $sales_list = array();
 
-              $result = $db->prepare("SELECT * , sales_list.qty as qty2  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE sales_list.loading_id=:id  ORDER BY products.list_order ");
+              $result = $db->prepare("SELECT * , sales_list.qty as qty2  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE sales_list.loading_id=:id  ORDER BY products.product_id ");
               $result->bindParam(':id', $id);
               $result->execute();
               for ($i = 0; $row = $result->fetch(); $i++) {
@@ -236,7 +236,7 @@ include("connect.php");
               <?php $sales = array();
               $product = array();
 
-              $result = $db->prepare("SELECT * FROM products WHERE product_id < 9  ORDER BY list_order  ");
+              $result = $db->prepare("SELECT * FROM products WHERE product_id < 9  ORDER BY product_id  ");
               $result->bindParam(':id', $id);
               $result->execute();
               for ($i = 0; $row = $result->fetch(); $i++) {
