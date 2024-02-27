@@ -251,11 +251,11 @@ include("connect.php");
                 $product = $_GET['product'];
                 $filter = $_GET['filter'];
 
-                $sql1 = " SELECT *  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE sales_list.loading_id=:id AND products.type='accessory' AND sales_list.action = 0 GROUP BY products.product_id ";
-                $sql2 = " SELECT * , sales_list.qty as qty2  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE sales_list.loading_id=:id AND sales_list.action='0'  ORDER BY products.product_id ";
-                $sql3 = " SELECT *  FROM sales WHERE loading_id=:id AND action='1' ";
-                $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE sales_list.loading_id=:id AND sales_list.action = 0 GROUP BY products.product_id ";
-                $sql5 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE sales_list.loading_id=:id AND sales_list.action = 0 AND products.type='accessory' GROUP BY products.product_id ";
+                $sql1 = " SELECT *  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND products.type='accessory' AND sales_list.action = 0 GROUP BY products.product_id ";
+                $sql2 = " SELECT * , sales_list.qty as qty2  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.action='0'  ORDER BY products.product_id ";
+                $sql3 = " SELECT *  FROM sales WHERE (date BETWEEN '$d1' and '$d2') AND action='1' ";
+                $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.action = 0 GROUP BY products.product_id ";
+                $sql5 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.action = 0 AND products.type='accessory' GROUP BY products.product_id ";
 
 
 
