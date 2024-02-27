@@ -205,13 +205,13 @@ include("connect.php");
 
                 <?php
                 $ass_list = array();
-                $result = $db->prepare("SELECT *  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE sales_list.loading_id=:id AND products.type='accessory' AND sales_list.action = 0 GROUP BY products.product_id ");
+                $result = $db->prepare("SELECT *  FROM sales_list WHERE sales_list.loading_id=:id AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id ");
                 $result->bindParam(':id', $id);
                 $result->execute();
                 for ($i = 0; $row = $result->fetch(); $i++) {
                   array_push($ass_list, $row['product_id']);
                 ?>
-                  <th class="th"><span> <?php echo $row['gen_name']; ?></span></th>
+                  <th class="th"><span> <?php echo $row['name']; ?></span></th>
                 <?php } ?>
 
               </tr>
@@ -244,12 +244,12 @@ include("connect.php");
               $sales = array();
               $product = array();
 
-              $result = $db->prepare("SELECT * , sales_list.qty as qty2  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE sales_list.loading_id=:id AND sales_list.action='0'  ORDER BY products.product_id ");
+              $result = $db->prepare("SELECT *  FROM sales_list WHERE sales_list.loading_id=:id AND sales_list.action='0'  ORDER BY sales_list.product_id ");
               $result->bindParam(':id', $id);
               $result->execute();
               for ($i = 0; $row = $result->fetch(); $i++) {
 
-                $data = array('invo' => $row['invoice_no'], 'pid' => $row['product_id'], 'qty' => $row['qty2']);
+                $data = array('invo' => $row['invoice_no'], 'pid' => $row['product_id'], 'qty' => $row['qty']);
 
                 array_push($sales_list, $data);
               }
@@ -318,6 +318,7 @@ include("connect.php");
 
                   <td> <?php echo $list['8']; ?> </td>
                   <td> <?php echo $list['4']; ?> </td>
+                  
                   <?php foreach ($ass_list as $ass) { ?>
                     <td> <?php echo $list[$ass]; ?>
                     </td>
@@ -334,7 +335,7 @@ include("connect.php");
               $total[$p_id] = '';
             }
 
-            $result = $db->prepare("SELECT * , sum(sales_list.qty)  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE sales_list.loading_id=:id AND sales_list.action = 0 GROUP BY products.product_id ");
+            $result = $db->prepare("SELECT * , sum(sales_list.qty)  FROM sales_list WHERE sales_list.loading_id=:id AND sales_list.action = 0 GROUP BY sales_list.product_id ");
             $result->bindParam(':id', $id);
             $result->execute();
             for ($i = 0; $row = $result->fetch(); $i++) {
