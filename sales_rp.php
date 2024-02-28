@@ -73,11 +73,11 @@ include("connect.php");
 
                       <?php
                       $result = $db->prepare("SELECT * FROM lorry ORDER by lorry_id ASC ");
-                      $result->bindParam(':userid', $res);
+                      $result->bindParam(':id', $res);
                       $result->execute();
                       for ($i = 0; $row = $result->fetch(); $i++) {
                       ?>
-                        <option><?php echo $row['lorry_no']; ?> </option>
+                        <option value="<?php echo $row['lorry_id']; ?>"><?php echo $row['lorry_no']; ?> </option>
                       <?php
                       }
                       ?>
@@ -94,7 +94,7 @@ include("connect.php");
                       <label>Filter</label>
                     </div>
                     <select class="form-control select2" name="filter" class="form-control" id="p_type" onchange="view_payment_date(this.value);">
-                      <option value="">ALL CUSTOMER</option>
+                      <option value="all">ALL CUSTOMER</option>
                       <option value="group">Customer Group</option>
                       <option value="type">Customer Type</option>
                       <option value="cus">One Customer</option>
@@ -132,7 +132,7 @@ include("connect.php");
                 <div class="form-group">
                   <div class="input-group">
                     <div class="input-group-addon">
-                      <label>products</label>
+                      <label>Products</label>
                     </div>
                     <select class="form-control select2" name="product" autofocus>
                       <option value="all"> All Customer </option>
@@ -149,13 +149,13 @@ include("connect.php");
                 <div class="form-group">
                   <div class="input-group">
                     <div class="input-group-addon">
-                      <label>customer</label>
+                      <label>Customer</label>
                     </div>
                     <select class="form-control select2" name="cus" style="width: 100%;" autofocus>
 
                       <?php
                       $result = $db->prepare("SELECT * FROM customer ORDER by customer_id ASC ");
-                      $result->bindParam(':userid', $res);
+                      $result->bindParam(':id', $res);
                       $result->execute();
                       for ($i = 0; $row = $result->fetch(); $i++) {
                       ?>
@@ -178,7 +178,7 @@ include("connect.php");
 
                       <?php
                       $result = $db->prepare("SELECT * FROM customer_category ORDER by id ASC ");
-                      $result->bindParam(':userid', $res);
+                      $result->bindParam(':id', $res);
                       $result->execute();
                       for ($i = 0; $row = $result->fetch(); $i++) {
                       ?>
@@ -199,14 +199,14 @@ include("connect.php");
                     </div>
                     <select class="form-control select2" name="customer_type" style="width: 100%;">
                       <option value="1">Channel</option>
-                      <option value="2">commercial</option>
+                      <option value="2">Commercial</option>
                       <option value="3">Apartment</option>
                     </select>
                   </div>
                 </div>
               </div>
 
-              <div class="col-md-3">
+              <div class="col-md-3" style="float: right; width: max-content;margin-right: 20px;">
                 <div class="form-group">
                   <button class="btn btn-info" style="padding: 6px 50px;" type="submit">
                     <i class="fa fa-search"></i> Search
@@ -224,12 +224,82 @@ include("connect.php");
 
       <div class="box ">
         <div class="box-header">
-          <h3 class="box-title">Sales Report
-            <a href="sales_rp_print.php?filter=<?php echo $_GET['filter'] ?>&d1=<?php echo $_GET['d1'] ?>&d2=<?php echo $_GET['d2'] ?>&cus=<?php echo $_GET['cus'] ?>&lorry=<?php echo $_GET['lorry'] ?>&product=<?php echo $_GET['product'] ?>&customer_type=<?php echo $_GET['customer_type'] ?>" title="Click to Print">
-              <button class="btn btn-danger">Print</button></a>
-          </h3>
+          <h3 class="box-title">Sales Report</h3>
+          <a style="padding: 4px 10px;margin-left: 20px;" class="btn btn-danger" href="sales_rp_print.php?filter=<?php echo $_GET['filter'] ?>&d1=<?php echo $_GET['d1'] ?>&d2=<?php echo $_GET['d2'] ?>&cus=<?php echo $_GET['cus'] ?>&lorry=<?php echo $_GET['lorry'] ?>&product=<?php echo $_GET['product'] ?>&customer_type=<?php echo $_GET['customer_type'] ?>" title="Click to Print">
+            <i class="fa fa-print"></i> Print
+          </a>
         </div>
         <!-- /.box-header -->
+        <?php $id = '6756';
+
+        $d1 = $_GET['d1']; //date one
+        $d2 = $_GET['d2']; //date two
+        $lorry = $_GET['lorry']; // lorry id
+        $filter = $_GET['filter'];
+        $product = $_GET['product'];
+
+        if ($product == '1') { //product 0 - 5
+          $pro1 = '0';
+          $pro2 = '5';
+        }
+        if ($product == '2') { //product 4 - 9
+          $pro1 = '4';
+          $pro2 = '9';
+        }
+        if ($product == '3') { //product 9 - 50
+          $pro1 = '9';
+          $pro2 = '50';
+        }
+
+        if ($filter == 'group') {
+          $group = $_GET['group']; //customer category id
+        }
+
+        if ($filter == 'type') {
+          $cus_type = $_GET['customer_type']; //customer type 1/2/3
+        }
+
+        if ($filter == 'cus') {
+          $cus = $_GET['cus']; // customer id
+        }
+
+        // 1 - get all for date range
+        if ($lorry == 'all' & $filter == 'all' & $product == 'all') {
+
+          $sql1 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
+          $sql2 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
+          $sql3 = " SELECT *  FROM sales WHERE (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
+          $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
+        }
+
+        // 2 - one customer and date range
+        if ($lorry == 'all' & $product == 'all' & $filter == 'cus') {
+
+          $sql1 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
+          $sql2 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
+          $sql3 = " SELECT *  FROM sales WHERE (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus' AND sales.action='1' "; //main array creation
+          $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
+        }
+
+        // 2 - product 1 and and date range
+        if ($lorry == 'all' & $product != 'all' & $filter == 'all') {
+
+          $sql1 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
+          $sql2 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
+          $sql3 = " SELECT *  FROM sales WHERE (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
+          $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
+        }
+
+        // 2 - product 1 and one customer and date range
+        if ($lorry == 'all' & $product != 'all' & $filter == 'cus') {
+
+          $sql1 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > '$pro2' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
+          $sql2 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.cus_id = '$cus' AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
+          $sql3 = " SELECT *  FROM sales WHERE (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
+          $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.cus_id = '$cus' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
+        }
+
+        ?>
 
         <div class="box-body">
           <table id="" class="table table-bordered table-striped">
@@ -238,56 +308,58 @@ include("connect.php");
 
               <tr>
                 <th colspan="2"></th>
-                <th colspan="2">12.5kg</th>
-                <th colspan="2">5kg</th>
-                <th colspan="2">37.5kg</th>
-                <th colspan="2">2kg</th>
 
-                <?php $id = '6756';
+                <?php if ($product == 'all' | $product != 3) { ?>
 
-                $d1 = $_GET['d1'];
-                $d2 = $_GET['d2'];
-                $lorry = $_GET['lorry'];
-                $product = $_GET['product'];
-                $filter = $_GET['filter'];
+                  <th colspan="2">12.5kg</th>
+                  <th colspan="2">5kg</th>
+                  <th colspan="2">37.5kg</th>
+                  <th colspan="2">2kg</th>
 
-                $sql1 = " SELECT *  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND products.type='accessory' AND sales_list.action = 0 GROUP BY products.product_id ";
-                $sql2 = " SELECT * , sales_list.qty as qty2  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.action='0'  ORDER BY products.product_id ";
-                $sql3 = " SELECT *  FROM sales WHERE (date BETWEEN '$d1' and '$d2') AND action='1' ";
-                $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.action = 0 GROUP BY products.product_id ";
-                $sql5 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN products ON sales_list.product_id = products.product_id WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.action = 0 AND products.type='accessory' GROUP BY products.product_id ";
-
-
-
-                $ass_list = array();
-                $result = $db->prepare($sql1);
-                $result->bindParam(':id', $id);
-                $result->execute();
-                for ($i = 0; $row = $result->fetch(); $i++) {
-                  array_push($ass_list, $row['product_id']);
-                ?>
-                  <th class="th"><span> <?php echo $row['gen_name']; ?></span></th>
                 <?php } ?>
+
+                <?php
+                if ($product == 'all' | $product == 3) {
+                  $ass_list = array();
+                  $result = $db->prepare($sql1);
+                  $result->bindParam(':id', $id);
+                  $result->execute();
+                  for ($i = 0; $row = $result->fetch(); $i++) {
+                    array_push($ass_list, $row['product_id']);
+                ?>
+                    <th class="th"><span> <?php echo $row['name']; ?></span></th>
+                <?php }
+                } ?>
 
               </tr>
 
               <tr>
                 <th>Invoice</th>
                 <th>Customer</th>
-                <th>N</th>
-                <th>R</th>
-                <th>N</th>
-                <th>R</th>
-                <th>N</th>
-                <th>R</th>
-                <th>N</th>
-                <th>R</th>
 
-                <?php
-                foreach ($ass_list as $list) { ?>
-                  <th></th>
+                <?php if ($product == 'all' | $product != 3) { ?>
+
+                  <th>N</th>
+                  <th>R</th>
+                  <th>N</th>
+                  <th>R</th>
+                  <th>N</th>
+                  <th>R</th>
+                  <th>N</th>
+                  <th>R</th>
+
                 <?php } ?>
 
+                <?php
+                if ($product == 'all' | $product == 3) {
+                  foreach ($ass_list as $list) { ?>
+                    <th></th>
+                <?php }
+                } ?>
+
+                <th>Pay Type</th>
+                <th>Amount</th>
+                <th>Margin</th>
               <tr>
 
             </thead>
@@ -304,7 +376,7 @@ include("connect.php");
               $result->execute();
               for ($i = 0; $row = $result->fetch(); $i++) {
 
-                $data = array('invo' => $row['invoice_no'], 'pid' => $row['product_id'], 'qty' => $row['qty2']);
+                $data = array('invo' => $row['invoice_no'], 'pid' => $row['product_id'], 'qty' => $row['qty']);
 
                 array_push($sales_list, $data);
               }
@@ -323,11 +395,19 @@ include("connect.php");
                 $invo = $row['invoice_number'];
                 $cus = $row['name'];
                 $sales_id = $row['transaction_id'];
+                $type = $row['type'];
+                $amount = $row['amount'];
+                $profit = $row['profit'];
 
                 $temp = array();
 
-                $temp['invo'] =  $sales_id;
+                $temp['id'] =  $sales_id;
+                $temp['invo'] =  $invo;
                 $temp['cus'] =  $cus;
+                $temp['type'] =  $type;
+                $temp['amount'] =  $amount;
+                $temp['profit'] =  $profit;
+                $temp['qty'] = 0;
 
                 foreach ($product as $p_id) { //colum
                   $temp[$p_id] = '';
@@ -345,9 +425,9 @@ include("connect.php");
                         } else {
                           $temp[$p_id] = "<span class='pull-right badge bg-yellow'> " . $list['qty'] . "</span>";
                         }
-                      } else {
                       }
                     }
+                    $temp['qty'] = $list['qty'];
                   }
                 }
 
@@ -355,31 +435,51 @@ include("connect.php");
               }
               ?>
 
-              <?php foreach ($sales as $list) { ?>
+              <?php foreach ($sales as $list) {
+                if ($list['qty'] > 0) { ?>
 
-                <tr>
+                  <tr>
 
-                  <td> <?php echo $list['invo']; ?> </td>
-                  <td> <?php echo $list['cus']; ?> </td>
+                    <td> <?php echo $list['id']; ?> </td>
+                    <td> <?php echo $list['cus']; ?> </td>
 
-                  <td> <?php echo $list['5']; ?></td>
-                  <td> <?php echo $list['1']; ?> </td>
+                    <?php if ($product == 'all' | $product != 3) { ?>
 
-                  <td> <?php echo $list['6']; ?></td>
-                  <td><?php echo $list['2']; ?></td>
+                      <td> <?php echo $list['5']; ?></td>
+                      <td> <?php echo $list['1']; ?> </td>
 
-                  <td> <?php echo $list['7']; ?></td>
-                  <td><?php echo $list['3']; ?></td>
+                      <td> <?php echo $list['6']; ?></td>
+                      <td><?php echo $list['2']; ?></td>
 
-                  <td> <?php echo $list['8']; ?> </td>
-                  <td> <?php echo $list['4']; ?> </td>
-                  <?php foreach ($ass_list as $ass) { ?>
-                    <td> <?php echo $list[$ass]; ?>
+                      <td> <?php echo $list['7']; ?></td>
+                      <td><?php echo $list['3']; ?></td>
+
+                      <td> <?php echo $list['8']; ?> </td>
+                      <td> <?php echo $list['4']; ?> </td>
+
+                    <?php } ?>
+
+                    <?php
+                    if ($product == 'all' | $product == 3) {
+
+                      foreach ($ass_list as $ass) { ?>
+
+                        <td> <?php echo $list[$ass]; ?> </td>
+
+                    <?php }
+                    } ?>
+
+                    <td> <?php echo $list['type']; ?> </td>
+                    <td> <?php echo $list['amount']; ?> </td>
+                    <td>
+                      <?php echo $list['profit']; ?> <br>
+                      <a href="bill2.php?id=<?php echo $list['invo']; ?>" title="Click to pay" class="btn btn-primary">View</a>
                     </td>
-                  <?php } ?>
 
-                </tr>
-              <?php } ?>
+                  </tr>
+
+              <?php }
+              } ?>
             </tbody>
 
             <?php
@@ -419,18 +519,24 @@ include("connect.php");
                 </td>
 
                 <?php
-                foreach ($total as $i => $tot) {
-                  if ($i > 9  && $tot > 0) { ?>
-                    <td>
-                      <span class="pull-right badge bg-muted">
-                        <?php
-                        echo $tot;
-                        ?>
-                      </span>
-                    </td>
+                if ($product == 'all' | $product == 3) {
+                  foreach ($total as $i => $tot) {
+                    if ($i > 9  && $tot > 0) { ?>
+                      <td>
+                        <span class="pull-right badge bg-muted">
+                          <?php
+                          echo $tot;
+                          ?>
+                        </span>
+                      </td>
 
                 <?php }
+                  }
                 } ?>
+
+                <td></td>
+                <td></td>
+                <td></td>
 
               </tr>
 
