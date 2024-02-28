@@ -22,7 +22,9 @@ for($i=0; $row = $result->fetch(); $i++){
         'contact' =>$row['contact'],
         'area' =>$row['area'],
         'vat_no' =>$row['vat_no'],
-        'root_id' =>$row['root_id']);
+        'root_id' =>$row['root_id'],
+        'root'=>$row['root'],
+    );
     }
  
 
