@@ -16,14 +16,13 @@ $result->bindParam(':userid', $res);
 $result->execute();
 for($i=0; $row = $result->fetch(); $i++){
     $result_array[] = array (
-        "name" => $row['customer_name'],
-        "cus_id" => $row['customer_id'],
-        "amount" => $row['amount'],
-        "balance" => $row['amount']-$row['pay_amount'],
-        "type" => $row['type'],
-        "invoice_no"=>$row['invoice_no'],
-        "date" => $row['date'],
-        "id" => $row['transaction_id'],
+        "lorry_no" => $row['lorry_no'],
+        "lorry_id" => $row['lorry_id'],
+        "root_id" => $row['root_id'],
+        "driver_id" => $row['driver'],
+        "helper1_id" => $row['helper1'],
+        "helper2_id" => $row['helper2'],
+        "loading_id" => $row['transaction_id'],
     );
     }
  
