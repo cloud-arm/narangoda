@@ -15,9 +15,10 @@ $result = $db->prepare("SELECT * FROM loading WHERE driver='$id' AND action='loa
 $result->bindParam(':userid', $res);
 $result->execute();
 for($i=0; $row = $result->fetch(); $i++){
-    $result_array[] = array (
+    $result_array = array (
         "action" => $row['action'],
-        "sync" => $row['sync']
+        "sync" => $row['sync'],
+        "loading_id" => $row['transaction_id'],
     );
     }
  
