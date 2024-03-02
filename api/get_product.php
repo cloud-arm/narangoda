@@ -9,7 +9,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 //echo $r_data[0];
 //$user=$_POST['user'];
 
-$load_id=1;
+$load_id=$_POST['id'];
 
 $result = $db->prepare("SELECT * FROM products JOIN loading_list ON products.product_id = loading_list.product_code WHERE loading_list.loading_id='$load_id' ");
 $result->bindParam(':userid', $res);
