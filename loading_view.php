@@ -9,7 +9,7 @@ include("connect.php");
   <?php
   include_once("auth.php");
   $r = $_SESSION['SESS_LAST_NAME'];
-  $_SESSION['SESS_DEPARTMENT'] = 'loading_view';
+  $_SESSION['SESS_FORM'] = 'loading_view';
   if ($r == 'Cashier') {
 
     include_once("sidebar2.php");
@@ -19,13 +19,6 @@ include("connect.php");
     include_once("sidebar.php");
   }
   ?>
-
-
-
-
-  <link rel="stylesheet" href="datepicker.css" type="text/css" media="all" />
-  <script src="datepicker.js" type="text/javascript"></script>
-  <script src="datepicker.ui.min.js" type="text/javascript"></script>
 
   <style>
     th.th {
@@ -318,7 +311,7 @@ include("connect.php");
 
                   <td> <?php echo $list['8']; ?> </td>
                   <td> <?php echo $list['4']; ?> </td>
-                  
+
                   <?php foreach ($ass_list as $ass) { ?>
                     <td> <?php echo $list[$ass]; ?>
                     </td>
@@ -724,6 +717,8 @@ include("connect.php");
   <script src="../../dist/js/app.min.js"></script>
   <!-- AdminLTE for demo purposes -->
   <script src="../../dist/js/demo.js"></script>
+  <!-- Dark Theme Btn-->
+  <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
 
 
   <script>
