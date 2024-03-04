@@ -19,8 +19,7 @@
             <label> Area</label>
             <select class="form-control select2" name="area" style="width: 100%;" autofocus>
 
-              <option> Kaluthara </option>
-              <option> Horana </option>
+              <option> Galle </option>
 
             </select>
           </div>
