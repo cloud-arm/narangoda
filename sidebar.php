@@ -148,7 +148,7 @@
           </li>
 
           <?php $co = '';
-          if ($f == 'loading' || $f == 'loading_view' || $f == 'lorry_sales_view') {
+          if ($f == 'loading' || $f == 'unloading' || $f == 'empty_loading' || $f == 'loading_view' || $f == 'lorry_sales_view') {
             $co = 'active';
           } ?>
 
@@ -165,11 +165,17 @@
               <li class="<?php if ($f == 'loading') {
                             echo 'active';
                           } ?>"><a href="loading.php"><i class="fa fa-circle-o text-aqua "></i> New Loading</a></li>
-              <li><a rel="facebox" href="emty_loading.php"><i class="fa fa-circle-o text-aqua "></i> Empty Loading</a></li>
-              <li><a rel="facebox" href="unloading.php"><i class="fa fa-circle-o text-aqua "></i> Unloading</a></li>
+              <li class="<?php if ($f == 'empty_loading') {
+                            echo 'active';
+                          } ?>">
+                <a href="empty_loading.php"><i class="fa fa-circle-o text-aqua "></i> Empty Loading</a>
+              </li>
+              <li class="<?php if ($f == 'unloading') {
+                            echo 'active';
+                          } ?>"><a href="unloading.php"><i class="fa fa-circle-o text-aqua "></i> Unloading</a></li>
               <li class="<?php if ($f == 'loading_view') {
                             echo 'active';
-                          } ?>"><a href="loading_view.php?d1=<?php echo $date; ?>&lorry=0"><i class="fa fa-circle-o text-aqua "></i> View Loading</a></li>
+                          } ?>"><a href="loading_view.php?id=0"><i class="fa fa-circle-o text-aqua "></i> View Loading</a></li>
               <li class="<?php if ($f == 'lorry_sales_view') {
                             echo 'active';
                           } ?>"><a href="lorry_sales_view.php?d1=<?php echo $date; ?>&lorry=0"><i class="fa fa-circle-o text-aqua "></i> View Lorry Sales</a></li>
@@ -282,18 +288,10 @@
             </a>
           </li>
 
-          <li class="treeview">
-            <a href="#">
-              <i class="fa fa-suitcase"></i>
-              <span>Expenses</span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
+          <li>
+            <a href="expenses.php">
+              <i class="fa fa-suitcase"></i> <span>Expenses</span>
             </a>
-            <ul class="treeview-menu">
-              <li><a href="expenses.php"><i class="fa fa-circle-o text-aqua "></i>Expenses</a></li>
-              <li><a href="petty.php"><i class="fa fa-circle-o text-red "></i>Cash BOX</a></li>
-            </ul>
           </li>
 
           <?php $co = '';
@@ -377,18 +375,10 @@
             </a>
           </li>
 
-          <li class="treeview">
-            <a href="#">
-              <i class="fa fa-suitcase"></i>
-              <span>Expenses</span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
+          <li>
+            <a href="expenses.php">
+              <i class="fa fa-suitcase"></i> <span>Expenses</span>
             </a>
-            <ul class="treeview-menu">
-              <li><a href="expenses.php"><i class="fa fa-circle-o text-aqua "></i>Expenses</a></li>
-              <li><a href="petty.php"><i class="fa fa-circle-o text-red "></i>Cash BOX</a></li>
-            </ul>
           </li>
 
 
@@ -471,7 +461,7 @@
           <?php $co = '';
           $co0 = '';
           $dis = 'none';
-          if ($f == 'customer' || $f == 'product' || $f == 'rep' || $f == 'lorry' || $f == 'root' ) {
+          if ($f == 'customer' || $f == 'product' || $f == 'rep' || $f == 'lorry' || $f == 'root') {
             $co = 'active';
             $co0 = 'menu-open';
             $dis = 'block';
