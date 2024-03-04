@@ -20,6 +20,7 @@ for($i=0; $row = $result->fetch(); $i++){
         "lorry_id" => $row['lorry_id'],
         "root_id" => $row['root_id'],
         "driver_id" => $row['driver'],
+        "driver_name" => $row['rep'],
         "helper1_id" => $row['helper1'],
         "helper2_id" => $row['helper2'],
         "loading_id" => $row['transaction_id'],
