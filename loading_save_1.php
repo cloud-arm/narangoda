@@ -36,6 +36,13 @@ for ($i = 0; $row = $result->fetch(); $i++) {
     $root_name = $row['root_name'];
 }
 
+$result = $db->prepare("SELECT * FROM employee WHERE id= :id  ");
+$result->bindParam(':id', $driver);
+$result->execute();
+for ($i = 0; $row = $result->fetch(); $i++) {
+    $dr_name = $row['name'];
+}
+
 
 $term = 0;
 $result = $db->prepare("SELECT * FROM loading WHERE lorry_id= :id AND action='load' ");
@@ -52,9 +59,9 @@ if ($tran >= 1) {
     $empty = 0;
 
     // query
-    $sql = "INSERT INTO loading (lorry_no,lorry_id,root,root_id,date,action,loading_time,driver,helper1,helper2) VALUES (?,?,?,?,?,?,?,?,?,?)";
+    $sql = "INSERT INTO loading (lorry_no,lorry_id,root,root_id,date,action,loading_time,driver,helper1,helper2,rep) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
     $q = $db->prepare($sql);
-    $q->execute(array($lorry, $lorry_id, $root_name, $root, $date, $action, $time, $driver, $helper1, $helper2));
+    $q->execute(array($lorry, $lorry_id, $root_name, $root, $date, $action, $time, $driver, $helper1, $helper2,$dr_name));
 
 
 
