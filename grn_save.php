@@ -136,9 +136,9 @@ if ($invo != '') {
             $ql = $db->prepare($sql);
             $ql->execute(array($qty_blc, $cost, $sell, $p_id));
 
-            $sql = "INSERT INTO inventory (product_id,name,invoice_no,type,balance,qty,date) VALUES (?,?,?,?,?,?,?)";
+            $sql = "INSERT INTO inventory (product_id,name,invoice_no,type,balance,qty,date,cost,sell) VALUES (?,?,?,?,?,?,?,?,?)";
             $ql = $db->prepare($sql);
-            $ql->execute(array($p_id, $name, $invo, 'in', $qty_blc, $qty, $date));
+            $ql->execute(array($p_id, $name, $invo, 'in', $qty_blc, $qty, $date, $cost, $sell));
 
             $qty_blc = 0;
             $con = 0;
