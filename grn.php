@@ -5,10 +5,6 @@ include("head.php");
 include("connect.php");
 ?>
 
-
-<script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
-
-
 <body class="hold-transition skin-yellow sidebar-mini">
     <?php
     include_once("auth.php");
@@ -313,8 +309,6 @@ include("connect.php");
     <div class="control-sidebar-bg"></div>
     </div>
 
-    <script src="js/jquery.js"></script>
-
     <!-- jQuery 2.2.3 -->
     <script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
     <!-- Bootstrap 3.3.6 -->
@@ -413,20 +407,6 @@ include("connect.php");
             }
             return false;
         });
-
-        $(function() {
-            $(".select2").select2();
-
-            $("#example1").DataTable();
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": true,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": true
-            });
-        });
     </script>
 
     <!-- Page script -->
@@ -434,17 +414,6 @@ include("connect.php");
         $(function() {
             //Initialize Select2 Elements
             $(".select2").select2();
-
-            //Datemask dd/mm/yyyy
-            $("#datemask").inputmask("YYYY/MM/DD", {
-                "placeholder": "YYYY/MM/DD"
-            });
-            //Datemask2 mm/dd/yyyy
-            $("#datemask2").inputmask("YYYY/MM/DD", {
-                "placeholder": "YYYY/MM/DD"
-            });
-            //Money Euro
-            $("[data-mask]").inputmask();
 
             //Date range picker
             $('#reservation').daterangepicker();
@@ -473,9 +442,14 @@ include("connect.php");
                 autoclose: true
             });
 
-            //Timepicker
-            $(".timepicker").timepicker({
-                showInputs: false
+            $("#example1").DataTable();
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true
             });
         });
     </script>

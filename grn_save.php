@@ -88,9 +88,16 @@ if ($invo != '') {
         }
 
         if ($pay_amount > 0) {
-            $sql = 'INSERT INTO supply_payment (amount,pay_amount,pay_type,date,invoice_no,supply_id,supply_name,supplier_invoice,type,chq_no,chq_bank,chq_date,bank_name,acc_no) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-            $q = $db->prepare($sql);
-            $q->execute(array($pay_amount, $pay_amount, $pay_type, $date, $invo, $sup, $sn, $sup_invo, $type, $chq_no, $chq_bank, $chq_date, $bank_name, $acc_no));
+
+            if ($pay_type == 'Chq') {
+                $sql = 'INSERT INTO supply_payment (amount,pay_amount,pay_type,date,invoice_no,supply_id,supply_name,supplier_invoice,type,chq_no,chq_bank,chq_date,bank_name,acc_no,action) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                $q = $db->prepare($sql);
+                $q->execute(array($pay_amount, $pay_amount, $pay_type, $date, $invo, $sup, $sn, $sup_invo, $type, $chq_no, $chq_bank, $chq_date, $bank_name, $acc_no, 1));
+            }else {
+                $sql = 'INSERT INTO supply_payment (amount,pay_amount,pay_type,date,invoice_no,supply_id,supply_name,supplier_invoice,type,bank_name,acc_no) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
+                $q = $db->prepare($sql);
+                $q->execute(array($pay_amount, $pay_amount, $pay_type, $date, $invo, $sup, $sn, $sup_invo, $type, $bank_name, $acc_no));
+            }
 
             if ($amount > $pay_amount) {
                 $c_b = 0;
