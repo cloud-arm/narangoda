@@ -178,7 +178,7 @@ include("connect.php");
                                         <td><?php echo $row['sell']; ?></td>
                                         <td><?php echo $row['cost']; ?></td>
                                         <td><?php echo $row['amount']; ?></td>
-                                        <td> <a href="#" id="<?php echo $row['id']; ?>" class="dll_btn btn btn-danger" title="Click to Delete"> X</a></td>
+                                        <td> <a href="#" id="<?php echo $row['transaction_id']; ?>" class="dll_btn btn btn-danger" title="Click to Delete"> X</a></td>
                                         <?php $total += $row['amount']; ?>
                                     </tr>
                                 <?php

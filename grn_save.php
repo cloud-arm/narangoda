@@ -179,7 +179,7 @@ if ($invo != '') {
 
                 $sql = "INSERT INTO stock (product_id,code,name,invoice_no,qty_balance,qty,date,supply_id,supply_name,sell,cost) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
                 $ql = $db->prepare($sql);
-                $ql->execute(array($p_id, $code, $name, $invo, $qty_blc, $qty, $date, $sup, $sn, $sell, $cost));
+                $ql->execute(array($p_id, $code, $name, $invo, $qty, $qty, $date, $sup, $sn, $sell, $cost));
             }
         }
 
