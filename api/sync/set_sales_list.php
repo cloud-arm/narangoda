@@ -28,63 +28,73 @@ foreach ($sales_list as $list) {
     $price_id = $list['price_id'];
     $app_id = $list['id'];
 
+    //checking duplicate
+    $con = 0;
+    $result = $db->prepare("SELECT * FROM sales_list WHERE invoice_no = '$invoice' AND app_id = '$app_id' AND loading_id = '$load' ");
+    $result->bindParam(':id', $cus);
+    $result->execute();
+    for ($i = 0; $row = $result->fetch(); $i++) {
+        $con = $row['id'];
+    }
 
-    $cost_amount = 0;
-    // inventory records -----
+    if ($con == 0) {
 
-    $id = $pid;
+        $cost_amount = 0;
+        // inventory records -----
 
-    $temp_qty = $qty;
+        $id = $pid;
 
-    do {
-        if (isset($id)) {
-        } else {
-            $id = 0;
-        }
-        $qty_blc = 0;
-        $temp_sell = 0;
-        $temp_cost = 0;
-        $st_id = 0;
-        $re = $db->prepare("SELECT * FROM stock WHERE product_id=:id AND qty_balance>0  ORDER BY id ASC LIMIT 1 ");
-        $re->bindParam(':id', $id);
-        $re->execute();
-        for ($k = 0; $r = $re->fetch(); $k++) {
-            $st_qty = $r['qty_balance'];
-            $st_id = $r['id'];
-            $temp_sell = $r['sell'];
-            $temp_cost = $r['cost'];
+        $temp_qty = $qty;
 
-            if ($st_qty < $temp_qty) {
-
-                $temp_qty = $temp_qty - $st_qty;
-
-                $sql = "UPDATE stock SET qty=?, qty_balance=? WHERE id=?";
-                $ql = $db->prepare($sql);
-                $ql->execute(array($st_qty, 0, $st_id));
-
-                $sql = "INSERT INTO inventory (product_id,name,invoice_no,type,balance,qty,date,sell,cost,stock_id) VALUES (?,?,?,?,?,?,?,?,?,?)";
-                $ql = $db->prepare($sql);
-                $ql->execute(array($id, $name, $invoice, 'out', 0, $st_qty, $date, $temp_sell, $temp_cost * $temp_qty, $st_id));
+        do {
+            if (isset($id)) {
             } else {
+                $id = 0;
+            }
+            $qty_blc = 0;
+            $temp_sell = 0;
+            $temp_cost = 0;
+            $st_id = 0;
+            $re = $db->prepare("SELECT * FROM stock WHERE product_id=:id AND qty_balance>0  ORDER BY id ASC LIMIT 1 ");
+            $re->bindParam(':id', $id);
+            $re->execute();
+            for ($k = 0; $r = $re->fetch(); $k++) {
+                $st_qty = $r['qty_balance'];
+                $st_id = $r['id'];
+                $temp_sell = $r['sell'];
+                $temp_cost = $r['cost'];
 
-                $qty_blc = $st_qty - $temp_qty;
+                if ($st_qty < $temp_qty) {
 
-                $sql = "UPDATE stock SET qty=?, qty_balance=? WHERE id=?";
-                $ql = $db->prepare($sql);
-                $ql->execute(array($temp_qty, $qty_blc, $st_id));
+                    $temp_qty = $temp_qty - $st_qty;
 
-                $sql = "INSERT INTO inventory (product_id,name,invoice_no,type,balance,qty,date,sell,cost,stock_id) VALUES (?,?,?,?,?,?,?,?,?,?)";
-                $ql = $db->prepare($sql);
-                $ql->execute(array($id, $name, $invoice, 'out', $qty_blc, $temp_qty, $date, $temp_sell, $temp_cost * $temp_qty, $st_id));
+                    $sql = "UPDATE stock SET qty=?, qty_balance=? WHERE id=?";
+                    $ql = $db->prepare($sql);
+                    $ql->execute(array($st_qty, 0, $st_id));
 
+                    $sql = "INSERT INTO inventory (product_id,name,invoice_no,type,balance,qty,date,sell,cost,stock_id) VALUES (?,?,?,?,?,?,?,?,?,?)";
+                    $ql = $db->prepare($sql);
+                    $ql->execute(array($id, $name, $invoice, 'out', 0, $st_qty, $date, $temp_sell, $temp_cost * $temp_qty, $st_id));
+                } else {
+
+                    $qty_blc = $st_qty - $temp_qty;
+
+                    $sql = "UPDATE stock SET qty=?, qty_balance=? WHERE id=?";
+                    $ql = $db->prepare($sql);
+                    $ql->execute(array($temp_qty, $qty_blc, $st_id));
+
+                    $sql = "INSERT INTO inventory (product_id,name,invoice_no,type,balance,qty,date,sell,cost,stock_id) VALUES (?,?,?,?,?,?,?,?,?,?)";
+                    $ql = $db->prepare($sql);
+                    $ql->execute(array($id, $name, $invoice, 'out', $qty_blc, $temp_qty, $date, $temp_sell, $temp_cost * $temp_qty, $st_id));
+
+                    $temp_qty = 0;
+                }
+            }
+            if ($st_id == 0) {
                 $temp_qty = 0;
             }
-        }
-        if ($st_id == 0) {
-            $temp_qty = 0;
-        }
-    } while ($temp_qty > 0);
-
+        } while ($temp_qty > 0);
+    }
     // ------------
 
     // get cost amount
@@ -111,10 +121,22 @@ foreach ($sales_list as $list) {
     //------------------------------------------------------------------------------//
     try {
 
-        // insert query
-        $sql = "INSERT INTO sales_list (invoice_no,product_id,name,amount,cost_amount,qty,price,profit,date,loading_id,action,cus_id,price_id,vat,value,app_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        $ql = $db->prepare($sql);
-        $ql->execute(array($invoice, $pid, $name, $amount, $cost_amount, $qty, $price, $profit, $date, $load, 0, $cus, $price_id, $vat, $value, $app_id));
+        //checking duplicate
+        $con = 0;
+        $result = $db->prepare("SELECT * FROM sales_list WHERE invoice_no = '$invoice' AND app_id = '$app_id' AND loading_id = '$load' ");
+        $result->bindParam(':id', $cus);
+        $result->execute();
+        for ($i = 0; $row = $result->fetch(); $i++) {
+            $con = $row['id'];
+        }
+
+        if ($con == 0) {
+
+            // insert query
+            $sql = "INSERT INTO sales_list (invoice_no,product_id,name,amount,cost_amount,qty,price,profit,date,loading_id,action,cus_id,price_id,vat,value,app_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $ql = $db->prepare($sql);
+            $ql->execute(array($invoice, $pid, $name, $amount, $cost_amount, $qty, $price, $profit, $date, $load, 0, $cus, $price_id, $vat, $value, $app_id));
+        }
 
         // get sales list id
         $result = $db->prepare("SELECT * FROM sales_list WHERE invoice_no=:id AND product_id = $pid ");
