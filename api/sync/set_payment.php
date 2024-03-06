@@ -27,19 +27,13 @@ foreach ($payment as $list) {
     $chq_no = $list['chq_no'];
     $bank = $list['bank'];
     $chq_date = $list['chq_date'];
+    $time = $list['time'];//
+    $load = $list['loading_id'];//
+    $cus = $list['customer_id'];//
 
-    $time = date('H:i:s');
 
-    // get sales details
-    $result = $db->prepare("SELECT * FROM sales WHERE invoice_number =:id ");
-    $result->bindParam(':id', $invoice);
-    $result->execute();
-    for ($i = 0; $row = $result->fetch(); $i++) {
-        $load = $row['loading_id'];
-        $sales_id = $row['transaction_id'];
-        $cus = $row['customer_id'];
-    }
-
+    $sales_id = 0;
+    
     $credit = 0;
     $pay_amount = 0;
 
