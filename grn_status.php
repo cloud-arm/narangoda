@@ -13,11 +13,11 @@ $s_qty = '';
 
 if ($type == 'Return') {
 
-    $result = $db->prepare("SELECT * FROM stock WHERE id=:id ");
+    $result = $db->prepare("SELECT * FROM stock WHERE id=:id ORDER BY id DESC LIMIT 1  ");
     $result->bindParam(':id', $id);
     $result->execute();
     for ($i = 0; $row = $result->fetch(); $i++) {
-        $sell = $row['sell'];
+        $sell = '';
         $cost = $row['cost'];
         $s_qty = $row['qty_balance'];
         $p_id = $row['product_id'];
@@ -32,11 +32,11 @@ if ($type == 'Return') {
     }
 } else {
 
-    $result = $db->prepare("SELECT * FROM stock WHERE product_id=:id ");
+    $result = $db->prepare("SELECT * FROM stock WHERE product_id=:id ORDER BY id DESC LIMIT 1 ");
     $result->bindParam(':id', $id);
     $result->execute();
     for ($i = 0; $row = $result->fetch(); $i++) {
-        $sell = $row['sell'];
+        $sell = '';
         $cost = $row['cost'];
         $s_qty = $row['qty_balance'];
     }
