@@ -27,13 +27,13 @@ foreach ($payment as $list) {
     $chq_no = $list['chq_no'];
     $bank = $list['bank'];
     $chq_date = $list['chq_date'];
-    $time = $list['time'];//
-    $load = $list['loading_id'];//
-    $cus = $list['customer_id'];//
+    $time = $list['time'];
+    $load = $list['loading_id'];
+    $cus = $list['cus_id'];
 
 
     $sales_id = 0;
-    
+
     $credit = 0;
     $pay_amount = 0;
 
