@@ -108,7 +108,7 @@ include("connect.php");
                                     </div>
 
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 hidden">
                                         <div class="form-group">
                                             <div class="input-group date">
                                                 <div class="input-group-addon">
@@ -147,7 +147,6 @@ include("connect.php");
                                     <th>Product Name</th>
                                     <th>QTY</th>
                                     <th>Dic (Rs.)</th>
-                                    <th>Sell (Rs.)</th>
                                     <th>Cost (Rs.)</th>
                                     <th>Amount (Rs.)</th>
                                     <th>#</th>
@@ -175,7 +174,6 @@ include("connect.php");
                                         <td><?php echo $row['name']; ?></td>
                                         <td><?php echo $row['qty']; ?></td>
                                         <td><?php echo $row['discount']; ?></td>
-                                        <td><?php echo $row['sell']; ?></td>
                                         <td><?php echo $row['cost']; ?></td>
                                         <td><?php echo $row['amount']; ?></td>
                                         <td> <a href="#" id="<?php echo $row['transaction_id']; ?>" class="dll_btn btn btn-danger" title="Click to Delete"> X</a></td>

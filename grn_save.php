@@ -139,9 +139,9 @@ if ($invo != '') {
 
             $qty_blc = $st_qty + $qty;
 
-            $sql = "UPDATE  products SET qty = ?, cost = ?, sell_price = ? WHERE product_id=?";
+            $sql = "UPDATE  products SET qty = ?, cost = ? WHERE product_id=?";
             $ql = $db->prepare($sql);
-            $ql->execute(array($qty_blc, $cost, $sell, $p_id));
+            $ql->execute(array($qty_blc, $cost, $p_id));
 
             $sql = "INSERT INTO inventory (product_id,name,invoice_no,type,balance,qty,date,cost,sell) VALUES (?,?,?,?,?,?,?,?,?)";
             $ql = $db->prepare($sql);
