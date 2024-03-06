@@ -20,7 +20,6 @@ foreach ($payment as $list) {
     // get values
     $invoice = $list['invoice_no'];
     $amount = $list['amount'];
-    $balance = $list['balance'];
     $pay_type = $list['pay_type'];
     $date = $list['date'];
     $app_id = $list['id'];
@@ -37,14 +36,20 @@ foreach ($payment as $list) {
     $credit = 0;
     $pay_amount = 0;
 
-    if ($pay_type == 'Credit') {
+    if ($pay_type == 'credit') {
 
         $credit = $amount;
         $pay_amount = 0;
+    } else
+
+    if ($pay_type == 'chq') {
+
+        $credit = 0;
+        $pay_amount = 0;
     } else {
 
-        $credit = $balance;
-        $pay_amount = $amount - $balance;
+        $credit = 0;
+        $pay_amount = $amount;
     }
 
     //------------------------------------------------------------------//
