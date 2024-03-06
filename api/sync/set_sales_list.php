@@ -117,7 +117,7 @@ foreach ($sales_list as $list) {
         $ql->execute(array($invoice, $pid, $name, $amount, $cost_amount, $qty, $price, $profit, $date, $load, 0, $cus, $price_id, $vat, $value, $app_id));
 
         // get sales list id
-        $result = $db->prepare("SELECT * FROM sales_list WHERE invoice_no=:id ");
+        $result = $db->prepare("SELECT * FROM sales_list WHERE invoice_no=:id AND product_id = $pid ");
         $result->bindParam(':id', $invoice);
         $result->execute();
         for ($i = 0; $row = $result->fetch(); $i++) {
@@ -127,7 +127,7 @@ foreach ($sales_list as $list) {
         }
 
         // create success respond 
-        $res[] = array(
+        $res = array(
             "cloud_id" => $id,
             "app_id" => $ap_id,
             "invoice_no" => $invo,
@@ -139,7 +139,7 @@ foreach ($sales_list as $list) {
     } catch (PDOException $e) {
 
         // create error respond 
-        $res[] = array(
+        $res = array(
             "cloud_id" => 0,
             "app_id" => 0,
             "invoice_no" => "",
