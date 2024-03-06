@@ -162,24 +162,27 @@
             </a>
 
             <ul class="treeview-menu">
+
               <li class="<?php if ($f == 'loading') {
                             echo 'active';
                           } ?>"><a href="loading.php"><i class="fa fa-circle-o text-aqua "></i> New Loading</a></li>
+
               <li class="<?php if ($f == 'empty_loading') {
                             echo 'active';
-                          } ?>">
-                <a href="empty_loading.php"><i class="fa fa-circle-o text-aqua "></i> Empty Loading</a>
-              </li>
+                          } ?>"><a href="empty_loading.php"><i class="fa fa-circle-o text-aqua "></i> Empty Loading</a></li>
+
               <li class="<?php if ($f == 'unloading') {
                             echo 'active';
                           } ?>"><a href="unloading.php"><i class="fa fa-circle-o text-aqua "></i> Unloading</a></li>
+
               <li class="<?php if ($f == 'loading_view') {
                             echo 'active';
                           } ?>"><a href="loading_view.php?id=0"><i class="fa fa-circle-o text-aqua "></i> View Loading</a></li>
+
               <li class="<?php if ($f == 'lorry_sales_view') {
                             echo 'active';
                           } ?>"><a href="lorry_sales_view.php?d1=<?php echo $date; ?>&lorry=0"><i class="fa fa-circle-o text-aqua "></i> View Lorry Sales</a></li>
-              </a>
+
             </ul>
           </li>
 
@@ -198,22 +201,28 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
             </a>
+
             <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
               <li class="<?php if ($f == 'grn') {
                             echo 'active';
                           } ?>"><a href="grn.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> GRN</a></li>
+
               <li class="<?php if ($f == 'grn_supply') {
                             echo 'active';
                           } ?>"><a href="grn_supply.php?id=0"><i class="fa fa-circle-o text-aqua"></i> Suppliers</a></li>
+
               <li class="<?php if ($f == 'grn_payment') {
                             echo 'active';
                           } ?>"><a href="grn_payment.php"><i class="fa fa-circle-o text-aqua"></i> Payment</a></li>
-              <li class="<?php if ($f == 'grn_return') {
+
+              <!-- <li class="<?php if ($f == 'grn_return') {
                             echo 'active';
                           } ?>"><a href="grn_return.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> GRN Return</a></li>
+
               <li class="<?php if ($f == 'grn_order') {
                             echo 'active';
-                          } ?>"><a href="grn_order.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> Purchase Order</a></li>
+                          } ?>"><a href="grn_order.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> Purchase Order</a></li> -->
+
 
               <?php $co = '';
               if ($f == 'grn_rp' || $f == 'grn_payment_rp' || $f == 'grn_return_rp' || $f == 'grn_order_rp') {
@@ -225,19 +234,23 @@
                   <span>Report</span>
                   <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                 </a>
+
                 <ul class="treeview-menu">
+
                   <li class="<?php if ($f == 'grn_rp') {
                                 echo 'active';
                               } ?>"><a href="grn_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> GRN Record</a></li>
+
                   <li class="<?php if ($f == 'grn_payment_rp') {
                                 echo 'active';
                               } ?>"><a href="grn_payment_rp.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>"><i class="fa fa-circle-o text-red"></i> Payment Record</a></li>
-                  <li class="<?php if ($f == 'grn_return_rp') {
+
+                  <!-- <li class="<?php if ($f == 'grn_return_rp') {
                                 echo 'active';
                               } ?>"><a href="grn_return_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Return Record</a></li>
                   <li class="<?php if ($f == 'grn_order_rp') {
                                 echo 'active';
-                              } ?>"><a href="grn_order_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Order Record</a></li>
+                              } ?>"><a href="grn_order_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Order Record</a></li> -->
                 </ul>
               </li>
             </ul>
@@ -309,22 +322,24 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
             </a>
+
             <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
+
               <li class="<?php if ($f == 'acc_transfer') {
                             echo 'active';
                           } ?>"><a href="acc_transfer.php"><i class="fa fa-circle-o text-aqua"></i> Account Transfer</a></li>
+
               <li class="<?php if ($f == 'acc_bank_transfer') {
                             echo 'active';
-                          } ?>"><a href="acc_bank_transfer.php"><i class="fa fa-circle-o text-aqua"></i> Bank Transfer</a>
-              </li>
+                          } ?>"><a href="acc_bank_transfer.php"><i class="fa fa-circle-o text-aqua"></i> Bank Transfer</a></li>
+
               <li class="<?php if ($f == 'acc_bank_loan') {
                             echo 'active';
-                          } ?>"><a href="acc_bank_loan.php"><i class="fa fa-circle-o text-aqua"></i> Bank Loan</a>
-              </li>
+                          } ?>"><a href="acc_bank_loan.php"><i class="fa fa-circle-o text-aqua"></i> Bank Loan</a></li>
+
               <li class="<?php if ($f == 'acc_chq_realizing') {
                             echo 'active';
-                          } ?>"><a href="acc_chq_realizing.php"><i class="fa fa-circle-o text-aqua"></i> Chq Realizing</a>
-              </li>
+                          } ?>"><a href="acc_chq_realizing.php"><i class="fa fa-circle-o text-aqua"></i> Chq Realizing</a></li>
 
               <?php $co = '';
               if ($f == 'acc_regeneration' || $f == 'acc_bank_regeneration') {
@@ -336,10 +351,13 @@
                   <span>Report</span>
                   <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                 </a>
+
                 <ul class="treeview-menu">
+
                   <li class="<?php if ($f == 'acc_regeneration') {
                                 echo 'active';
                               } ?>"><a href="acc_regeneration.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>&account=1"><i class="fa fa-circle-o text-red"></i> Transfer Recode</a></li>
+
                   <li class="<?php if ($f == 'acc_bank_regeneration') {
                                 echo 'active';
                               } ?>"><a href="acc_bank_regeneration.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>&bank=1"><i class="fa fa-circle-o text-red"></i> Bank Reconciliation</a></li>
@@ -398,51 +416,59 @@
               </span>
             </a>
             <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
+
               <li class="<?php if ($f == 'grn') {
                             echo 'active';
                           } ?>"><a href="grn.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> GRN</a></li>
+
               <li class="<?php if ($f == 'grn_supply') {
                             echo 'active';
                           } ?>"><a href="grn_supply.php?id=0"><i class="fa fa-circle-o text-aqua"></i> Suppliers</a></li>
+
               <li class="<?php if ($f == 'grn_payment') {
                             echo 'active';
                           } ?>"><a href="grn_payment.php"><i class="fa fa-circle-o text-aqua"></i> Payment</a></li>
-              <li class="<?php if ($f == 'grn_return') {
+
+              <!-- <li class="<?php if ($f == 'grn_return') {
                             echo 'active';
-                          } ?>"><a href="grn_return.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> GRN Return</a></li>
-              <li class="<?php if ($f == 'grn_order') {
+                          } ?>"><a href="grn_return.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> GRN Return</a></li> -->
+              <!-- <li class="<?php if ($f == 'grn_order') {
                             echo 'active';
-                          } ?>"><a href="grn_order.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> Purchase Order</a></li>
+                          } ?>"><a href="grn_order.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> Purchase Order</a></li> -->
 
               <?php $co = '';
               if ($f == 'grn_rp' || $f == 'grn_payment_rp' || $f == 'grn_return_rp' || $f == 'grn_order_rp') {
                 $co = 'active';
               } ?>
+
               <li class="treeview <?php echo $co; ?>">
                 <a href="#">
                   <i class="fa fa-line-chart"></i>
                   <span>Report</span>
                   <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                 </a>
+
                 <ul class="treeview-menu">
                   <li class="<?php if ($f == 'grn_rp') {
                                 echo 'active';
                               } ?>"><a href="grn_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> GRN Record</a></li>
+
                   <li class="<?php if ($f == 'grn_payment_rp') {
                                 echo 'active';
                               } ?>"><a href="grn_payment_rp.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>"><i class="fa fa-circle-o text-red"></i> Payment Record</a></li>
-                  <li class="<?php if ($f == 'grn_return_rp') {
+                              
+                  <!-- <li class="<?php if ($f == 'grn_return_rp') {
                                 echo 'active';
-                              } ?>"><a href="grn_return_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Return Record</a></li>
-                  <li class="<?php if ($f == 'grn_order_rp') {
+                              } ?>"><a href="grn_return_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Return Record</a></li> -->
+                  <!-- <li class="<?php if ($f == 'grn_order_rp') {
                                 echo 'active';
-                              } ?>"><a href="grn_order_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Order Record</a></li>
+                              } ?>"><a href="grn_order_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Order Record</a></li> -->
                 </ul>
               </li>
             </ul>
           </li>
 
-          <li class="treeview">
+          <li class="treeview hidden">
             <a href="#">
               <i class="fa fa-bank"></i>
               <span>Bank</span>
