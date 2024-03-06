@@ -17,16 +17,16 @@ $result_array = array();
 
 foreach ($sales_list as $list) {
 
-    $invoice = $list['invoice'];
-    $pid = $list['product'];
-    $name = $list['name'];
+    $invoice = $list['invoice_no'];
+    $pid = $list['product_id'];
+    $name = $list['product_name'];
     $qty = $list['qty'];
     $price = $list['price'];
-    $load = $list['load_id'];
+    $load = $list['loading_id'];
     $date = $list['date'];
-    $cus = $list['customer'];
+    $cus = $list['cus_id'];
     $price_id = $list['price_id'];
-    $app_id = $list['app_id'];
+    $app_id = $list['id'];
 
 
     $cost_amount = 0;
