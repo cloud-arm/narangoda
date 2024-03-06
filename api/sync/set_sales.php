@@ -72,12 +72,14 @@ try {
     for ($i = 0; $row = $result->fetch(); $i++) {
         $id = $row['transaction_id'];
         $ap_id = $row['app_id'];
+        $invo = $row['invoice_number'];
     }
 
     // create success respond 
     $result_array[] = array(
         "cloud_id" => $id,
         "app_id" => $ap_id,
+        "invoice_no" => $invo,
         "status" => "success",
         "message" => ""
     );
@@ -90,6 +92,7 @@ try {
     $result_array[] = array(
         "cloud_id" => 0,
         "app_id" => 0,
+        "invoice_no" => "",
         "status" => "failed",
         "message" => $e->getMessage()
     );

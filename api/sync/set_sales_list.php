@@ -123,12 +123,14 @@ foreach ($sales_list as $list) {
         for ($i = 0; $row = $result->fetch(); $i++) {
             $id = $row['id'];
             $ap_id = $row['app_id'];
+            $invo = $row['invoice_no'];
         }
 
         // create success respond 
         $res[] = array(
             "cloud_id" => $id,
             "app_id" => $ap_id,
+            "invoice_no" => $invo,
             "status" => "success",
             "message" => "",
         );
@@ -140,6 +142,7 @@ foreach ($sales_list as $list) {
         $res[] = array(
             "cloud_id" => 0,
             "app_id" => 0,
+            "invoice_no" => "",
             "status" => "failed",
             "message" => $e->getMessage(),
         );
