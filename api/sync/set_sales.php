@@ -16,6 +16,7 @@ $amount = $_POST['amount'];
 $vat_action = $_POST['vat_action'];
 $vat_no = $_POST['vat_no'];
 $date = $_POST['date'];
+$app_id = $_POST['app_id'];
 
 // get loading details
 $result = $db->prepare("SELECT * FROM loading WHERE transaction_id=:id AND action='load' ");
@@ -60,9 +61,9 @@ for ($i = 0; $row = $result->fetch(); $i++) {
 try {
 
     // insert query
-    $sql = "INSERT INTO sales (invoice_number,cashier,date,time,amount,cost,profit,name,root,rep,lorry_no,term,loading_id,customer_id,action,address,vat,value,cus_vat_no,vat_action) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    $sql = "INSERT INTO sales (invoice_number,cashier,date,time,amount,cost,profit,name,root,rep,lorry_no,term,loading_id,customer_id,action,address,vat,value,cus_vat_no,vat_action,app_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $ql = $db->prepare($sql);
-    $ql->execute(array($invoice, $driver, $date, $time, $amount, $cost, $profit, $cus_name, $root, $driver_name, $lorry, $term, $load, $cus, 1, $address, $vat, $value, $vat_no, $vat_action));
+    $ql->execute(array($invoice, $driver, $date, $time, $amount, $cost, $profit, $cus_name, $root, $driver_name, $lorry, $term, $load, $cus, 1, $address, $vat, $value, $vat_no, $vat_action, $app_id));
 
     // get sales  id
     $result = $db->prepare("SELECT * FROM sales WHERE invoice_number=:id ");
@@ -70,13 +71,15 @@ try {
     $result->execute();
     for ($i = 0; $row = $result->fetch(); $i++) {
         $id = $row['transaction_id'];
+        $ap_id = $row['app_id'];
     }
 
     // create success respond 
     $result_array[] = array(
         "cloud_id" => $id,
-        "status" => 'success',
-        "message" => '',
+        "app_id" => $ap_id,
+        "status" => "success",
+        "message" => ""
     );
 
     // send respond
@@ -85,9 +88,10 @@ try {
 
     // create error respond 
     $result_array[] = array(
-        "cloud_id" => '0',
-        "status" => 'failed',
-        "message" => $e->getMessage(),
+        "cloud_id" => 0,
+        "app_id" => 0,
+        "status" => "failed",
+        "message" => $e->getMessage()
     );
 
     // send respond
