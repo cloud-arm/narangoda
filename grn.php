@@ -91,7 +91,7 @@ include("connect.php");
                                                 <div class="input-group-addon">
                                                     <label>Qty</label>
                                                 </div>
-                                                <input type="number" class="form-control" value="1" name="qty" tabindex="2">
+                                                <input type="number" step=".01" class="form-control" value="1" name="qty" tabindex="2">
                                             </div>
                                         </div>
                                     </div>
@@ -102,7 +102,7 @@ include("connect.php");
                                                 <div class="input-group-addon">
                                                     <label>Dis %</label>
                                                 </div>
-                                                <input type="number" class="form-control" name="dic" tabindex="2">
+                                                <input type="number" step=".01" class="form-control" name="dic" tabindex="2">
                                             </div>
                                         </div>
                                     </div>
@@ -114,7 +114,7 @@ include("connect.php");
                                                 <div class="input-group-addon">
                                                     <label>Sell Price</label>
                                                 </div>
-                                                <input type="number" id="sell1" class="form-control" name="sell" tabindex="2">
+                                                <input type="number" step=".01" id="sell1" class="form-control" name="sell" tabindex="2">
                                             </div>
                                         </div>
                                     </div>
@@ -125,7 +125,7 @@ include("connect.php");
                                                 <div class="input-group-addon">
                                                     <label>Cost Price</label>
                                                 </div>
-                                                <input type="number" id="cost1" class="form-control" name="cost" tabindex="2">
+                                                <input type="number" step=".01" id="cost1" class="form-control" name="cost" tabindex="2">
                                             </div>
                                         </div>
                                     </div>
