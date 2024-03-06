@@ -94,6 +94,11 @@ foreach ($sales_list as $list) {
                 $temp_qty = 0;
             }
         } while ($temp_qty > 0);
+
+        // update loading qty
+        $sql = "UPDATE loading_list SET qty_sold = qty_sold-? WHERE loading_id = ? AND product_code = ?";
+        $ql = $db->prepare($sql);
+        $ql->execute(array($qty, $load, $pid));
     }
     // ------------
 
