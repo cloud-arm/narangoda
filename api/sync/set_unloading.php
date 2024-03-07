@@ -21,7 +21,6 @@ foreach ($unloading as $list) {
     $app_id = $list['id'];
     $load = $list['loading_id'];
     $driver = $list['driver_id'];
-    $action = $list['action'];
     $r5000 = $list['r5000'];
     $r1000 = $list['r1000'];
     $r500 = $list['r500'];
@@ -32,16 +31,14 @@ foreach ($unloading as $list) {
     $coins = $list['coins'];
     $cash_amount = $list['cash_amount'];
 
-    $time = date('H:i:s');
-
 
     //------------------------------------------------------------------//
     try {
 
         // unloading
-        $sql = "UPDATE loading SET unloading_time = ?, action = ?, r5000 = ?, r1000 = ?, r500 = ?, r100 = ?, r50 = ?, r20 = ?, r10 = ?, coins = ?, cash_total = ? WHERE transaction_id = ? AND driver = ?";
+        $sql = "UPDATE loading SET  r5000 = ?, r1000 = ?, r500 = ?, r100 = ?, r50 = ?, r20 = ?, r10 = ?, coins = ?, cash_total = ? WHERE transaction_id = ? AND driver = ?";
         $q = $db->prepare($sql);
-        $q->execute(array($time, $action, $r5000, $r1000, $r500, $r100, $r50, $r20, $r10, $coins, $cash_amount, $load, $driver));
+        $q->execute(array( $r5000, $r1000, $r500, $r100, $r50, $r20, $r10, $coins, $cash_amount, $load, $driver));
 
         // create success respond 
         $res = array(
