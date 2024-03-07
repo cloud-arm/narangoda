@@ -22,6 +22,49 @@ date_default_timezone_set("Asia/Colombo");
   }
   ?>
 
+  <style>
+    .d-none {
+      display: none !important;
+    }
+
+    .mx-2 {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+
+    .w-100 {
+      width: 100%;
+    }
+
+    .fa-remove {
+      font-size: 20px !important;
+      padding: 0;
+    }
+
+    .container-up {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+      background-color: rgb(0, 0, 0, 0.3);
+    }
+
+    .container-up .container-close {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .container-up .box {
+      padding: 7px 15px;
+    }
+  </style>
+
   <!-- /.sidebar -->
   </aside>
 
@@ -38,142 +81,13 @@ date_default_timezone_set("Asia/Colombo");
     <!-- Main content -->
     <section class="content">
 
-      <div class="row">
-        <div class="col-md-6 model_add_1" style="display: none;">
-          <div class="box box-primary model_add_1">
-            <div class="box-header with-border">
-              <h3 class="box-title">New Utility Type</h3>
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" onclick="model_cl(1)" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-
-            <div class="box-body">
-
-              <form method="POST" action="expenses_save.php">
-
-                <div class="row" style="display: flex; align-items: end;">
-                  <div class="col-md-9">
-                    <div class="form-group">
-                      <label>Utility Name</label>
-                      <input type="text" name="util_name" value="" class="form-control" autocomplete="off">
-                    </div>
-                  </div>
-
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <input type="hidden" name="unit" value="2">
-                      <input type="submit" value="Save" class="btn btn-info">
-                    </div>
-                  </div>
-                </div>
-
-              </form>
-
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-6 model_add_2" style="display: none;">
-          <div class="box box-primary model_add_2">
-            <div class="box-header with-border">
-              <h3 class="box-title">New Expenses Type</h3>
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" onclick="model_cl(2)" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-
-            <div class="box-body">
-
-              <form method="POST" action="expenses_save.php">
-
-                <div class="row" style="display: flex; align-items: end;">
-                  <div class="col-md-9">
-                    <div class="form-group">
-                      <label>Expenses Type</label>
-                      <input type="text" name="type" value="" class="form-control" autocomplete="off">
-                    </div>
-                  </div>
-
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <input type="hidden" name="unit" value="3">
-                      <input type="submit" value="Save" class="btn btn-info">
-                    </div>
-                  </div>
-                </div>
-
-              </form>
-
-            </div>
-          </div>
-        </div>
-
-
-        <div class="col-md-12 model_add_3" style="display: none;">
-          <div class="box box-primary model_add_3">
-            <div class="box-header with-border">
-              <h3 class="box-title">New Meter Reading Bill</h3>
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" onclick="model_cl(3)" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-
-            <div class="box-body">
-
-              <form method="POST" action="expenses_save.php">
-
-                <div class="row" style="display: flex; align-items: end;">
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label>Utility Name</label>
-                      <input type="text" name="util_name" value="" class="form-control" autocomplete="off">
-                    </div>
-                  </div>
-
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label>Last Meter</label>
-                      <input type="text" name="last_meter" value="" class="form-control" autocomplete="off">
-                    </div>
-                  </div>
-
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label>Unit Price</label>
-                      <input type="number" name="unit_price" value="" class="form-control" autocomplete="off">
-                    </div>
-                  </div>
-
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <input type="hidden" name="unit" value="4">
-                      <input type="submit" value="Save" class="btn btn-info">
-                    </div>
-                  </div>
-                </div>
-
-              </form>
-
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- SELECT2 EXAMPLE -->
       <div class="box box-info">
         <div class="box-header with-border">
-          <h3 class="box-title">Expenses
-            <span class="btn btn-success" id="model_btn_1" onclick="model_btn(1)" style="margin: 10px 20px;">Add Utility Bill</span>
-            <span class="btn btn-success" id="model_btn_2" onclick="model_btn(2)" style="margin: 10px 20px;">Add Expenses Type</span>
-            <span class="btn btn-success hidden" id="model_btn_3" onclick="model_btn(3)" style="margin: 10px 20px;">Add Meter Reading Utility Bill</span>
-          </h3>
+          <h3 class="box-title">Expenses</h3>
+          <small class="btn btn-success mx-2" style="padding: 5px 10px;" title="Add Utility Bill" onclick="click_open(1)">Add Utility Bill</small>
+          <small class="btn btn-success mx-2" style="padding: 5px 10px;" title="Add Expenses Type" onclick="click_open(2)">Add Expenses Type</small>
+          <small class="btn btn-success mx-2 hidden" style="padding: 5px 10px;" title="Add Meter Reading Utility Bill" onclick="click_open(3)">Add Meter Reading Utility Bill</small>
         </div>
 
         <!-- /.box-header -->
@@ -189,11 +103,11 @@ date_default_timezone_set("Asia/Colombo");
               <div class="col-md-3">
                 <div class="form-group">
                   <label>Expenses Type</label>
-                  <select class="form-control" name="type" style="width: 100%;" id="ex_type" onchange="select_type()" tabindex="1">
+                  <select class="form-control select2" name="type" style="width: 100%;" id="ex_type" onchange="select_type()" tabindex="1">
 
                     <?php
                     $result = $db->prepare("SELECT * FROM expenses_types ");
-                    $result->bindParam(':userid', $ttr);
+                    $result->bindParam(':id', $ttr);
                     $result->execute();
                     for ($i = 0; $row = $result->fetch(); $i++) {
                     ?>
@@ -209,7 +123,7 @@ date_default_timezone_set("Asia/Colombo");
               <div class="col-md-3">
                 <div class="form-group">
                   <label>Pay Type</label>
-                  <select class="form-control " id="pay_type" name="pay_type" onchange="select_pay()" style="width: 100%;" tabindex="2">
+                  <select class="form-control select2 hidden-search" id="pay_type" name="pay_type" onchange="select_pay()" style="width: 100%;" tabindex="2">
                     <option value="cash"> Cash </option>
                     <option value="chq"> Chq </option>
                     <option value="bank" disabled> Bank </option>
@@ -220,10 +134,10 @@ date_default_timezone_set("Asia/Colombo");
               <div class="col-md-3" id="acc_sec">
                 <div class="form-group">
                   <label>Account</label>
-                  <select class="form-control " name="acc" style="width: 100%;" tabindex="3">
+                  <select class="form-control select2 hidden-search" name="acc" style="width: 100%;" tabindex="3">
                     <?php
                     $result = $db->prepare("SELECT * FROM cash ");
-                    $result->bindParam(':userid', $ttr);
+                    $result->bindParam(':id', $ttr);
                     $result->execute();
                     for ($i = 0; $row = $result->fetch(); $i++) {
                     ?>
@@ -238,11 +152,11 @@ date_default_timezone_set("Asia/Colombo");
               <div class="col-md-3 bank_sec" style="display: none;">
                 <div class="form-group">
                   <label>Account</label>
-                  <select class="form-control " name="bank" style="width: 100%;" tabindex="4">
+                  <select class="form-control select2 hidden-search" name="bank" style="width: 100%;" tabindex="4">
 
                     <?php
                     $result = $db->prepare("SELECT * FROM bank_balance ");
-                    $result->bindParam(':userid', $ttr);
+                    $result->bindParam(':id', $ttr);
                     $result->execute();
                     for ($i = 0; $row = $result->fetch(); $i++) {
                     ?>
@@ -266,6 +180,26 @@ date_default_timezone_set("Asia/Colombo");
                 <div class="form-group">
                   <label>Chq Date</label>
                   <input type="text" name="chq_date" id="datepicker" class="form-control" tabindex="6" autocomplete="off">
+                </div>
+              </div>
+
+              <div class="col-md-3 load_sec" style="display: none;">
+                <div class="form-group">
+                  <label>Loading ID</label> <span id="blc" class="badge bg-red"></span>
+                  <select class="form-control select2" name="load_id" style="width: 100%;" tabindex="8" onchange="select_bill(this.options[this.selectedIndex].getAttribute('balance'))">
+                    <option value="0" disabled selected></option>
+                    <?php
+                    $result = $db->prepare("SELECT * FROM loading WHERE  action='load'  ");
+                    $result->bindParam(':id', $res);
+                    $result->execute();
+                    for ($i = 0; $row = $result->fetch(); $i++) {
+                    ?>
+                      <option value="<?php echo $row['transaction_id']; ?>"><?php echo $row['lorry_no']; ?> </option>
+                    <?php
+                    }
+                    ?>
+                  </select>
+
                 </div>
               </div>
 
@@ -352,7 +286,7 @@ date_default_timezone_set("Asia/Colombo");
             <div class="col-lg-3"></div>
             <div class="col-md-2">
               <div class="form-group">
-                <select class="form-control " name="year" style="width: 100%;" tabindex="1">
+                <select class="form-control select2 hidden-search" name="year" style="width: 100%;" tabindex="1">
                   <option> <?php echo date('Y') - 1 ?> </option>
                   <option selected> <?php echo date('Y') ?> </option>
                 </select>
@@ -360,7 +294,7 @@ date_default_timezone_set("Asia/Colombo");
             </div>
             <div class="col-md-2">
               <div class="form-group">
-                <select class="form-control " name="month" style="width: 100%;" tabindex="1">
+                <select class="form-control select2 hidden-search " name="month" style="width: 100%;" tabindex="1">
                   <?php for ($x = 1; $x <= 12; $x++) {
                     $mo = sprintf("%02d", $x); ?>
                     <option <?php if (isset($_POST['year'])) {
@@ -436,11 +370,14 @@ date_default_timezone_set("Asia/Colombo");
                 <tr class="record" style="<?php echo $style; ?>">
                   <td><?php echo $row['id'];   ?> </td>
                   <td><?php echo $row['date'];   ?> </td>
-                  <td><?php if ($row['util_id'] > 0) {
-                        echo $row['util_name'];
-                      } else {
-                        echo $row['type'];
-                      }  ?> </td>
+                  <td>
+                    <?php if ($row['util_id'] > 0) {
+                      echo $row['util_name'];
+                    } else {
+                      echo $row['type'];
+                    }  ?>
+                    <?php if ($type == 2) { ?> <br> <span class="badge bg-blue">Loading ID: <?php echo $row['loading_id']; ?> </span> <?php } ?>
+                  </td>
                   <td><?php echo $row['comment'];   ?></td>
                   <td><?php echo $row['pay_type'];   ?></td>
                   <td><?php echo $row['chq_no'];   ?></td>
@@ -464,6 +401,122 @@ date_default_timezone_set("Asia/Colombo");
 
   <!-- /.content-wrapper -->
   <?php include("dounbr.php"); ?>
+
+  <div class="container-up d-none" id="container_up">
+    <div class="container-close" onclick="click_close()"></div>
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="box box-success popup d-none" id="popup_1">
+          <div class="box-header with-border">
+            <h3 class="box-title w-100">
+              New Utility Type
+              <i onclick="click_close()" class="btn p-0 me-2 pull-right fa fa-remove" style="font-size: 25px"></i>
+            </h3>
+          </div>
+
+          <div class="box-body d-block">
+            <form method="POST" action="expenses_save.php">
+
+              <div class="row" style="display: block;">
+                <div class="col-md-9">
+                  <div class="form-group">
+                    <label>Utility Name</label>
+                    <input type="text" name="util_name" value="" class="form-control" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <input type="hidden" name="unit" value="2">
+                    <input type="submit" style="margin-top: 23px;" value="Save" class="btn btn-info">
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <div class="box box-success popup d-none" id="popup_2">
+          <div class="box-header with-border">
+            <h3 class="box-title w-100">
+              New Expenses Type
+              <i onclick="click_close()" class="btn p-0 me-2 pull-right fa fa-remove" style="font-size: 25px"></i>
+            </h3>
+          </div>
+
+          <div class="box-body d-block">
+            <form method="POST" action="expenses_save.php">
+
+              <div class="row" style="display: block;">
+                <div class="col-md-9">
+                  <div class="form-group">
+                    <label>Expenses Type</label>
+                    <input type="text" name="type" value="" class="form-control" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <input type="hidden" name="unit" value="3">
+                    <input type="submit" style="margin-top: 23px;" value="Save" class="btn btn-info">
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <div class="box box-success popup d-none" id="popup_3">
+          <div class="box-header with-border">
+            <h3 class="box-title w-100">
+              New Meter Reading Bill
+              <i onclick="click_close()" class="btn p-0 me-2 pull-right fa fa-remove" style="font-size: 25px"></i>
+            </h3>
+          </div>
+
+          <div class="box-body d-block">
+            <form method="POST" action="expenses_save.php">
+
+              <div class="row" style="display: block;">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Utility Name</label>
+                    <input type="text" name="util_name" value="" class="form-control" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Last Meter</label>
+                    <input type="text" name="last_meter" value="" class="form-control" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Unit Price</label>
+                    <input type="number" name="unit_price" value="" class="form-control" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <input type="hidden" name="unit" value="4">
+                    <input type="submit" style="margin-top: 23px;" value="Save" class="btn btn-info">
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
   <div class="control-sidebar-bg"></div>
   </div>
@@ -494,6 +547,18 @@ date_default_timezone_set("Asia/Colombo");
   <script src="../../dist/js/demo.js"></script>
   <!-- Dark Theme Btn-->
   <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
+
+  <script>
+    function click_open(i) {
+      $("#popup_" + i).removeClass("d-none");
+      $("#container_up").removeClass("d-none");
+    }
+
+    function click_close() {
+      $(".popup").addClass("d-none");
+      $("#container_up").addClass("d-none");
+    }
+  </script>
 
   <script type="text/javascript">
     function select_bill(val) {
@@ -536,8 +601,14 @@ date_default_timezone_set("Asia/Colombo");
 
       if (val == 1) {
         $('.util_sec').css('display', 'block');
+        $('.load_sec').css('display', 'none');
+      } else
+      if (val == 2) {
+        $('.util_sec').css('display', 'none');
+        $('.load_sec').css('display', 'block');
       } else {
         $('.util_sec').css('display', 'none');
+        $('.load_sec').css('display', 'none');
       }
     }
 
@@ -596,6 +667,9 @@ date_default_timezone_set("Asia/Colombo");
     $(function() {
       //Initialize Select2 Elements
       $(".select2").select2();
+      $('.select2.hidden-search').select2({
+        minimumResultsForSearch: -1
+      });
 
       //Date range picker
       $('#reservation').daterangepicker();

@@ -18,7 +18,7 @@ if ($unit == 1) {
     $comment = $_POST['comment'];
     $amount = $_POST['pay_amount'];
     $pay_type = $_POST['pay_type'];
-    $job_no = 0;
+    $load_id = 0;
     $util_id = 0;
     $util_date = '';
     $util_invo = '';
@@ -44,7 +44,7 @@ if ($unit == 1) {
         $type_name = $r['type_name'];
     }
 
-    if ($type_name == 'Utility_Bill') {
+    if ($type == 1) {
         $util_id = $_POST['util_id'];
         $util_date = $_POST['util_date'];
         $util_invo = $_POST['util_invo'];
@@ -56,6 +56,10 @@ if ($unit == 1) {
         for ($i = 0; $r = $re->fetch(); $i++) {
             $util_name = $r['name'];
         }
+    }
+
+    if ($type == 2) {
+        $load_id = $_POST['load_id'];
     }
 
     if ($pay_type == 'chq') {
@@ -129,15 +133,17 @@ if ($unit == 1) {
         $q->execute(array($amount, $amount, $pay_type, $date, $invo, 0, $chq_no, $acc_name, $acc, $chq_date, '', 3, 1));
     }
 
-    $sql = "INSERT INTO expenses_records (date,type_id,type,invoice_no,acc_id,acc_name,comment,amount,user,job_no,util_id,util_name,util_date,util_invoice,util_bill_amount,util_balance,util_forward_balance,pay_type,chq_no,chq_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    $sql = "INSERT INTO expenses_records (date,type_id,type,invoice_no,acc_id,acc_name,comment,amount,user,loading_id,util_id,util_name,util_date,util_invoice,util_bill_amount,util_balance,util_forward_balance,pay_type,chq_no,chq_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $q = $db->prepare($sql);
-    $q->execute(array($date, $type, $type_name, $invo, $acc, $acc_name, $comment, $amount, $ui, $job_no, $util_id, $util_name, $util_date, $util_invo, $util_amount, $util_blc, $util_fw_blc, $pay_type, $chq_no, $chq_date));
+    $q->execute(array($date, $type, $type_name, $invo, $acc, $acc_name, $comment, $amount, $ui, $load_id, $util_id, $util_name, $util_date, $util_invo, $util_amount, $util_blc, $util_fw_blc, $pay_type, $chq_no, $chq_date));
 }
 
 if ($unit == 2) {
     $util_name = $_POST['util_name'];
 
-    $name = strtoupper($util_name);
+    $name = trim($util_name);
+    $name = ucwords($name);
+    $name = str_replace(" ", "_", $name);
 
     $id = 0;
     $re = $db->prepare("SELECT * FROM utility_bill WHERE name=:id ");
@@ -159,7 +165,17 @@ if ($unit == 3) {
     $type = $_POST['type'];
     $id = 0;
 
-    $name = strtoupper($type);
+    $name = trim($type);
+    $name = ucwords($name);
+    $name = str_replace(" ", "_", $name);
+
+    $id = 0;
+    $re = $db->prepare("SELECT * FROM expenses_types WHERE type_name=:id ");
+    $re->bindParam(':id', $name);
+    $re->execute();
+    for ($i = 0; $r = $re->fetch(); $i++) {
+        $id = $r['sn'];
+    }
 
     if ($id == 0) {
         $sql = "INSERT INTO expenses_types (type_name) VALUES (?) ";
@@ -175,7 +191,9 @@ if ($unit == 4) {
     $unit_price = $_POST['unit_price'];
 
     $date = date('Y-m-d');
-    $name = strtoupper($util_name);
+    $name = trim($util_name);
+    $name = ucwords($name);
+    $name = str_replace(" ", "_", $name);
 
     $id = 0;
     $re = $db->prepare("SELECT * FROM utility_bill WHERE name=:id ");
