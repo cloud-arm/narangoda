@@ -476,14 +476,14 @@ include("connect.php");
             $cash = $row['sum(amount)'];
           }
 
-          $result = $db->prepare("SELECT sum(amount) FROM payment WHERE  loading_id='$id' AND type='chq' and action >'0'  ORDER by transaction_id DESC");
+          $result = $db->prepare("SELECT sum(amount) FROM payment WHERE  loading_id='$id' AND pay_type='chq' and action >'0'  ORDER by transaction_id DESC");
           $result->bindParam(':userid', $c);
           $result->execute();
           for ($i = 0; $row = $result->fetch(); $i++) {
             $chq = $row['sum(amount)'];
           }
 
-          $result = $db->prepare("SELECT sum(amount) FROM payment WHERE  loading_id='$id' AND type='credit' and action >'0'  ORDER by transaction_id DESC");
+          $result = $db->prepare("SELECT sum(amount) FROM payment WHERE  loading_id='$id' AND pay_type='credit' and action >'0'  ORDER by transaction_id DESC");
           $result->bindParam(':userid', $c);
           $result->execute();
           for ($i = 0; $row = $result->fetch(); $i++) {
@@ -553,18 +553,18 @@ include("connect.php");
                 </thead>
                 <tbody>
 
-                  <?php $result = $db->prepare("SELECT * FROM expenses_records WHERE loading_id='$id' and action='0' and m_type < '4' ");
-                  $result->bindParam(':userid', $date);
-                  $result->execute();
-                  for ($i = 0; $row = $result->fetch(); $i++) {
+                  <!-- <?php //$result = $db->prepare("SELECT * FROM expenses_records WHERE loading_id='$id' and action='0' and m_type < '4' ");
+                  //$result->bindParam(':userid', $date);
+                  //$result->execute();
+                  //or ($i = 0; $row = $result->fetch(); $i++) {
                   ?>
                     <tr>
-                      <td><?php echo $row['sn'];   ?> </td>
-                      <td><?php echo $row['type'];   ?> </td>
-                      <td>Rs.<?php echo $row['amount'];   ?></td>
-                      <td><?php echo $row['comment'];   ?></td>
+                      <td><?php //echo $row['id'];   ?> </td>
+                      <td><?php //echo $row['type'];   ?> </td>
+                      <td>Rs.<?php //echo $row['amount'];   ?></td>
+                      <td><?php //echo $row['comment'];   ?></td>
                     </tr>
-                  <?php }   ?>
+                  <?php //}   ?> -->
 
                   <?php $result = $db->prepare("SELECT * FROM petty_topup WHERE loading_id='$id' and action='0'");
                   $result->bindParam(':userid', $date);
