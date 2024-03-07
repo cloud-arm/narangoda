@@ -130,7 +130,7 @@ if ($unit == 1) {
 
         $sql = "INSERT INTO transaction_record (transaction_type,type,record_no,amount,action,credit_acc_no,credit_acc_type,credit_acc_name,credit_acc_balance,debit_acc_type,debit_acc_name,debit_acc_id,debit_acc_balance,date,time,user_id,user_name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $ql = $db->prepare($sql);
-        $ql->execute(array('expenses', 'Debit', $type, $amount, 0, $acc, 'cash', $acc_name, $cr_blc, 'cash_payment', $type_name, $type, 0, $date, $time, $ui, $un));
+        $ql->execute(array('expenses', 'Debit', $type, $amount, 0, 0, '', '', 0, 'cash_payment', $acc_name, $acc, $cr_blc, $date, $time, $ui, $un));
     }
 
     if ($pay_type == 'chq') {
