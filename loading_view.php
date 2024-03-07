@@ -50,22 +50,137 @@ include("connect.php");
       </h1>
     </section>
 
-    <form action="loading_view.php" method="get">
-      <center>
-        <strong>
 
-          Loading id :<input type="text" style="width:223px; padding:4px;" name="id" />
+    <?php
 
-          <button class="btn btn-info" style="width: 123px; height:35px; margin-top:-8px;margin-left:8px;" type="submit">
-            <i class="icon icon-search icon-large"></i> Search
-          </button>
+    date_default_timezone_set("Asia/Colombo");
 
-        </strong>
+    $id = $_GET['id'];
+    $result = $db->prepare("SELECT * FROM loading WHERE transaction_id='$id'  ");
+    $result->bindParam(':userid', $res);
+    $result->execute();
+    for ($i = 0; $row = $result->fetch(); $i++) {
+      $root = $row['root'];
+      $lorry = $row['lorry_no'];
+      $lorry_id = $row['lorry_id'];
+      $driver = $row['driver'];
+      $helper1 = $row['helper1'];
+      $helper2 = $row['helper2'];
+      $load_date = $row['date'];
+    }
 
+    $result = $db->prepare("SELECT * FROM employee  ");
+    $result->bindParam(':userid', $res);
+    $result->execute();
+    for ($i = 0; $row = $result->fetch(); $i++) {
+      if ($row['id'] == $driver) {
+        $driver = $row['name'];
+        $driver_pic = $row['pic'];
+      }
 
-      </center>
-    </form>
+      if ($row['id'] == $helper1) {
+        $helper1 = $row['name'];
+        $helper1_pic = $row['pic'];
+      }
 
+      if ($row['id'] == $helper2) {
+        $helper2 = $row['name'];
+        $helper2_pic = $row['pic'];
+      }
+    }
+
+    ?>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <form action="" method="GET">
+        <div class="row" style="margin-bottom: 50px;display: flex;align-items: end;">
+          <div class="col-lg-3"></div>
+          <div class="col-lg-3">
+            <label>Loading id :</label>
+            <input type="text" class="form-control pull-right" name="id" value="<?php echo $_GET['id']; ?>">
+          </div>
+
+          <div class="col-lg-2">
+            <button class="btn btn-info" type="submit">
+              <i class="fa fa-search "></i> Search
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-yellow"><i class="fa fa-truck"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Lorry Number</span>
+              <span class="info-box-number" style="margin-top: 10px;"><?php echo $lorry; ?></span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-yellow">
+              <div class="info-box-img">
+                <img src="<?php echo $driver_pic; ?>" alt="">
+              </div>
+            </span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Driver</span>
+              <span class="info-box-number" style="margin-top: 10px;"><?php echo $driver; ?></span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+
+        <!-- fix for small devices only -->
+        <div class="clearfix visible-sm-block"></div>
+
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-light">
+              <div class="info-box-img">
+                <img src="<?php echo $helper1_pic; ?>" alt="">
+              </div>
+            </span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Helper-1</span>
+              <span class="info-box-number" style="margin-top: 10px;"><?php echo $helper1; ?></span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-light">
+              <div class="info-box-img">
+                <img src="<?php echo $helper2_pic; ?>" alt="">
+              </div>
+            </span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Helper-1</span>
+              <span class="info-box-number" style="margin-top: 10px;"><?php echo $helper2; ?></span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+      </div>
+    </section>
 
 
     <!-- Main content -->
@@ -75,6 +190,9 @@ include("connect.php");
       <div class="box box-info">
         <div class="box-header with-border">
           <h3 class="box-title">Loading Report</h3>
+          <label style="margin-right: 50px;" class="pull-right"><small style="margin-right: 10px;">Root: </small><?php echo $root; ?></label>
+          <label style="margin-right: 50px;" class="pull-right"><small style="margin-right: 10px;">Date: </small><?php echo $load_date; ?></label>
+          <label style="margin-right: 50px;" class="pull-right"><small style="margin-right: 10px;">Loading ID: </small><?php echo $id; ?></label>
         </div>
 
         <!-- /.box-header -->
@@ -102,7 +220,6 @@ include("connect.php");
                 $lorry_no = $row['lorry_no'];
                 $he1 = $row['helper1'];
                 $he2 = $row['helper2'];
-                $date25 = $row['date'];
                 $unload = $row['action'];
               }
 
@@ -128,52 +245,6 @@ include("connect.php");
             </tbody>
           </table>
 
-          <td> Date:
-            <?php echo $date25; ?>
-          </td>
-          <br>
-
-          <td> Loading ID:
-            <?php echo $id; ?>
-          </td>
-          <br>
-
-          <td> Lorry NO:
-            <?php echo $lorry_no; ?>
-          </td>
-          <br>
-
-          <td> Driver:
-            <?php
-            $result = $db->prepare("SELECT * FROM employee WHERE  id='$driver'  ");
-            $result->bindParam(':userid', $date);
-            $result->execute();
-            for ($i = 0; $row = $result->fetch(); $i++) {
-              echo $row['name'];
-            }
-            ?>
-          </td>
-          <br>
-
-          <td> Helper 1:
-            <?php $result = $db->prepare("SELECT * FROM employee WHERE  id='$he1'  ");
-            $result->bindParam(':userid', $date);
-            $result->execute();
-            for ($i = 0; $row = $result->fetch(); $i++) {
-              echo $row['name'];
-            } ?>
-          </td>
-          <br>
-
-          <td> Helper 2:
-            <?php $result = $db->prepare("SELECT * FROM employee WHERE  id='$he2'  ");
-            $result->bindParam(':userid', $date);
-            $result->execute();
-            for ($i = 0; $row = $result->fetch(); $i++) {
-              echo $row['name'];
-            } ?>
-          </td>
-          <br>
         </div>
 
         <div class="box-header with-border">
@@ -554,17 +625,22 @@ include("connect.php");
                 <tbody>
 
                   <!-- <?php //$result = $db->prepare("SELECT * FROM expenses_records WHERE loading_id='$id' and action='0' and m_type < '4' ");
-                  //$result->bindParam(':userid', $date);
-                  //$result->execute();
-                  //or ($i = 0; $row = $result->fetch(); $i++) {
-                  ?>
+                        //$result->bindParam(':userid', $date);
+                        //$result->execute();
+                        //or ($i = 0; $row = $result->fetch(); $i++) {
+                        ?>
                     <tr>
-                      <td><?php //echo $row['id'];   ?> </td>
-                      <td><?php //echo $row['type'];   ?> </td>
-                      <td>Rs.<?php //echo $row['amount'];   ?></td>
-                      <td><?php //echo $row['comment'];   ?></td>
+                      <td><?php //echo $row['id'];   
+                          ?> </td>
+                      <td><?php //echo $row['type'];   
+                          ?> </td>
+                      <td>Rs.<?php //echo $row['amount'];   
+                              ?></td>
+                      <td><?php //echo $row['comment'];   
+                          ?></td>
                     </tr>
-                  <?php //}   ?> -->
+                  <?php //}   
+                  ?> -->
 
                   <?php $result = $db->prepare("SELECT * FROM petty_topup WHERE loading_id='$id' and action='0'");
                   $result->bindParam(':userid', $date);

@@ -5,10 +5,6 @@ include("head.php");
 include("connect.php");
 ?>
 
-
-<script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
-
-
 <body class="hold-transition skin-yellow sidebar-mini">
     <?php
     include_once("auth.php");
@@ -32,21 +28,6 @@ include("connect.php");
 
     ?>
 
-
-    <link rel="stylesheet" href="datepicker.css" type="text/css" media="all" />
-    <script src="datepicker.js" type="text/javascript"></script>
-    <script src="datepicker.ui.min.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        $(function() {
-            $("#datepicker1").datepicker({
-                dateFormat: 'yy/mm/dd'
-            });
-            $("#datepicker2").datepicker({
-                dateFormat: 'yy/mm/dd'
-            });
-
-        });
-    </script>
     <!-- /.sidebar -->
     </aside>
     <!-- Content Wrapper. Contains page content -->
