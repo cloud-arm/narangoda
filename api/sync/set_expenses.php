@@ -25,9 +25,9 @@ foreach ($expenses as $list) {
     $date = $list['date'];
     $driver = $list['driver'];
     $app_id = $list['id'];
+    $time = $list['time'];
 
     $pay_type = 'cash';
-    $time = date('H:i:s');
 
     $type = 2;
     $re = $db->prepare("SELECT * FROM expenses_types WHERE sn=:id ");
