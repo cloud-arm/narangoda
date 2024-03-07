@@ -560,26 +560,24 @@
 							</thead>
 							<tbody>
 
-								<?php $result = $db->prepare("SELECT * FROM expenses_records WHERE loading_id='$id' and action='0' and m_type < '4' ");
+								<?php $result = $db->prepare("SELECT * FROM expenses_records WHERE loading_id='$id' and dll='0'  ");
 
 								$result->bindParam(':userid', $date);
 								$result->execute();
 								for ($i = 0; $row = $result->fetch(); $i++) {
-
-
-
-
-
-									echo '<tr class="record">';
-
-
-
 								?>
 
 
-									<td><?php echo $row['sn'];   ?> </td>
 
-									<td><?php echo $row['type'];   ?> </td>
+
+									<tr class="record">
+
+
+
+
+									<td><?php echo $row['id'];   ?> </td>
+
+									<td><?php echo $row['sub_type_name'];   ?> </td>
 									<td>Rs.<?php echo $row['amount'];   ?></td>
 									<td><?php echo $row['comment'];   ?></td>
 

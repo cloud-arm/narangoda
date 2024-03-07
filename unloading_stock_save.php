@@ -38,7 +38,7 @@ for ($i = 0; $row = $result->fetch(); $i++) {
 }
 $sum_amount = $sum_amount + $c_cash;
 
-$result = $db->prepare("SELECT sum(amount) FROM expenses_records WHERE loading_id ='$lo_id' and m_type='3' ");
+$result = $db->prepare("SELECT sum(amount) FROM expenses_records WHERE loading_id ='$lo_id' and dll='0' ");
 $result->bindParam(':userid', $c);
 $result->execute();
 for ($i = 0; $row = $result->fetch(); $i++) {

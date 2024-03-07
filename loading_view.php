@@ -412,28 +412,28 @@ include("connect.php");
                 <td colspan="2">Total</td>
 
                 <td>
-                   <span class="pull-right badge bg-muted"> <?php echo $total['5']; ?> </span>
+                  <span class="pull-right badge bg-muted"> <?php echo $total['5']; ?> </span>
                 </td>
                 <td>
-                   <span class="pull-right badge bg-yellow"> <?php echo $total['1']; ?> </span>
+                  <span class="pull-right badge bg-yellow"> <?php echo $total['1']; ?> </span>
                 </td>
                 <td>
-                   <span class="pull-right badge bg-muted"> <?php echo $total['6']; ?> </span>
+                  <span class="pull-right badge bg-muted"> <?php echo $total['6']; ?> </span>
                 </td>
                 <td>
-                   <span class="pull-right badge bg-yellow"> <?php echo $total['2']; ?> </span>
+                  <span class="pull-right badge bg-yellow"> <?php echo $total['2']; ?> </span>
                 </td>
                 <td>
-                   <span class="pull-right badge bg-muted"> <?php echo $total['7']; ?> </span>
+                  <span class="pull-right badge bg-muted"> <?php echo $total['7']; ?> </span>
                 </td>
                 <td>
-                   <span class="pull-right badge bg-yellow"> <?php echo $total['3']; ?> </span>
+                  <span class="pull-right badge bg-yellow"> <?php echo $total['3']; ?> </span>
                 </td>
                 <td>
-                   <span class="pull-right badge bg-muted"> <?php echo $total['8']; ?> </span>
+                  <span class="pull-right badge bg-muted"> <?php echo $total['8']; ?> </span>
                 </td>
                 <td>
-                   <span class="pull-right badge bg-yellow"> <?php echo $total['4']; ?> </span>
+                  <span class="pull-right badge bg-yellow"> <?php echo $total['4']; ?> </span>
                 </td>
 
                 <?php
@@ -632,23 +632,23 @@ include("connect.php");
                 </thead>
                 <tbody>
 
-                  <!-- <?php //$result = $db->prepare("SELECT * FROM expenses_records WHERE loading_id='$id' and action='0' and m_type < '4' ");
-                        //$result->bindParam(':userid', $date);
-                        //$result->execute();
-                        //or ($i = 0; $row = $result->fetch(); $i++) {
-                        ?>
+                  <?php $result = $db->prepare("SELECT * FROM expenses_records WHERE loading_id='$id' AND dll='0'  ");
+                  $result->bindParam(':userid', $date);
+                  $result->execute();
+                  for ($i = 0; $row = $result->fetch(); $i++) {
+                  ?>
                     <tr>
-                      <td><?php //echo $row['id'];   
+                      <td><?php echo $row['id'];
                           ?> </td>
-                      <td><?php //echo $row['type'];   
+                      <td><?php echo $row['sub_type_name'];
                           ?> </td>
-                      <td>Rs.<?php //echo $row['amount'];   
+                      <td>Rs.<?php echo $row['amount'];
                               ?></td>
-                      <td><?php //echo $row['comment'];   
+                      <td><?php echo $row['comment'];
                           ?></td>
                     </tr>
-                  <?php //}   
-                  ?> -->
+                  <?php }
+                  ?>
 
                   <?php $result = $db->prepare("SELECT * FROM petty_topup WHERE loading_id='$id' and action='0'");
                   $result->bindParam(':userid', $date);
