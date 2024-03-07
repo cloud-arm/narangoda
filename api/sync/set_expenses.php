@@ -21,9 +21,9 @@ foreach ($expenses as $list) {
     $load_id = $list['loading_id'];
     $comment = $list['comment'];
     $amount = $list['amount'];
-    $sub_id = $list['type'];
+    $sub_id = $list['type_id'];
     $date = $list['date'];
-    $driver = $list['driver'];
+    $driver = $list['driver_id'];
     $app_id = $list['id'];
     $time = $list['time'];
 
