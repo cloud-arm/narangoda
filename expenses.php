@@ -85,9 +85,9 @@ date_default_timezone_set("Asia/Colombo");
       <div class="box box-info">
         <div class="box-header with-border">
           <h3 class="box-title">Expenses</h3>
-          <small class="btn btn-success mx-2" style="padding: 5px 10px;" title="Add Utility Bill" onclick="click_open(1)">Add Utility Bill</small>
-          <small class="btn btn-success mx-2" style="padding: 5px 10px;" title="Add Expenses Type" onclick="click_open(2)">Add Expenses Type</small>
-          <small class="btn btn-success mx-2 hidden" style="padding: 5px 10px;" title="Add Meter Reading Utility Bill" onclick="click_open(3)">Add Meter Reading Utility Bill</small>
+          <small class="btn btn-success mx-2" style="padding: 5px 10px;" title="Add Expenses Type" onclick="click_open(1)">Add Expenses Type</small>
+          <small class="btn btn-success mx-2 util_sec" style="padding: 5px 10px;" title="Add Utility Bill" onclick="click_open(2)">Add Utility Bill</small>
+          <small class="btn btn-success mx-2 load_sec" style="display: none;padding: 5px 10px;" title="Add Root Expenses Sub Type" onclick="click_open(3)">Add Root Expenses</small>
         </div>
 
         <!-- /.box-header -->
@@ -203,6 +203,26 @@ date_default_timezone_set("Asia/Colombo");
                 </div>
               </div>
 
+              <div class="col-md-3 load_sec" style="display: none;">
+                <div class="form-group">
+                  <label>Sub Type</label> <span id="blc" class="badge bg-red"></span>
+                  <select class="form-control select2" name="sub_type" style="width: 100%;" tabindex="8" onchange="select_bill(this.options[this.selectedIndex].getAttribute('balance'))">
+                    <option value="0" disabled selected></option>
+                    <?php
+                    $result = $db->prepare("SELECT * FROM expenses_sub_type  ");
+                    $result->bindParam(':id', $res);
+                    $result->execute();
+                    for ($i = 0; $row = $result->fetch(); $i++) {
+                    ?>
+                      <option value="<?php echo $row['id']; ?>"><?php echo $row['name']; ?> </option>
+                    <?php
+                    }
+                    ?>
+                  </select>
+
+                </div>
+              </div>
+
               <div class="col-md-3 util_sec" style="display: block;">
                 <div class="form-group">
                   <label>Utility Bill</label> <span id="blc" class="badge bg-red"></span>
@@ -240,7 +260,7 @@ date_default_timezone_set("Asia/Colombo");
               <div class="col-md-3 util_sec" style="display: block;">
                 <div class="form-group">
                   <label>Bill Amount</label>
-                  <input type="text" name="Util_amount" step=".01" class="form-control" tabindex="11" autocomplete="off">
+                  <input type="text" name="util_amount" step=".01" class="form-control" tabindex="11" autocomplete="off">
                 </div>
               </div>
 
@@ -373,6 +393,8 @@ date_default_timezone_set("Asia/Colombo");
                   <td>
                     <?php if ($row['util_id'] > 0) {
                       echo $row['util_name'];
+                    } else if ($row['sub_type'] > 0) {
+                      echo $row['sub_type_name'];
                     } else {
                       echo $row['type'];
                     }  ?>
@@ -410,37 +432,6 @@ date_default_timezone_set("Asia/Colombo");
         <div class="box box-success popup d-none" id="popup_1">
           <div class="box-header with-border">
             <h3 class="box-title w-100">
-              New Utility Type
-              <i onclick="click_close()" class="btn p-0 me-2 pull-right fa fa-remove" style="font-size: 25px"></i>
-            </h3>
-          </div>
-
-          <div class="box-body d-block">
-            <form method="POST" action="expenses_save.php">
-
-              <div class="row" style="display: block;">
-                <div class="col-md-9">
-                  <div class="form-group">
-                    <label>Utility Name</label>
-                    <input type="text" name="util_name" value="" class="form-control" autocomplete="off">
-                  </div>
-                </div>
-
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <input type="hidden" name="unit" value="2">
-                    <input type="submit" style="margin-top: 23px;" value="Save" class="btn btn-info">
-                  </div>
-                </div>
-              </div>
-
-            </form>
-          </div>
-        </div>
-
-        <div class="box box-success popup d-none" id="popup_2">
-          <div class="box-header with-border">
-            <h3 class="box-title w-100">
               New Expenses Type
               <i onclick="click_close()" class="btn p-0 me-2 pull-right fa fa-remove" style="font-size: 25px"></i>
             </h3>
@@ -469,10 +460,10 @@ date_default_timezone_set("Asia/Colombo");
           </div>
         </div>
 
-        <div class="box box-success popup d-none" id="popup_3">
+        <div class="box box-success popup d-none" id="popup_2">
           <div class="box-header with-border">
             <h3 class="box-title w-100">
-              New Meter Reading Bill
+              New Utility Type
               <i onclick="click_close()" class="btn p-0 me-2 pull-right fa fa-remove" style="font-size: 25px"></i>
             </h3>
           </div>
@@ -481,28 +472,45 @@ date_default_timezone_set("Asia/Colombo");
             <form method="POST" action="expenses_save.php">
 
               <div class="row" style="display: block;">
-                <div class="col-md-6">
+                <div class="col-md-9">
                   <div class="form-group">
                     <label>Utility Name</label>
                     <input type="text" name="util_name" value="" class="form-control" autocomplete="off">
                   </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-3">
                   <div class="form-group">
-                    <label>Last Meter</label>
-                    <input type="text" name="last_meter" value="" class="form-control" autocomplete="off">
+                    <input type="hidden" name="unit" value="2">
+                    <input type="submit" style="margin-top: 23px;" value="Save" class="btn btn-info">
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <div class="box box-success popup d-none" id="popup_3">
+          <div class="box-header with-border">
+            <h3 class="box-title w-100">
+              New Root Expenses Sub Type
+              <i onclick="click_close()" class="btn p-0 me-2 pull-right fa fa-remove" style="font-size: 25px"></i>
+            </h3>
+          </div>
+
+          <div class="box-body d-block">
+            <form method="POST" action="expenses_save.php">
+
+              <div class="row" style="display: block;">
+                <div class="col-md-9">
+                  <div class="form-group">
+                    <label>Sub Type Name</label>
+                    <input type="text" name="name" value="" class="form-control" autocomplete="off">
                   </div>
                 </div>
 
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Unit Price</label>
-                    <input type="number" name="unit_price" value="" class="form-control" autocomplete="off">
-                  </div>
-                </div>
-
-                <div class="col-md-6">
+                <div class="col-md-3">
                   <div class="form-group">
                     <input type="hidden" name="unit" value="4">
                     <input type="submit" style="margin-top: 23px;" value="Save" class="btn btn-info">
@@ -601,11 +609,14 @@ date_default_timezone_set("Asia/Colombo");
 
       if (val == 1) {
         $('.util_sec').css('display', 'block');
+        $('.util_sec.btn').css('display', 'inline-block');
         $('.load_sec').css('display', 'none');
+        $('.root_sec').css('display', 'none');
       } else
       if (val == 2) {
         $('.util_sec').css('display', 'none');
         $('.load_sec').css('display', 'block');
+        $('.load_sec.btn').css('display', 'inline-block');
       } else {
         $('.util_sec').css('display', 'none');
         $('.load_sec').css('display', 'none');
