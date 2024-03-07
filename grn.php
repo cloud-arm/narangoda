@@ -10,12 +10,15 @@ include("connect.php");
     include_once("auth.php");
     $r = $_SESSION['SESS_LAST_NAME'];
     $_SESSION['SESS_FORM'] = 'grn';
+
     if ($r == 'Cashier') {
-        include_once("sidebar2.php");
+        header("location: app/");
     }
+
     if ($r == 'admin') {
         include_once("sidebar.php");
     }
+
     $u = $_SESSION['SESS_MEMBER_ID'];
     $invo = $_GET['id'];
 
@@ -438,16 +441,6 @@ include("connect.php");
             });
             $('#datepickerd').datepicker({
                 autoclose: true
-            });
-
-            $("#example1").DataTable();
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": true,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": true
             });
         });
     </script>
