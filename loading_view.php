@@ -411,21 +411,29 @@ include("connect.php");
               <tr>
                 <td colspan="2">Total</td>
 
-                <td> <span class="pull-right badge bg-muted"> <?php echo $total['5']; ?> </span>
+                <td>
+                   <span class="pull-right badge bg-muted"> <?php echo $total['5']; ?> </span>
                 </td>
-                <td> <span class="pull-right badge bg-yellow"> <?php echo $total['1']; ?> </span>
+                <td>
+                   <span class="pull-right badge bg-yellow"> <?php echo $total['1']; ?> </span>
                 </td>
-                <td> <span class="pull-right badge bg-muted"> <?php echo $total['6']; ?> </span>
+                <td>
+                   <span class="pull-right badge bg-muted"> <?php echo $total['6']; ?> </span>
                 </td>
-                <td> <span class="pull-right badge bg-yellow"> <?php echo $total['2']; ?> </span>
+                <td>
+                   <span class="pull-right badge bg-yellow"> <?php echo $total['2']; ?> </span>
                 </td>
-                <td> <span class="pull-right badge bg-muted"> <?php echo $total['7']; ?> </span>
+                <td>
+                   <span class="pull-right badge bg-muted"> <?php echo $total['7']; ?> </span>
                 </td>
-                <td> <span class="pull-right badge bg-yellow"> <?php echo $total['3']; ?> </span>
+                <td>
+                   <span class="pull-right badge bg-yellow"> <?php echo $total['3']; ?> </span>
                 </td>
-                <td> <span class="pull-right badge bg-muted"> <?php echo $total['8']; ?> </span>
+                <td>
+                   <span class="pull-right badge bg-muted"> <?php echo $total['8']; ?> </span>
                 </td>
-                <td> <span class="pull-right badge bg-yellow"> <?php echo $total['4']; ?> </span>
+                <td>
+                   <span class="pull-right badge bg-yellow"> <?php echo $total['4']; ?> </span>
                 </td>
 
                 <?php
