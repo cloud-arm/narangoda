@@ -20,6 +20,7 @@
             <select class="form-control select2" name="area" style="width: 100%;" autofocus>
 
               <option> Galle </option>
+              <option> Matara </option>
 
             </select>
           </div>

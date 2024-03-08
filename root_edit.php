@@ -28,12 +28,12 @@
             <label> Area</label>
             <select class="form-control select2" name="area" style="width: 100%;" autofocus>
 
-              <option <?php if ($area == 'Kaluthara') {
+              <option <?php if ($area == 'Galle') {
                         echo 'selected';
-                      } ?>> Kaluthara </option>
-              <option <?php if ($area == 'Horana') {
+                      } ?>> Galle </option>
+              <option <?php if ($area == 'Matara') {
                         echo 'selected';
-                      } ?>> Horana </option>
+                      } ?>> Matara </option>
 
             </select>
           </div>
