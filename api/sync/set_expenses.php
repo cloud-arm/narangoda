@@ -51,20 +51,6 @@ foreach ($expenses as $list) {
         $driver_name = $row['name'];
     }
 
-    $acc = 1;
-    $cr_blc = 0;
-    $blc = 0;
-    $re = $db->prepare("SELECT * FROM cash WHERE id = :id");
-    $re->bindParam(':id', $acc);
-    $re->execute();
-    for ($k = 0; $r = $re->fetch(); $k++) {
-        $blc = $r['amount'];
-        $acc_name = $r['name'];
-    }
-
-    $cr_blc = $blc - $amount;
-
-
     try {
 
         //checking duplicate
@@ -78,20 +64,10 @@ foreach ($expenses as $list) {
 
         if ($con == 0) {
 
-            $sql = "UPDATE  cash SET amount=? WHERE id=?";
-            $ql = $db->prepare($sql);
-            $ql->execute(array($cr_blc, $acc));
-
-            $sql = "INSERT INTO transaction_record (transaction_type,type,record_no,amount,action,credit_acc_no,credit_acc_type,credit_acc_name,credit_acc_balance,debit_acc_type,debit_acc_name,debit_acc_id,debit_acc_balance,date,time,user_id,user_name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-            $ql = $db->prepare($sql);
-            $ql->execute(array('expenses', 'Debit', $type, $amount, 0, '', '', '', 0, 'cash_payment', $acc_name, $acc, $cr_blc, $date, $time, $driver, $driver_name));
-
-
             $sql = "INSERT INTO expenses_records (date,type_id,type,invoice_no,acc_id,acc_name,comment,amount,user,loading_id,pay_type,sub_type,sub_type_name,app_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             $q = $db->prepare($sql);
             $q->execute(array($date, $type, $type_name, $invoice, $acc, $acc_name, $comment, $amount, $driver, $load_id, $pay_type, $sub_id, $sub_name, $app_id));
         }
-
 
         // get sales  data
         $result = $db->prepare("SELECT * FROM expenses_records WHERE invoice_no='$invoice' AND sub_type = '$sub_id' AND loading_id = '$load_id' ");
