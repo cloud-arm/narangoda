@@ -167,9 +167,9 @@
                             echo 'active';
                           } ?>"><a href="loading.php"><i class="fa fa-circle-o text-aqua "></i> New Loading</a></li>
 
-              <li class="<?php if ($f == 'empty_loading') {
-                            echo 'active';
-                          } ?>"><a href="empty_loading.php"><i class="fa fa-circle-o text-aqua "></i> Empty Loading</a></li>
+              <li class="hidden <?php if ($f == 'empty_loading') {
+                                  echo 'active';
+                                } ?>"><a href="empty_loading.php"><i class="fa fa-circle-o text-aqua "></i> Empty Loading</a></li>
 
               <li class="<?php if ($f == 'unloading') {
                             echo 'active';
@@ -216,8 +216,8 @@
                           } ?>"><a href="grn_payment.php"><i class="fa fa-circle-o text-aqua"></i> Payment</a></li>
 
               <!-- <li class="<?php if ($f == 'grn_return') {
-                            echo 'active';
-                          } ?>"><a href="grn_return.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> GRN Return</a></li>
+                                echo 'active';
+                              } ?>"><a href="grn_return.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> GRN Return</a></li>
 
               <li class="<?php if ($f == 'grn_order') {
                             echo 'active';
@@ -246,8 +246,8 @@
                               } ?>"><a href="grn_payment_rp.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>"><i class="fa fa-circle-o text-red"></i> Payment Record</a></li>
 
                   <!-- <li class="<?php if ($f == 'grn_return_rp') {
-                                echo 'active';
-                              } ?>"><a href="grn_return_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Return Record</a></li>
+                                    echo 'active';
+                                  } ?>"><a href="grn_return_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Return Record</a></li>
                   <li class="<?php if ($f == 'grn_order_rp') {
                                 echo 'active';
                               } ?>"><a href="grn_order_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Order Record</a></li> -->
@@ -430,11 +430,11 @@
                           } ?>"><a href="grn_payment.php"><i class="fa fa-circle-o text-aqua"></i> Payment</a></li>
 
               <!-- <li class="<?php if ($f == 'grn_return') {
-                            echo 'active';
-                          } ?>"><a href="grn_return.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> GRN Return</a></li> -->
+                                echo 'active';
+                              } ?>"><a href="grn_return.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> GRN Return</a></li> -->
               <!-- <li class="<?php if ($f == 'grn_order') {
-                            echo 'active';
-                          } ?>"><a href="grn_order.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> Purchase Order</a></li> -->
+                                echo 'active';
+                              } ?>"><a href="grn_order.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> Purchase Order</a></li> -->
 
               <?php $co = '';
               if ($f == 'grn_rp' || $f == 'grn_payment_rp' || $f == 'grn_return_rp' || $f == 'grn_order_rp') {
@@ -456,13 +456,13 @@
                   <li class="<?php if ($f == 'grn_payment_rp') {
                                 echo 'active';
                               } ?>"><a href="grn_payment_rp.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>"><i class="fa fa-circle-o text-red"></i> Payment Record</a></li>
-                              
+
                   <!-- <li class="<?php if ($f == 'grn_return_rp') {
-                                echo 'active';
-                              } ?>"><a href="grn_return_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Return Record</a></li> -->
+                                    echo 'active';
+                                  } ?>"><a href="grn_return_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Return Record</a></li> -->
                   <!-- <li class="<?php if ($f == 'grn_order_rp') {
-                                echo 'active';
-                              } ?>"><a href="grn_order_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Order Record</a></li> -->
+                                    echo 'active';
+                                  } ?>"><a href="grn_order_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Order Record</a></li> -->
                 </ul>
               </li>
             </ul>
@@ -527,6 +527,81 @@
 
             </ul>
           </li>
+
+          <li class="treeview">
+
+            <a href="#">
+              <i class="fa fa-exchange"></i>
+              <span>SUB Menu</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+
+            <ul class="treeview-menu">
+
+              <li>
+                <a href="customer_category.php"><i class="fa fa-usd"></i> Customer Category</a>
+              </li>
+
+              <li>
+                <a href="new/go/bill_return.php">
+                  <i class="fa fa-level-down"></i> <span>Product Return</span>
+                  <span class="pull-right-container">
+
+                  </span>
+                </a>
+              </li>
+
+              <li>
+                <a href="special_price.php">
+                  <i class="fa fa-usd"></i> <span>Special Price</span>
+                  <span class="pull-right-container">
+
+                  </span>
+                </a>
+              </li>
+
+
+              <li class="treeview">
+                <a href="#">
+                  <i class="fa fa-retweet text-white"></i>
+                  <span>Trust</span>
+                  <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                  </span>
+                </a>
+
+                <ul class="treeview-menu">
+                  <li><a href="trust.php"><i class="fa fa-circle-o text-aqua "></i> Add New Trust</a></li>
+                  <li><a href="trust_view.php"><i class="fa fa-circle-o text-aqua "></i> View Trust</a></li>
+                  </a>
+                </ul>
+              </li>
+
+
+              <li class="treeview">
+                <a href="#">
+                  <i class="fa fa-exclamation-triangle text-yellow"></i>
+                  <span>Damage</span>
+                  <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                  </span>
+                </a>
+
+                <ul class="treeview-menu">
+
+                  <li><a href="damage.php"><i class="fa fa-circle-o text-aqua "></i> Add New Damage</a></li>
+                  <li><a rel="facebox" href="damage_company.php"><i class="fa fa-circle-o text-aqua "></i> Sent Damage to Company</a></li>
+                  <li><a rel="facebox" href="damage_receive.php"><i class="fa fa-circle-o text-aqua "></i> Damage Receive</a></li>
+                  <li><a rel="facebox" href="damage_customer.php"><i class="fa fa-circle-o text-aqua "></i> Sent Damage to Customer</a></li>
+                  <li><a href="damage_view.php"><i class="fa fa-circle-o text-aqua "></i> View Damage</a></li>
+                  </a>
+                </ul>
+              </li>
+            </ul>
+          </li>
+
 
         <?php }
         if (false) { ?>
