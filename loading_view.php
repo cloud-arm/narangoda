@@ -487,7 +487,7 @@ include("connect.php");
               for ($i = 0; $row = $result->fetch(); $i++) {
                 $invo = $row['invoice_no'];
 
-                $result1 = $db->prepare("SELECT * FROM sales WHERE  invoice_number=$invo and action='1' ");
+                $result1 = $db->prepare("SELECT * FROM sales WHERE  invoice_number='$invo' and action='1' ");
                 $result1->bindParam(':userid', $c);
                 $result1->execute();
                 for ($i = 0; $row1 = $result1->fetch(); $i++) {
@@ -507,7 +507,7 @@ include("connect.php");
                   <td><?php echo $row['amount']; ?></td>
                   <td><?php echo $row['chq_no']; ?></td>
                   <td><?php echo $row['chq_date']; ?></td>
-                  <td><?php echo $row['bank']; ?> </td>
+                  <td><?php echo $row['chq_bank']; ?> </td>
                 </tr>
               <?php
               }
