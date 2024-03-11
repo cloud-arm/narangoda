@@ -1,5 +1,6 @@
 <?php
 include('../../connect.php');
+include('log.php');
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
@@ -87,6 +88,16 @@ foreach ($sales as $list) {
             $sql = "INSERT INTO sales (invoice_number,cashier,date,time,amount,balance,cost,profit,name,root,rep,lorry_no,term,loading_id,customer_id,action,address,vat,value,cus_vat_no,vat_action,app_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             $ql = $db->prepare($sql);
             $ql->execute(array($invoice, $driver, $date, $time, $amount, $balance, $cost, $profit, $cus_name, $root, $driver_name, $lorry, $term, $load, $cus, 1, $address, $vat, $value, $vat_no, $vat_action, $app_id));
+
+            //update vat amount
+            $sql = "UPDATE vat_account SET amount = amount + ? WHERE vat_no = ?";
+            $ql = $db->prepare($sql);
+            $ql->execute(array($vat, $vat_no));
+
+            // insert vat record
+            $sql = "INSERT INTO vat_record (invoice_no,type,date,time,record_type,vat,value,vat_no,user_name,user_id) VALUES (?,?,?,?,?,?,?,?,?,?)";
+            $ql = $db->prepare($sql);
+            $ql->execute(array($invoice, 'Credit', $date, $time, 'invoice', $vat, $value, $vat_no, $driver_name, $driver));
         }
 
         // get sales  data
@@ -109,6 +120,10 @@ foreach ($sales as $list) {
         );
 
         array_push($result_array, $res);
+
+        // Create log
+        $content = "cloud_id: " . $id . ", app_id: " . $ap_id . ", invoice: " . $invo . ", status: success, message: - , Date: " . date('Y-m-d') . ", Time: " . date('H:s:i');
+        log_init('sales', $content);
     } catch (PDOException $e) {
 
         // create error respond 
@@ -121,6 +136,10 @@ foreach ($sales as $list) {
         );
 
         array_push($result_array, $res);
+
+        // Create log
+        $content = "cloud_id: 0, app_id: " . $app_id . ", invoice: " . $invoice . ", status: failed, message: " . $e->getMessage() . ", Date: " . date('Y-m-d') . ", Time: " . date('H:s:i');
+        log_init('sales', $content);
     }
 }
 

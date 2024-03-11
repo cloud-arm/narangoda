@@ -1,5 +1,6 @@
 <?php
 include('../../connect.php');
+include('log.php');
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: POST");
@@ -89,6 +90,10 @@ foreach ($expenses as $list) {
         );
 
         array_push($result_array, $res);
+
+        // Create log
+        $content = "cloud_id: " . $id . ", app_id: " . $ap_id . ", invoice: " . $invo . ", status: success, message: - , Date: " . date('Y-m-d') . ", Time: " . date('H:s:i');
+        log_init('expenses', $content);
     } catch (PDOException $e) {
 
         // create error respond 
@@ -101,6 +106,10 @@ foreach ($expenses as $list) {
         );
 
         array_push($result_array, $res);
+
+        // Create log
+        $content = "cloud_id: 0, app_id: " . $app_id . ", invoice: " . $invoice . ", status: failed, message: " . $e->getMessage() . ", Date: " . date('Y-m-d') . ", Time: " . date('H:s:i');
+        log_init('expenses', $content);
     }
 }
 
