@@ -218,7 +218,7 @@ include("connect.php");
               for ($i = 0; $row = $result->fetch(); $i++) {
               ?>
                 <tr class="record">
-                  <td><?php echo $row['transaction_id']; ?></td>
+                  <td><?php echo $row['invoice_number']; ?></td>
                   <td><?php echo $row['name']; ?> </td>
                   <td><?php echo $row['amount']; ?> </td>
                   <td>
