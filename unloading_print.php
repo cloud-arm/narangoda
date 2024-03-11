@@ -268,7 +268,7 @@
 
 							$temp = array();
 
-							$temp['invo'] =  $sales_id;
+							$temp['invo'] =  $invo;
 							$temp['cus'] =  $cus;
 
 							foreach ($product as $p_id) { //colum
@@ -436,7 +436,7 @@
 								<td><?php echo $row['amount']; ?></td>
 								<td><?php echo $row['chq_no']; ?></td>
 								<td><?php echo $row['chq_date']; ?></td>
-								<td><?php echo $row['bank']; ?></td>
+								<td><?php echo $row['bank_name']; ?></td>
 							</tr>
 						<?php
 						}
@@ -530,7 +530,7 @@
 								for ($i = 0; $row = $result->fetch(); $i++) {
 								?>
 									<tr>
-										<td><?php echo $row['sales_id'];   ?> </td>
+										<td><?php echo $row['invoice_no'];   ?> </td>
 										<td><?php echo $row['type'];   ?> </td>
 										<td>Rs.<?php echo $row['amount'];   ?></td>
 
@@ -575,15 +575,11 @@
 
 
 
-									<td><?php echo $row['id'];   ?> </td>
+										<td><?php echo $row['id'];   ?> </td>
 
-									<td><?php echo $row['sub_type_name'];   ?> </td>
-									<td>Rs.<?php echo $row['amount'];   ?></td>
-									<td><?php echo $row['comment'];   ?></td>
-
-
-
-
+										<td><?php echo $row['sub_type_name'];   ?> </td>
+										<td>Rs.<?php echo $row['amount'];   ?></td>
+										<td><?php echo $row['comment'];   ?></td>
 
 
 									</tr>

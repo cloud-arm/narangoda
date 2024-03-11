@@ -335,7 +335,7 @@ include("connect.php");
 
                 $temp = array();
 
-                $temp['invo'] =  $sales_id;
+                $temp['invo'] =  $invo;
                 $temp['cus'] =  $cus;
 
                 foreach ($product as $p_id) { //colum
@@ -608,7 +608,7 @@ include("connect.php");
                   for ($i = 0; $row = $result->fetch(); $i++) {
                   ?>
                     <tr>
-                      <td><?php echo $row['sales_id'];   ?> </td>
+                      <td><?php echo $row['invoice_no'];   ?> </td>
                       <td><?php echo $row['type'];   ?> </td>
                       <td>Rs.<?php echo $row['amount'];   ?></td>
 
