@@ -429,7 +429,7 @@
 						?>
 
 							<tr>
-								<td><?php echo $in; ?></td>
+								<td><?php echo $invo; ?></td>
 
 								<td><?php echo $cus; ?></td>
 								<td><?php echo $row['type']; ?></td>
