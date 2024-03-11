@@ -11,7 +11,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 $id=$_POST['id'];
 
-$result = $db->prepare("SELECT * FROM customer WHERE id > '$id' ");
+$result = $db->prepare("SELECT * FROM customer WHERE customer_id > '$id' ");
 $result->bindParam(':userid', $res);
 $result->execute();
 for($i=0; $row = $result->fetch(); $i++){
