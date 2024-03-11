@@ -25,6 +25,7 @@ for($i=0; $row = $result->fetch(); $i++){
         "sell" => $row['sell_price'],
         "cost" => $row['o_price'],
         "qty" => $row['qty'],
+        "qty_sold" => $row['qty_sold'],
         "img"=>$row['img'],
     );
     }
