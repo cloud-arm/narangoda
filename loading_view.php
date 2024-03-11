@@ -197,571 +197,603 @@ include("connect.php");
 
         <!-- /.box-header -->
         <div class="box-body">
-          <table id="example1" class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th>Product </th>
-                <th>Load Qty</th>
-                <th>Available Qty</th>
+          <div class="row">
 
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-              include("connect.php");
+            <?php
+            $id = $_GET['id'];
+            $loading_list = array();
 
-              $id = $_GET['id'];
-              $result = $db->prepare("SELECT * FROM loading WHERE  transaction_id=$id ");
-              $result->bindParam(':userid', $c);
-              $result->execute();
-              for ($i = 0; $row = $result->fetch(); $i++) {
-
-                $driver = $row['driver'];
-                $lorry_no = $row['lorry_no'];
-                $he1 = $row['helper1'];
-                $he2 = $row['helper2'];
-                $unload = $row['action'];
-              }
-
-              $result = $db->prepare("SELECT * FROM loading_list WHERE  loading_id='$id'  ORDER by transaction_id ASC");
-              $result->bindParam(':userid', $date);
-              $result->execute();
-              for ($i = 0; $row = $result->fetch(); $i++) {
-
-                $date = 0;
-                $time = 0;
-                $term = 0;
-                $load_yard = 0;
-                $unload_yard = 0;
-
-              ?>
-                <tr>
-                  <td><?php echo $row['product_name']; ?></td>
-                  <td><?php echo $row['qty']; ?></td>
-                  <td><?php echo $qty = $row['qty_sold']; ?></td>
-
-                </tr>
-              <?php } ?>
-            </tbody>
-          </table>
-
-        </div>
-
-        <div class="box-header with-border">
-          <h3 class="box-title">
-            Lorry Sales Report
-            <span class="pull-right badge bg-muted">New</span>
-            <span class="pull-right badge bg-yellow">Refill</span>
-          </h3>
-        </div>
-
-        <div class="box-body">
-          <table id="" class="table table-bordered table-striped">
-
-            <thead>
-
-              <tr>
-                <th colspan="2"></th>
-                <th colspan="2">12.5kg</th>
-                <th colspan="2">5kg</th>
-                <th colspan="2">37.5kg</th>
-                <th colspan="2">2kg</th>
-
-                <?php
-                $ass_list = array();
-                $result = $db->prepare("SELECT *  FROM sales_list WHERE sales_list.loading_id=:id AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id ");
-                $result->bindParam(':id', $id);
-                $result->execute();
-                for ($i = 0; $row = $result->fetch(); $i++) {
-                  array_push($ass_list, $row['product_id']);
-                ?>
-                  <th class="th"><span> <?php echo $row['name']; ?></span></th>
-                <?php } ?>
-
-              </tr>
-
-              <tr>
-                <th>Invoice</th>
-                <th>Customer</th>
-                <th>N</th>
-                <th>R</th>
-                <th>N</th>
-                <th>R</th>
-                <th>N</th>
-                <th>R</th>
-                <th>N</th>
-                <th>R</th>
-
-                <?php
-                foreach ($ass_list as $list) { ?>
-                  <th></th>
-                <?php } ?>
-
-              <tr>
-
-            </thead>
-
-            <tbody>
-
-              <?php $id = $_GET['id'];
-              $sales_list = array();
-              $sales = array();
-              $product = array();
-
-              $result = $db->prepare("SELECT *  FROM sales_list WHERE sales_list.loading_id=:id AND sales_list.action='0'  ORDER BY sales_list.product_id ");
-              $result->bindParam(':id', $id);
-              $result->execute();
-              for ($i = 0; $row = $result->fetch(); $i++) {
-
-                $data = array('invo' => $row['invoice_no'], 'pid' => $row['product_id'], 'qty' => $row['qty']);
-
-                array_push($sales_list, $data);
-              }
-
-              $result = $db->prepare("SELECT * FROM products  ORDER BY product_id  ");
-              $result->bindParam(':id', $id);
-              $result->execute();
-              for ($i = 0; $row = $result->fetch(); $i++) {
-                array_push($product, $row['product_id']);
-              }
-
-              $result = $db->prepare("SELECT * FROM sales WHERE loading_id=:id AND action='1' ");
-              $result->bindParam(':id', $id);
-              $result->execute();
-              for ($i = 0; $row = $result->fetch(); $i++) { //row
-                $invo = $row['invoice_number'];
-                $cus = $row['name'];
-                $sales_id = $row['transaction_id'];
-
-                $temp = array();
-
-                $temp['invo'] =  $invo;
-                $temp['cus'] =  $cus;
-
-                foreach ($product as $p_id) { //colum
-                  $temp[$p_id] = '';
-                }
-
-                foreach ($sales_list as $list) {
-
-                  if ($list['invo'] == $invo) {
-
-                    foreach ($product as $p_id) { //colum
-
-                      if ($p_id == $list['pid']) {
-                        if ($p_id > 4) {
-                          $temp[$p_id] = "<span class='pull-right badge bg-muted'> " . $list['qty'] . "</span>";
-                        } else {
-                          $temp[$p_id] = "<span class='pull-right badge bg-yellow'> " . $list['qty'] . "</span>";
-                        }
-                      } else {
-                      }
-                    }
-                  }
-                }
-
-                array_push($sales, $temp);
-              }
-              ?>
-
-              <?php foreach ($sales as $list) { ?>
-
-                <tr>
-
-                  <td> <?php echo $list['invo']; ?> </td>
-                  <td> <?php echo $list['cus']; ?> </td>
-
-                  <td> <?php echo $list['5']; ?></td>
-                  <td> <?php echo $list['1']; ?> </td>
-
-                  <td> <?php echo $list['6']; ?></td>
-                  <td><?php echo $list['2']; ?></td>
-
-                  <td> <?php echo $list['7']; ?></td>
-                  <td><?php echo $list['3']; ?></td>
-
-                  <td> <?php echo $list['8']; ?> </td>
-                  <td> <?php echo $list['4']; ?> </td>
-
-                  <?php foreach ($ass_list as $ass) { ?>
-                    <td> <?php echo $list[$ass]; ?>
-                    </td>
-                  <?php } ?>
-
-                </tr>
-              <?php } ?>
-            </tbody>
-
-            <?php $id = $_GET['id'];
-            $total = array();
-
-            foreach ($product as $p_id) {
-              $total[$p_id] = '';
-            }
-
-            $result = $db->prepare("SELECT * , sum(sales_list.qty)  FROM sales_list WHERE sales_list.loading_id=:id AND sales_list.action = 0 GROUP BY sales_list.product_id ");
-            $result->bindParam(':id', $id);
+            $result = $db->prepare("SELECT * FROM loading_list WHERE  loading_id='$id' AND product_code < 9  ORDER by product_code ASC");
+            $result->bindParam(':userid', $date);
             $result->execute();
             for ($i = 0; $row = $result->fetch(); $i++) {
-              $total[$row['product_id']] = $row['sum(sales_list.qty)'];
+
+              $data = array('id' => $row['product_code'], 'qty' => $row['qty'], 'st_qty' => $row['qty_sold']);
+
+              array_push($loading_list, $data);
+            }
+
+            function check_img($id)
+            {
+              if ($id == 1 | $id == 5) {
+                return '12.5.png';
+              }
+              if ($id == 2 | $id == 6) {
+                return '5.png';
+              }
+              if ($id == 3 | $id == 7) {
+                return '37.5.png';
+              }
+              if ($id == 4 | $id == 8) {
+                return '2.png';
+              }
+            }
+
+            function get_empty($lists, $id)
+            {
+              foreach ($lists as $list) {
+
+                if ($list['id'] == $id + 4) {
+                  return $list['qty'];
+                }
+              }
             }
             ?>
 
-            <tfoot class=" bg-black">
-              <tr>
-                <td colspan="2">Total</td>
+            <?php foreach ($loading_list as $list) {
+              if ($list['id'] < 5) { ?>
 
-                <td>
-                  <span class="pull-right badge bg-muted"> <?php echo $total['5']; ?> </span>
-                </td>
-                <td>
-                  <span class="pull-right badge bg-yellow"> <?php echo $total['1']; ?> </span>
-                </td>
-                <td>
-                  <span class="pull-right badge bg-muted"> <?php echo $total['6']; ?> </span>
-                </td>
-                <td>
-                  <span class="pull-right badge bg-yellow"> <?php echo $total['2']; ?> </span>
-                </td>
-                <td>
-                  <span class="pull-right badge bg-muted"> <?php echo $total['7']; ?> </span>
-                </td>
-                <td>
-                  <span class="pull-right badge bg-yellow"> <?php echo $total['3']; ?> </span>
-                </td>
-                <td>
-                  <span class="pull-right badge bg-muted"> <?php echo $total['8']; ?> </span>
-                </td>
-                <td>
-                  <span class="pull-right badge bg-yellow"> <?php echo $total['4']; ?> </span>
-                </td>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                  <div class="info-box">
+                    <span class="info-box-icon bg-yellow">
+                      <img style="width: 60px;height: 70px;" src="icon/<?php echo check_img($list['id']); ?>" alt="">
+                    </span>
 
-                <?php
+                    <div class="info-box-content">
+                      <span class="info-box-label">Stock: <?php echo $list['st_qty']; ?></span>
 
-                foreach ($total as $i => $tot) {
-                  if ($i > 9  && $tot > 0) { ?>
-                    <td>
-                      <span class="pull-right badge bg-muted">
-                        <?php
-                        echo $tot;
-                        ?>
-                      </span>
-                    </td>
+                      <div class="info-box-content-set" style="margin-top: 5px;">
+                        <span class="info-box-text">Gas:</span>
+                        <span class="info-box-number"><?php echo $list['qty']; ?></span>
+                      </div>
 
-                <?php }
-                } ?>
+                      <div class="info-box-content-set">
+                        <span class="info-box-text">Empty:</span>
+                        <span class="info-box-number"><?php echo get_empty($loading_list, $list['id']) - $list['qty']; ?></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-              </tr>
-
-            </tfoot>
-
-          </table>
-        </div>
-
-        <br>
-
-        <div class="box-body">
-          <table id="example2" class="table table-bordered table-striped">
-            <thead>
-              <tr>
-
-                <th>Invoice no </th>
-                <th>Customer</th>
-                <th>Pay type</th>
-                <th>Amount </th>
-                <th>Chq no</th>
-                <th>Chq Date</th>
-                <th>Bank</th>
-              </tr>
-
-            </thead>
-            <tbody>
-              <?php
-
-
-              $id = $_GET['id'];
-
-              $result = $db->prepare("SELECT * FROM payment WHERE  loading_id='$id' and action>'0'  ORDER by transaction_id DESC");
-              $result->bindParam(':userid', $date);
-              $result->execute();
-              for ($i = 0; $row = $result->fetch(); $i++) {
-                $invo = $row['invoice_no'];
-
-                $result1 = $db->prepare("SELECT * FROM sales WHERE  invoice_number='$invo' and action='1' ");
-                $result1->bindParam(':userid', $c);
-                $result1->execute();
-                for ($i = 0; $row1 = $result1->fetch(); $i++) {
-
-                  $in = $row1['transaction_id'];
-                  $cus = $row1['name'];
-                }
-
-
-              ?>
-
-                <tr>
-                  <td><?php echo $in; ?></td>
-
-                  <td><?php echo $cus; ?></td>
-                  <td><?php echo $row['type']; ?></td>
-                  <td><?php echo $row['amount']; ?></td>
-                  <td><?php echo $row['chq_no']; ?></td>
-                  <td><?php echo $row['chq_date']; ?></td>
-                  <td><?php echo $row['chq_bank']; ?> </td>
-                </tr>
-              <?php
-              }
-
-              //------------ Credit payment--------//
-              $result1 = $db->prepare("SELECT * FROM collection WHERE  loading_id=$id ");
-              $result1->bindParam(':userid', $c);
-              $result1->execute();
-              for ($i = 0; $row = $result1->fetch(); $i++) {
-                $action = $row['action'];
-                if ($action == 0) {
-                  $color_code = '#7FB3D5';
-                } else {
-                  $color_code = '#E84141';
-                }
-              ?>
-                <tr style="background-color:<?php echo $color_code; ?>">
-                  <td><?php echo $row['invoice_no']; ?>(credit)</td>
-                  <td><?php echo $row['customer']; ?></td>
-                  <td><?php echo $row['pay_type']; ?></td>
-                  <td><?php echo $row['amount']; ?></td>
-                  <td><?php echo $row['chq_no']; ?></td>
-                  <td><?php echo $row['chq_date']; ?></td>
-                  <td><?php echo $row['bank'];
-                      if ($user_lewal == '2') {
-                        if ($unload == 'load') {
-                      ?>
-                        <a href="credit_collection_dll.php?id=<?php echo $row['id']; ?>&lid=<?php echo $_GET['id']; ?>">
-                          <span style="font-size: 12px" class="label label-danger">Remove</span> </a>
-                  </td>
-              <?php }
-                      } ?>
-                </tr>
-              <?php   }    ?>
-            </tbody>
-            <tfoot>
-            </tfoot>
-          </table>
-          <?php
-
-          $result = $db->prepare("SELECT sum(amount) FROM payment WHERE  loading_id='$id' AND type='cash' and action >'0'  ORDER by transaction_id DESC");
-          $result->bindParam(':userid', $c);
-          $result->execute();
-          for ($i = 0; $row = $result->fetch(); $i++) {
-            $cash = $row['sum(amount)'];
-          }
-
-          $result = $db->prepare("SELECT sum(amount) FROM payment WHERE  loading_id='$id' AND pay_type='chq' and action >'0'  ORDER by transaction_id DESC");
-          $result->bindParam(':userid', $c);
-          $result->execute();
-          for ($i = 0; $row = $result->fetch(); $i++) {
-            $chq = $row['sum(amount)'];
-          }
-
-          $result = $db->prepare("SELECT sum(amount) FROM payment WHERE  loading_id='$id' AND pay_type='credit' and action >'0'  ORDER by transaction_id DESC");
-          $result->bindParam(':userid', $c);
-          $result->execute();
-          for ($i = 0; $row = $result->fetch(); $i++) {
-            $credit = $row['sum(amount)'];
-          }
-
-          $result = $db->prepare("SELECT sum(amount) FROM collection WHERE  loading_id='$id' AND pay_type='cash' and action ='0'  ");
-          $result->bindParam(':userid', $c);
-          $result->execute();
-          for ($i = 0; $row = $result->fetch(); $i++) {
-            $c_cash = $row['sum(amount)'];
-          }
-
-          $result = $db->prepare("SELECT sum(amount) FROM collection WHERE  loading_id='$id' AND pay_type='chq' and action ='0'  ");
-          $result->bindParam(':userid', $c);
-          $result->execute();
-          for ($i = 0; $row = $result->fetch(); $i++) {
-            $c_chq = $row['sum(amount)'];
-          }
-          ?>
-
-          <h3 style="color: green">Cash- Rs.<?php echo $cash + $c_cash; ?></h3>
-          <h3>CHQ- Rs.<?php echo $chq + $c_chq; ?></h3>
-          <h3 style="color: red">Credit- Rs.<?php echo $credit; ?></h3>
-
-          <div class="row">
-            <div class="col-md-6">
-              <h3>Remove bill</h3>
-              <table id="example1" class="table table-bordered table-striped">
-                <thead>
-                  <tr>
-                    <th>Invoice no</th>
-                    <th>Type</th>
-                    <th>Amount (Rs.)</th>
-
-                  </tr>
-                </thead>
-                <tbody>
-
-                  <?php $result = $db->prepare("SELECT * FROM payment WHERE loading_id='$id' and action='0'  ");
-                  $result->bindParam(':userid', $date);
-                  $result->execute();
-                  for ($i = 0; $row = $result->fetch(); $i++) {
-                  ?>
-                    <tr>
-                      <td><?php echo $row['invoice_no'];   ?> </td>
-                      <td><?php echo $row['type'];   ?> </td>
-                      <td>Rs.<?php echo $row['amount'];   ?></td>
-
-                    </tr>
-                  <?php }   ?>
-
-                </tbody>
-              </table>
-            </div>
-
-            <div class="col-md-6">
-              <h3>Expenses</h3>
-              <table id="example1" class="table table-bordered table-striped">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Type</th>
-                    <th>Amount (Rs.)</th>
-                    <th>Comment</th>
-                  </tr>
-                </thead>
-                <tbody>
-
-                  <?php $result = $db->prepare("SELECT * FROM expenses_records WHERE loading_id='$id' AND dll='0'  ");
-                  $result->bindParam(':userid', $date);
-                  $result->execute();
-                  for ($i = 0; $row = $result->fetch(); $i++) {
-                  ?>
-                    <tr>
-                      <td><?php echo $row['id'];
-                          ?> </td>
-                      <td><?php echo $row['sub_type_name'];
-                          ?> </td>
-                      <td>Rs.<?php echo $row['amount'];
-                              ?></td>
-                      <td><?php echo $row['comment'];
-                          ?></td>
-                    </tr>
-                  <?php }
-                  ?>
-
-                  <?php $result = $db->prepare("SELECT * FROM petty_topup WHERE loading_id='$id' and action='0'");
-                  $result->bindParam(':userid', $date);
-                  $result->execute();
-                  for ($i = 0; $row = $result->fetch(); $i++) {
-                  ?>
-                    <tr style="background-color:cadetblue">
-                      <td>Non </td>
-                      <td>Patty cash TOPUP</td>
-                      <td>Rs.<?php echo $row['amount'];   ?></td>
-                      <td><?php echo $row['date'];   ?></td>
-                    </tr>
-                  <?php }   ?>
-                </tbody>
-              </table>
-            </div>
-
-            <div class="col-md-6">
-              <table id="example1" class="table table-bordered table-striped">
-                <thead>
-                  <tr>
-                    <th><i class="fa fa-money"></i></th>
-                    <th>QTY</th>
-                    <th>Amount</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php
-                  $result = $db->prepare("SELECT * FROM loading WHERE transaction_id='$id'   ");
-                  $result->bindParam(':userid', $res);
-                  $result->execute();
-                  for ($i = 0; $row = $result->fetch(); $i++) {
-                    $tid = $row['transaction_id'];
-                    $tto = 0; ?>
-
-
-                    <tr>
-                      <td>5000</td>
-                      <td><?php echo $row['r5000']; ?></td>
-                      <td><?php $tto += $row['r5000'] * 5000;
-                          echo $row['r5000'] * 5000; ?></td>
-                    </tr>
-                    <tr>
-                      <td>2000</td>
-                      <td><?php echo $row['r2000']; ?></td>
-                      <td><?php $tto += $row['r2000'] * 2000;
-                          echo $row['r2000'] * 2000; ?></td>
-                    </tr>
-                    <tr>
-                      <td>1000</td>
-                      <td><?php echo $row['r1000']; ?></td>
-                      <td><?php $tto += $row['r1000'] * 1000;
-                          echo $row['r1000'] * 1000; ?></td>
-                    </tr>
-                    <tr>
-                      <td>500</td>
-                      <td><?php echo $row['r500']; ?></td>
-                      <td><?php $tto += $row['r500'] * 500;
-                          echo $row['r500'] * 500; ?></td>
-                    </tr>
-                    <tr>
-                      <td>100</td>
-                      <td><?php echo $row['r100']; ?></td>
-                      <td><?php $tto += $row['r100'] * 100;
-                          echo $row['r100'] * 100; ?></td>
-                    </tr>
-                    <tr>
-                      <td>50</td>
-                      <td><?php echo $row['r50']; ?></td>
-                      <td><?php $tto += $row['r50'] * 50;
-                          echo $row['r50'] * 50; ?></td>
-                    </tr>
-                    <tr>
-                      <td>20</td>
-                      <td><?php echo $row['r20']; ?></td>
-                      <td><?php $tto += $row['r20'] * 20;
-                          echo $row['r20'] * 20; ?></td>
-                    </tr>
-                    <tr>
-                      <td>10</td>
-                      <td><?php echo $row['r10']; ?></td>
-                      <td><?php $tto += $row['r10'] * 10;
-                          echo $row['r10'] * 10; ?></td>
-                    </tr>
-                    <tr>
-                      <td><i class="fa fa-database"></i> Coine (කාසි)</td>
-                      <td><?php echo $row['coins']; ?></td>
-                      <td><?php $tto += $row['coins'];
-                          echo $row['coins']; ?></td>
-                    </tr>
-                  <?php } ?>
-
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td>Total</td>
-                    <td><?php echo  $tto; ?></td>
-                  </tr>
-                  <tr>
-                    <td>Balance</td>
-                    <td><?php echo  $row['cash_total']; ?></td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-
+            <?php }
+            } ?>
 
           </div>
-          <!-- /.box-body -->
+
+          <div class="box-header with-border">
+            <h3 class="box-title">
+              Lorry Sales Report
+              <span class="pull-right badge bg-muted">New</span>
+              <span class="pull-right badge bg-yellow">Refill</span>
+            </h3>
+          </div>
+
+          <div class="box-body">
+            <table id="" class="table table-bordered table-striped">
+
+              <thead>
+
+                <tr>
+                  <th colspan="2"></th>
+                  <th colspan="2">12.5kg</th>
+                  <th colspan="2">5kg</th>
+                  <th colspan="2">37.5kg</th>
+                  <th colspan="2">2kg</th>
+
+                  <?php
+                  $ass_list = array();
+                  $result = $db->prepare("SELECT *  FROM sales_list WHERE sales_list.loading_id=:id AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id ");
+                  $result->bindParam(':id', $id);
+                  $result->execute();
+                  for ($i = 0; $row = $result->fetch(); $i++) {
+                    array_push($ass_list, $row['product_id']);
+                  ?>
+                    <th class="th"><span> <?php echo $row['name']; ?></span></th>
+                  <?php } ?>
+
+                </tr>
+
+                <tr>
+                  <th>Invoice</th>
+                  <th>Customer</th>
+                  <th>N</th>
+                  <th>R</th>
+                  <th>N</th>
+                  <th>R</th>
+                  <th>N</th>
+                  <th>R</th>
+                  <th>N</th>
+                  <th>R</th>
+
+                  <?php
+                  foreach ($ass_list as $list) { ?>
+                    <th></th>
+                  <?php } ?>
+
+                <tr>
+
+              </thead>
+
+              <tbody>
+
+                <?php $id = $_GET['id'];
+                $sales_list = array();
+                $sales = array();
+                $product = array();
+
+                $result = $db->prepare("SELECT *  FROM sales_list WHERE sales_list.loading_id=:id AND sales_list.action='0'  ORDER BY sales_list.product_id ");
+                $result->bindParam(':id', $id);
+                $result->execute();
+                for ($i = 0; $row = $result->fetch(); $i++) {
+
+                  $data = array('invo' => $row['invoice_no'], 'pid' => $row['product_id'], 'qty' => $row['qty']);
+
+                  array_push($sales_list, $data);
+                }
+
+                $result = $db->prepare("SELECT * FROM products  ORDER BY product_id  ");
+                $result->bindParam(':id', $id);
+                $result->execute();
+                for ($i = 0; $row = $result->fetch(); $i++) {
+                  array_push($product, $row['product_id']);
+                }
+
+                $result = $db->prepare("SELECT * FROM sales WHERE loading_id=:id AND action='1' ");
+                $result->bindParam(':id', $id);
+                $result->execute();
+                for ($i = 0; $row = $result->fetch(); $i++) { //row
+                  $invo = $row['invoice_number'];
+                  $cus = $row['name'];
+                  $sales_id = $row['transaction_id'];
+
+                  $temp = array();
+
+                  $temp['invo'] =  $invo;
+                  $temp['cus'] =  $cus;
+
+                  foreach ($product as $p_id) { //colum
+                    $temp[$p_id] = '';
+                  }
+
+                  foreach ($sales_list as $list) {
+
+                    if ($list['invo'] == $invo) {
+
+                      foreach ($product as $p_id) { //colum
+
+                        if ($p_id == $list['pid']) {
+                          if ($p_id > 4) {
+                            $temp[$p_id] = "<span class='pull-right badge bg-muted'> " . $list['qty'] . "</span>";
+                          } else {
+                            $temp[$p_id] = "<span class='pull-right badge bg-yellow'> " . $list['qty'] . "</span>";
+                          }
+                        } else {
+                        }
+                      }
+                    }
+                  }
+
+                  array_push($sales, $temp);
+                }
+                ?>
+
+                <?php foreach ($sales as $list) { ?>
+
+                  <tr>
+
+                    <td> <?php echo $list['invo']; ?> </td>
+                    <td> <?php echo $list['cus']; ?> </td>
+
+                    <td> <?php echo $list['5']; ?></td>
+                    <td> <?php echo $list['1']; ?> </td>
+
+                    <td> <?php echo $list['6']; ?></td>
+                    <td><?php echo $list['2']; ?></td>
+
+                    <td> <?php echo $list['7']; ?></td>
+                    <td><?php echo $list['3']; ?></td>
+
+                    <td> <?php echo $list['8']; ?> </td>
+                    <td> <?php echo $list['4']; ?> </td>
+
+                    <?php foreach ($ass_list as $ass) { ?>
+                      <td> <?php echo $list[$ass]; ?>
+                      </td>
+                    <?php } ?>
+
+                  </tr>
+                <?php } ?>
+              </tbody>
+
+              <?php $id = $_GET['id'];
+              $total = array();
+
+              foreach ($product as $p_id) {
+                $total[$p_id] = '';
+              }
+
+              $result = $db->prepare("SELECT * , sum(sales_list.qty)  FROM sales_list WHERE sales_list.loading_id=:id AND sales_list.action = 0 GROUP BY sales_list.product_id ");
+              $result->bindParam(':id', $id);
+              $result->execute();
+              for ($i = 0; $row = $result->fetch(); $i++) {
+                $total[$row['product_id']] = $row['sum(sales_list.qty)'];
+              }
+              ?>
+
+              <tfoot class=" bg-black">
+                <tr>
+                  <td colspan="2">Total</td>
+
+                  <td>
+                    <span class="pull-right badge bg-muted"> <?php echo $total['5']; ?> </span>
+                  </td>
+                  <td>
+                    <span class="pull-right badge bg-yellow"> <?php echo $total['1']; ?> </span>
+                  </td>
+                  <td>
+                    <span class="pull-right badge bg-muted"> <?php echo $total['6']; ?> </span>
+                  </td>
+                  <td>
+                    <span class="pull-right badge bg-yellow"> <?php echo $total['2']; ?> </span>
+                  </td>
+                  <td>
+                    <span class="pull-right badge bg-muted"> <?php echo $total['7']; ?> </span>
+                  </td>
+                  <td>
+                    <span class="pull-right badge bg-yellow"> <?php echo $total['3']; ?> </span>
+                  </td>
+                  <td>
+                    <span class="pull-right badge bg-muted"> <?php echo $total['8']; ?> </span>
+                  </td>
+                  <td>
+                    <span class="pull-right badge bg-yellow"> <?php echo $total['4']; ?> </span>
+                  </td>
+
+                  <?php
+
+                  foreach ($total as $i => $tot) {
+                    if ($i > 9  && $tot > 0) { ?>
+                      <td>
+                        <span class="pull-right badge bg-muted">
+                          <?php
+                          echo $tot;
+                          ?>
+                        </span>
+                      </td>
+
+                  <?php }
+                  } ?>
+
+                </tr>
+
+              </tfoot>
+
+            </table>
+          </div>
+
+          <br>
+
+          <div class="box-body">
+            <table id="example2" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+
+                  <th>Invoice no </th>
+                  <th>Customer</th>
+                  <th>Pay type</th>
+                  <th>Amount </th>
+                  <th>Chq no</th>
+                  <th>Chq Date</th>
+                  <th>Bank</th>
+                </tr>
+
+              </thead>
+              <tbody>
+                <?php
+
+
+                $id = $_GET['id'];
+
+                $result = $db->prepare("SELECT * FROM payment WHERE  loading_id='$id' and action>'0'  ORDER by transaction_id DESC");
+                $result->bindParam(':userid', $date);
+                $result->execute();
+                for ($i = 0; $row = $result->fetch(); $i++) {
+                  $invo = $row['invoice_no'];
+
+                  $result1 = $db->prepare("SELECT * FROM sales WHERE  invoice_number='$invo' and action='1' ");
+                  $result1->bindParam(':userid', $c);
+                  $result1->execute();
+                  for ($i = 0; $row1 = $result1->fetch(); $i++) {
+
+                    $in = $row1['transaction_id'];
+                    $cus = $row1['name'];
+                  }
+
+
+                ?>
+
+                  <tr>
+                    <td><?php echo $invo; ?></td>
+
+                    <td><?php echo $cus; ?></td>
+                    <td><?php echo $row['type']; ?></td>
+                    <td><?php echo $row['amount']; ?></td>
+                    <td><?php echo $row['chq_no']; ?></td>
+                    <td><?php echo $row['chq_date']; ?></td>
+                    <td><?php echo $row['chq_bank']; ?> </td>
+                  </tr>
+                <?php
+                }
+
+                //------------ Credit payment--------//
+                $result1 = $db->prepare("SELECT * FROM collection WHERE  loading_id=$id ");
+                $result1->bindParam(':userid', $c);
+                $result1->execute();
+                for ($i = 0; $row = $result1->fetch(); $i++) {
+                  $action = $row['action'];
+                  if ($action == 0) {
+                    $color_code = '#7FB3D5';
+                  } else {
+                    $color_code = '#E84141';
+                  }
+                ?>
+                  <tr style="background-color:<?php echo $color_code; ?>">
+                    <td><?php echo $row['invoice_no']; ?>(credit)</td>
+                    <td><?php echo $row['customer']; ?></td>
+                    <td><?php echo $row['pay_type']; ?></td>
+                    <td><?php echo $row['amount']; ?></td>
+                    <td><?php echo $row['chq_no']; ?></td>
+                    <td><?php echo $row['chq_date']; ?></td>
+                    <td><?php echo $row['bank'];
+                        if ($user_lewal == '2') {
+                          if ($unload == 'load') {
+                        ?>
+                          <a href="credit_collection_dll.php?id=<?php echo $row['id']; ?>&lid=<?php echo $_GET['id']; ?>">
+                            <span style="font-size: 12px" class="label label-danger">Remove</span> </a>
+                    </td>
+                <?php }
+                        } ?>
+                  </tr>
+                <?php   }    ?>
+              </tbody>
+              <tfoot>
+              </tfoot>
+            </table>
+            <?php
+
+            $result = $db->prepare("SELECT sum(amount) FROM payment WHERE  loading_id='$id' AND type='cash' and action >'0'  ORDER by transaction_id DESC");
+            $result->bindParam(':userid', $c);
+            $result->execute();
+            for ($i = 0; $row = $result->fetch(); $i++) {
+              $cash = $row['sum(amount)'];
+            }
+
+            $result = $db->prepare("SELECT sum(amount) FROM payment WHERE  loading_id='$id' AND pay_type='chq' and action >'0'  ORDER by transaction_id DESC");
+            $result->bindParam(':userid', $c);
+            $result->execute();
+            for ($i = 0; $row = $result->fetch(); $i++) {
+              $chq = $row['sum(amount)'];
+            }
+
+            $result = $db->prepare("SELECT sum(amount) FROM payment WHERE  loading_id='$id' AND pay_type='credit' and action >'0'  ORDER by transaction_id DESC");
+            $result->bindParam(':userid', $c);
+            $result->execute();
+            for ($i = 0; $row = $result->fetch(); $i++) {
+              $credit = $row['sum(amount)'];
+            }
+
+            $result = $db->prepare("SELECT sum(amount) FROM collection WHERE  loading_id='$id' AND pay_type='cash' and action ='0'  ");
+            $result->bindParam(':userid', $c);
+            $result->execute();
+            for ($i = 0; $row = $result->fetch(); $i++) {
+              $c_cash = $row['sum(amount)'];
+            }
+
+            $result = $db->prepare("SELECT sum(amount) FROM collection WHERE  loading_id='$id' AND pay_type='chq' and action ='0'  ");
+            $result->bindParam(':userid', $c);
+            $result->execute();
+            for ($i = 0; $row = $result->fetch(); $i++) {
+              $c_chq = $row['sum(amount)'];
+            }
+            ?>
+
+            <h3 style="color: green">Cash- Rs.<?php echo $cash + $c_cash; ?></h3>
+            <h3>CHQ- Rs.<?php echo $chq + $c_chq; ?></h3>
+            <h3 style="color: red">Credit- Rs.<?php echo $credit; ?></h3>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="box-header">
+                  <h3 class="box-title">Remove bill</h3>
+                </div>
+                <div class="box-body">
+                  <table id="example10" class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th>Invoice no</th>
+                        <th>Type</th>
+                        <th>Amount (Rs.)</th>
+
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      <?php $result = $db->prepare("SELECT * FROM payment WHERE loading_id='$id' and action='0'  ");
+                      $result->bindParam(':userid', $date);
+                      $result->execute();
+                      for ($i = 0; $row = $result->fetch(); $i++) {
+                      ?>
+                        <tr>
+                          <td><?php echo $row['invoice_no'];   ?> </td>
+                          <td><?php echo $row['type'];   ?> </td>
+                          <td>Rs.<?php echo $row['amount'];   ?></td>
+
+                        </tr>
+                      <?php }   ?>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="box-header">
+                  <h3 class="box-title">Expenses</h3>
+                </div>
+                <div class="box-body">
+                  <table id="example10" class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Type</th>
+                        <th>Amount (Rs.)</th>
+                        <th>Comment</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      <?php $result = $db->prepare("SELECT * FROM expenses_records WHERE loading_id='$id' AND dll='0'  ");
+                      $result->bindParam(':userid', $date);
+                      $result->execute();
+                      for ($i = 0; $row = $result->fetch(); $i++) {
+                      ?>
+                        <tr>
+                          <td><?php echo $row['id'];
+                              ?> </td>
+                          <td><?php echo $row['sub_type_name'];
+                              ?> </td>
+                          <td>Rs.<?php echo $row['amount'];
+                                  ?></td>
+                          <td><?php echo $row['comment'];
+                              ?></td>
+                        </tr>
+                      <?php }
+                      ?>
+
+                      <?php $result = $db->prepare("SELECT * FROM petty_topup WHERE loading_id='$id' and action='0'");
+                      $result->bindParam(':userid', $date);
+                      $result->execute();
+                      for ($i = 0; $row = $result->fetch(); $i++) {
+                      ?>
+                        <tr style="background-color:cadetblue">
+                          <td>Non </td>
+                          <td>Patty cash TOPUP</td>
+                          <td>Rs.<?php echo $row['amount'];   ?></td>
+                          <td><?php echo $row['date'];   ?></td>
+                        </tr>
+                      <?php }   ?>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="box-body">
+                  <table id="example10" class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th><i class="fa fa-money"></i></th>
+                        <th>QTY</th>
+                        <th>Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php
+                      $result = $db->prepare("SELECT * FROM loading WHERE transaction_id='$id'   ");
+                      $result->bindParam(':userid', $res);
+                      $result->execute();
+                      for ($i = 0; $row = $result->fetch(); $i++) {
+                        $tid = $row['transaction_id'];
+                        $tto = 0; ?>
+
+
+                        <tr>
+                          <td>5000</td>
+                          <td><?php echo $row['r5000']; ?></td>
+                          <td><?php $tto += $row['r5000'] * 5000;
+                              echo $row['r5000'] * 5000; ?></td>
+                        </tr>
+                        <tr>
+                          <td>2000</td>
+                          <td><?php echo $row['r2000']; ?></td>
+                          <td><?php $tto += $row['r2000'] * 2000;
+                              echo $row['r2000'] * 2000; ?></td>
+                        </tr>
+                        <tr>
+                          <td>1000</td>
+                          <td><?php echo $row['r1000']; ?></td>
+                          <td><?php $tto += $row['r1000'] * 1000;
+                              echo $row['r1000'] * 1000; ?></td>
+                        </tr>
+                        <tr>
+                          <td>500</td>
+                          <td><?php echo $row['r500']; ?></td>
+                          <td><?php $tto += $row['r500'] * 500;
+                              echo $row['r500'] * 500; ?></td>
+                        </tr>
+                        <tr>
+                          <td>100</td>
+                          <td><?php echo $row['r100']; ?></td>
+                          <td><?php $tto += $row['r100'] * 100;
+                              echo $row['r100'] * 100; ?></td>
+                        </tr>
+                        <tr>
+                          <td>50</td>
+                          <td><?php echo $row['r50']; ?></td>
+                          <td><?php $tto += $row['r50'] * 50;
+                              echo $row['r50'] * 50; ?></td>
+                        </tr>
+                        <tr>
+                          <td>20</td>
+                          <td><?php echo $row['r20']; ?></td>
+                          <td><?php $tto += $row['r20'] * 20;
+                              echo $row['r20'] * 20; ?></td>
+                        </tr>
+                        <tr>
+                          <td>10</td>
+                          <td><?php echo $row['r10']; ?></td>
+                          <td><?php $tto += $row['r10'] * 10;
+                              echo $row['r10'] * 10; ?></td>
+                        </tr>
+                        <tr>
+                          <td><i class="fa fa-database"></i> Coine (කාසි)</td>
+                          <td><?php echo $row['coins']; ?></td>
+                          <td><?php $tto += $row['coins'];
+                              echo $row['coins']; ?></td>
+                        </tr>
+                      <?php } ?>
+
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td>Total</td>
+                        <td><?php echo  $tto; ?></td>
+                      </tr>
+                      <tr>
+                        <td>Balance</td>
+                        <td><?php echo  $row['cash_total']; ?></td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
         </div>
-        <!-- /.box -->
-      </div>
-      <!-- /.col -->
+        <!-- /.col -->
     </section>
     <!-- /.content -->
   </div>
@@ -870,25 +902,6 @@ include("connect.php");
         autoclose: true
       });
 
-
-
-
-
-      //iCheck for checkbox and radio inputs
-      $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-        checkboxClass: 'icheckbox_minimal-blue',
-        radioClass: 'iradio_minimal-blue'
-      });
-      //Red color scheme for iCheck
-      $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
-        checkboxClass: 'icheckbox_minimal-red',
-        radioClass: 'iradio_minimal-red'
-      });
-      //Flat red color scheme for iCheck
-      $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
-        checkboxClass: 'icheckbox_flat-green',
-        radioClass: 'iradio_flat-green'
-      });
     });
   </script>
 
