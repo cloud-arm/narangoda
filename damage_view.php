@@ -1,263 +1,360 @@
 <!DOCTYPE html>
 <html>
-<?php 
+<?php
 include("head.php");
 include("connect.php");
 ?>
 
 
-<body class="hold-transition skin-blue sidebar-mini">
-<?php 
-include_once("auth.php");
-$r=$_SESSION['SESS_LAST_NAME'];
+<body class="hold-transition skin-yellow sidebar-mini">
+  <?php
+  include_once("auth.php");
+  $r = $_SESSION['SESS_LAST_NAME'];
+  $_SESSION['SESS_FORM'] = 'damage_view';
 
-if($r =='Cashier'){
+  if ($r == 'Cashier') {
 
-header("location:./../../../index.php");
-}
-if($r =='admin'){
+    header("location:./../../../index.php");
+  }
+  if ($r == 'admin') {
 
-include_once("sidebar.php");
-}
-?>
+    include_once("sidebar.php");
+  }
+  ?>
 
-
-
-
-<link rel="stylesheet" href="datepicker.css"
-        type="text/css" media="all" />
-    <script src="datepicker.js" type="text/javascript"></script>
-    <script src="datepicker.ui.min.js"
-        type="text/javascript"></script>
- <script type="text/javascript">
-     
-		 $(function(){
-        $("#datepicker1").datepicker({ dateFormat: 'yy/mm/dd' });
-        $("#datepicker2").datepicker({ dateFormat: 'yy/mm/dd' });
-       
-    });
-
-    </script>
-
-
-
-
-    <!-- /.sidebar -->
+  <!-- /.sidebar -->
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
-     <div class="content-wrapper">
+  <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-       DAMAGE
+        DAMAGE
         <small>Preview</small>
       </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">Forms</a></li>
-        <li class="active">damage</li>
-      </ol>
     </section>
-   
-   
-   
-   
-   
-   
-   
-   <section class="content">
-   
-     <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">Damage Data</h3>
-            </div>
-            <!-- /.box-header -->
-			 
-            <div class="box-body">
-              <table id="example1" class="table table-bordered table-striped">
-			  
-                <thead>
-                <tr>
-                  <th>Customer Name</th>
-                  <th>Complain no</th>
-                  <th>Product</th>
-                  <th>Location</th>
-                  <th>Date</th>
-                  <th>Action</th>
-				  <th>Type</th>
-                  <th>View</th>
-                </tr>
-				
-                </thead>
-				
-                <tbody>
-				<?php
-   
-   $result = $db->prepare("SELECT * FROM damage   ");
-				$result->bindParam(':userid', $date);
-                $result->execute();
-                for($i=0; $row = $result->fetch(); $i++){
-				
-				$rate=$row['complain_no'];
-				$id=$row['cylinder_no'];
-				
-			?>
-                <tr class="record" >
-                  <td><?php echo $row['customer_name'];?></td>
-				  
-				  
-				  
-                  <td><?php echo $row['complain_no'];?>
-                  </td>
-                  <td><?php echo $row['cylinder_type'];?></td>
-                  <td><?php echo $row['location'];?></td>
-                  <td><?php echo $row['date'];?></td>
-				  <td><small class="label pull-right bg-purple"><?php echo $row['action'];?></small></td>
-                 
 
-                  
-                  <td><?php
-				  
-				  $dr=$row['type'];
-				  if($dr=="damage"){
-					  
-					echo  '<small class="label pull-right bg-red">Damage</small>' ;
-					  
-					  
+    <section class="content">
 
-				  }
-				  
-				  else{
-					  echo  '<small class="label pull-right bg-green">'.$dr.'</small>';
-				  }
-				  
-				  
-				  
-				  ?></td>
-				  
-				  <td>
-				  
-				  <a href="damage_profile.php?id=<?php echo $row['complain_no'];?>"   title="Click to Delete" >
-				  <button class="btn btn-info"><i class="icon-trash">view</i></button></a>
-				  </td>
-				  
-				 
-				  
-				   <?php 
-				}
-				
-				?>
-                </tr>
-               
-                
-                </tbody>
-                <tfoot>
-                
-				
-				
-				
-				
-				
-				
-                </tfoot>
-              </table>
-            </div>
-            <!-- /.box-body -->
-          </div>
-          <!-- /.box -->
+      <div class="box">
+        <div class="box-header with-border">
+          <h3 class="box-title">Damage Data</h3>
         </div>
-        <!-- /.col -->
-      
-   
-   
-   
+        <!-- /.box-header -->
 
-    <!-- Main content -->
-    
-      <!-- /.row -->
+        <div class="box-body">
+          <table id="example1" class="table table-bordered table-striped">
+
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Customer Name</th>
+                <th>Complain no</th>
+                <th>Product</th>
+                <th>Date</th>
+                <th>Comment</th>
+                <th>Action</th>
+                <th>Type</th>
+                <th>#</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <?php
+
+              $result = $db->prepare("SELECT * FROM damage   ");
+              $result->bindParam(':userid', $date);
+              $result->execute();
+              for ($i = 0; $row = $result->fetch(); $i++) {
+
+                $rate = $row['complain_no'];
+                $id = $row['cylinder_no'];
+
+                if ($row['type'] == "damage") {
+                  $type = 'Damage';
+                  $crl2 = 'red';
+                } else 
+
+                if ($row['type'] == "clear") {
+                  $type = 'Clear';
+                  $crl2 = 'maroon';
+                } else 
+
+                if ($row['type'] == "complete") {
+                  $type = 'Complete';
+                  $crl2 = 'navy';
+                }
+
+                if ($row['action'] == "register") {
+                  $action = 'Register';
+                  $crl1 = 'purple';
+                } else
+
+                if ($row['action'] == "sent_company") {
+                  $action = 'Sent Company';
+                  $crl1 = 'orange';
+                } else
+
+                if ($row['action'] == "delivery_to_customer") {
+                  $action = 'Delivery To Customer';
+                  $crl1 = 'green';
+                } else
+
+                if ($row['action'] == "receive_yard") {
+                  $action = 'Receive To Yard';
+                  $crl1 = 'primary';
+                }
+              ?>
+                <tr class="record">
+                  <td><?php echo $i + 1; ?></td>
+                  <td><?php echo $row['customer_name']; ?></td>
+                  <td><?php echo $row['complain_no']; ?></td>
+                  <td><?php echo $row['cylinder_type']; ?></td>
+                  <td><?php echo $row['date']; ?></td>
+                  <td><?php echo $row['comment']; ?></td>
+                  <td>
+                    <span class="label pull-right bg-<?php echo $crl1; ?>"><?php echo $action; ?></span>
+                  </td>
+                  <td>
+                    <span class="label pull-right bg-<?php echo $crl2; ?>"><?php echo $type; ?></span>
+                  </td>
+                  <td>
+                    <?php if ($row['position'] == 1) { ?>
+                      <a href="#" title="Send to Company" onclick="click_open(1,'<?php echo $row['complain_no']; ?>')" class="btn btn-sm btn-warning">
+                        <i class="fa fa-send"></i>
+                      </a>
+                    <?php } ?>
+                    <?php if ($row['position'] == 2) { ?>
+                      <a href="#" title="Damage Receiver" onclick="click_open(2,'<?php echo $row['complain_no']; ?>')" class="btn btn-sm btn-primary">
+                        <i class="fa fa-reply"></i>
+                      </a>
+                    <?php } ?>
+                    <?php if ($row['position'] == 3) { ?>
+                      <a href="#" title="Send to Customer" onclick="click_open(3,'<?php echo $row['complain_no']; ?>')" class="btn btn-sm btn-success">
+                        <i class="fa fa-recycle"></i>
+                      </a>
+                    <?php } ?>
+                    <a href="damage_profile.php?id=<?php echo $row['complain_no']; ?>" title="Click to View" class="btn btn-sm btn-info">
+                      <i class="fa fa-user"></i>
+                    </a>
+                  </td>
+                </tr>
+              <?php } ?>
+            </tbody>
+
+            <tfoot></tfoot>
+          </table>
+        </div>
+        <!-- /.box-body -->
+      </div>
 
     </section>
     <!-- /.content -->
-   </div>
+  </div>
   <!-- /.content-wrapper -->
- <?php
+  <?php
   include("dounbr.php");
-?>
-  <!-- /.control-sidebar -->
-  <!-- Add the sidebar's background. This div must be placed
-       immediately after the control sidebar -->
+  ?>
+
+  <div class="container-up d-none" id="container_up">
+    <div class="container-close" onclick="click_close()"></div>
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="box box-success popup d-none" id="popup_1">
+          <div class="box-header with-border">
+            <h3 class="box-title w-100">
+              Sent Damage to The Company
+              <i onclick="click_close()" class="btn pull-right fa fa-remove" style="font-size: 25px"></i>
+            </h3>
+          </div>
+
+          <div class="box-body d-block">
+            <form method="POST" action="damage_company_save.php">
+
+              <div class="row" style="display: block;">
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Complain No</label>
+                    <input type="text" name="complain_no" value="" class="form-control comp_no" readonly>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Location</label>
+                    <select class="form-control select2 hidden-search" name="location" style="width: 100%;" autofocus>
+                      <option>Mabima</option>
+                      <option>Hambanthoata</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Lorry No</label>
+                    <select class="form-control select2" name="lorry" style="width: 100%;" autofocus>
+                      <?php
+                      include("connect.php");
+                      $result = $db->prepare("SELECT * FROM lorry  ");
+                      $result->bindParam(':id', $res);
+                      $result->execute();
+                      for ($i = 0; $row = $result->fetch(); $i++) {
+                      ?>
+                        <option value="<?php echo $row['lorry_id']; ?>"><?php echo $row['lorry_no']; ?> </option>
+                      <?php
+                      }
+                      ?>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <input type="submit" style="margin-top: 23px;" value="Send to Company" class="btn btn-warning">
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <div class="box box-success popup d-none" id="popup_2">
+          <div class="box-header with-border">
+            <h3 class="box-title w-100">
+              Damage Receive
+              <i onclick="click_close()" class="btn me-2 pull-right fa fa-remove" style="font-size: 25px"></i>
+            </h3>
+          </div>
+
+          <div class="box-body d-block">
+            <form method="POST" action="damage_receive_save.php">
+
+              <div class="row" style="display: block;">
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Complain No</label>
+                    <input type="text" name="complain_no" value="" class="form-control comp_no" readonly>
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <input type="submit" style="margin-top: 23px;" value="Receive to Yard" class="btn btn-primary">
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <div class="box box-success popup d-none" id="popup_3">
+          <div class="box-header with-border">
+            <h3 class="box-title w-100">
+              Sent Damage to The Customer
+              <i onclick="click_close()" class="btn me-2 pull-right fa fa-remove" style="font-size: 25px"></i>
+            </h3>
+          </div>
+
+          <div class="box-body d-block">
+            <form method="POST" action="damage_customer_save.php">
+
+              <div class="row" style="display: block;">
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Complain No</label>
+                    <input type="text" name="complain_no" value="" class="form-control comp_no" readonly>
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <input type="submit" style="margin-top: 23px;" value="Receive to Customer" class="btn btn-success">
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
   <div class="control-sidebar-bg"></div>
-</div>
-<!-- ./wrapper -->
-<script src="js/jquery.js"></script>
-<!-- jQuery 2.2.3 -->
-<script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
-<!-- Bootstrap 3.3.6 -->
-<script src="../../bootstrap/js/bootstrap.min.js"></script>
-<!-- DataTables -->
-<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="../../plugins/datatables/dataTables.bootstrap.min.js"></script>
-<!-- SlimScroll -->
-<script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
-<!-- FastClick -->
-<script src="../../plugins/fastclick/fastclick.js"></script>
-<!-- AdminLTE App -->
-<script src="../../dist/js/app.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="../../dist/js/demo.js"></script>
-<!-- page script -->
-<script>
-  $(function () {
-    $("#example1").DataTable();
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false
+  </div>
+
+
+  <!-- jQuery 2.2.3 -->
+  <script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
+  <!-- Bootstrap 3.3.6 -->
+  <script src="../../bootstrap/js/bootstrap.min.js"></script>
+  <!-- DataTables -->
+  <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="../../plugins/datatables/dataTables.bootstrap.min.js"></script>
+  <!-- SlimScroll -->
+  <script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
+  <!-- FastClick -->
+  <script src="../../plugins/fastclick/fastclick.js"></script>
+  <!-- AdminLTE App -->
+  <script src="../../dist/js/app.min.js"></script>
+  <!-- AdminLTE for demo purposes -->
+  <script src="../../dist/js/demo.js"></script>
+  <!-- page script -->
+  <script>
+    $(function() {
+      $("#example1").DataTable();
+      $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false
+      });
     });
-  });
-</script>
+  </script>
 
+  <script>
+    function click_open(i, id) {
 
- <script type="text/javascript">
-$(function() {
+      $('.comp_no').val(id);
 
+      $("#popup_" + i).removeClass("d-none");
+      $("#container_up").removeClass("d-none");
+    }
 
-$(".delbutton").click(function(){
+    function click_close() {
+      $(".popup").addClass("d-none");
+      $("#container_up").addClass("d-none");
+    }
+  </script>
 
-//Save the link in a variable called element
-var element = $(this);
+  <script>
+    $(function() {
+      //Initialize Select2 Elements
+      $(".select2").select2();
 
-//Find the id of the link that was clicked
-var del_id = element.attr("id");
+      $('.select2.hidden-search').select2({
+        minimumResultsForSearch: -1
+      });
 
-//Built a url to send
-var info = 'id=' + del_id;
- if(confirm("Sure you want to delete this Collection? There is NO undo!"))
-		  {
+      //Date picker
+      $('#datepicker').datepicker({
+        autoclose: true,
+        datepicker: true,
+        format: 'yyyy-mm-dd '
+      });
 
- $.ajax({
-   type: "GET",
-   url: "pay_dll.php",
-   data: info,
-   success: function(){
-   
-   }
- });
-         $(this).parents(".record").animate({ backgroundColor: "#fbc7c7" }, "fast")
-		.animate({ opacity: "hide" }, "slow");
-
- }
-
-return false;
-
-});
-
-});
-</script>
+    });
+  </script>
 
 </body>
 

@@ -1,46 +1,29 @@
 ﻿<!DOCTYPE html>
 <html>
-<?php 
+<?php
 include("head.php");
 include("connect.php");
 ?>
-<body class="hold-transition skin-blue sidebar-mini">
-<?php 
-include_once("auth.php");
-$r=$_SESSION['SESS_LAST_NAME'];
 
-if($r =='Cashier'){
+<body class="hold-transition skin-yellow sidebar-mini">
+  <?php
+  include_once("auth.php");
+  $r = $_SESSION['SESS_LAST_NAME'];
+  $_SESSION['SESS_FORM'] = 'damage';
 
-include_once("sidebar2.php");
-}
-if($r =='admin'){
+  if ($r == 'Cashier') {
 
-include_once("sidebar.php");
-}
-?>
+    include_once("sidebar2.php");
+  }
+  if ($r == 'admin') {
 
-
-
-
-<link rel="stylesheet" href="datepicker.css"
-        type="text/css" media="all" />
-    <script src="datepicker.js" type="text/javascript"></script>
-    <script src="datepicker.ui.min.js" type="text/javascript"></script>
- <script type="text/javascript">
-     
-		 $(function(){
-        $("#datepicker1").datepicker({ dateFormat: 'yy/mm/dd' });
-        $("#datepicker2").datepicker({ dateFormat: 'yy/mm/dd' });
-       
-    });
-
-    </script>
-
-	
+    include_once("sidebar.php");
+  }
+  date_default_timezone_set("Asia/Colombo");
+  ?>
 
 
-
-    <!-- /.sidebar -->
+  <!-- /.sidebar -->
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
@@ -48,14 +31,9 @@ include_once("sidebar.php");
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Damage Form 
+        Damage Form
         <small>Preview</small>
       </h1>
-      <ol class="breadcrumb">
-        <li><a href="index.php"><i class="fa fa-dashboard"></i> Home</a></li>
-       
-        <li class="active">Loan</li>
-      </ol>
     </section>
 
     <!-- Main content -->
@@ -65,240 +43,165 @@ include_once("sidebar.php");
       <div class="box box-info">
         <div class="box-header with-border">
           <h3 class="box-title">New Damage</h3>
+        </div>
 
-          
-        <!-- /.box-header -->
-		<div class="form-group">
-              
-		<form method="post" action="savedamage.php">
-		
+
         <div class="box-body">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label>Customer</label>
-                <select class="form-control select2" name="customer" style="width:100%;" autofocus >
-                  <option >Family   </option>
-                  
-				  <?php
-                $result = $db->prepare("SELECT * FROM customer  ");
-		$result->bindParam(':userid', $res);
-		$result->execute();
-		for($i=0; $row = $result->fetch(); $i++){
-	?>
-		<option ><?php echo $row['customer_name']; ?>    </option>
-	<?php
-				}
-			?>
-                </select>
-				</div>
-              </div>
-			   <?php date_default_timezone_set("Asia/Colombo"); ?>
-			  
-			  <div class="form-group">
-               <label>Product</label>
+          <form method="post" action="damage_save.php">
 
-                <div class="input-group date">
-                  <select class="form-control pull-right" name="product"   >
-				 
-<?php
-                $result = $db->prepare("SELECT * FROM products WHERE product_name=''  ");
-		$result->bindParam(':userid', $res);
-		$result->execute();
-		for($i=0; $row = $result->fetch(); $i++){
-	?>
-		<option ><?php echo $row['gen_name']; ?>    </option>
-	<?php
-				}
-			?>
+            <div class="row">
 
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Customer</label>
+                  <select class="form-control select2" name="customer" style="width:100%;">
+                    <option value="0">Narangoda Group </option>
 
-		
-	
-	
-                </select>
-                </div>
-				
-        
-		
-        </div>
-      </div>
-	   				  
-											  
-      <!-- /.box -->
-<div class="form-group">
-              
-		
-		
-		        <div class="box-body">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label>	Complain no.</label>
-                <input type="text" name="complain_no" class="form-control pull-right"  >
-               
-                  </div>
-				</div>
-				<div class="col-md-6">
-              <div class="form-group">
-                <label>	Cylinder no.</label>
-                <input type="text" name="cylinder_no" class="form-control pull-right"  >
-                 
-                  </div>
-				</div>
-              </div>
-              </div>
-
-
-
-<div class="box-body">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label>	Gas Weight.</label>
-                <input type="text" name="gas_weight" class="form-control pull-right"  >
-               
-                  </div>
-				</div>
-				<div class="col-md-6">
-              <div class="form-group">
-                <label>	comment.</label>
-                <input type="text" name="comment" class="form-control pull-right"  >
-                 
-                  </div>
-				</div>
-              </div>
-              </div>
-			  
-			  
-			  
-			  
-			   <div class="box-body">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label>	Reason.</label>
-                <input type="text" name="reason" class="form-control pull-right"  >
-               
-                  </div>
-				</div>
-				<div class="col-md-6">
-              <div class="form-group">
-                <label>Location</label>
-                  <select class="form-control pull-right" name="location"  >
-                    
-		<option >Kaluthara Yard</option>
-		<option >Payagala Yard</option>
-	    
+                    <?php
+                    $result = $db->prepare("SELECT * FROM customer  ");
+                    $result->bindParam(':userid', $res);
+                    $result->execute();
+                    for ($i = 0; $row = $result->fetch(); $i++) {
+                    ?>
+                      <option value="<?php echo $row['customer_id']; ?>"><?php echo $row['customer_name']; ?> </option>
+                    <?php
+                    }
+                    ?>
                   </select>
-                  </div>
-				</div>
+                </div>
               </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Product</label>
+                  <select class="form-control select2" name="product" style="width:100%;">
+                    <?php
+                    $result = $db->prepare("SELECT * FROM products WHERE product_id > 4  ");
+                    $result->bindParam(':userid', $res);
+                    $result->execute();
+                    for ($i = 0; $row = $result->fetch(); $i++) {
+                    ?>
+                      <option value="<?php echo $row['product_id']; ?>"><?php echo $row['gen_name']; ?> </option>
+                    <?php
+                    }
+                    ?>
+                  </select>
+                </div>
               </div>
-			  
-			          
-            
-              
-				  
-				  
-				  
-		
-		
-		
-		
-		<br>
-		
-		
-		
-	
-			  
-			  
-			  
-			  
-			  <input class="btn btn-info" type="submit" value="Next" >
-			  
-			  </form>
-          <!-- /.box -->
 
-        </div>
-        <!-- /.col (left) -->
-       
 
-        
-            <!-- /.box-body -->
-            
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label> Complain no.</label>
+                  <input type="text" name="complain_no" class="form-control">
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label> Cylinder no.</label>
+                  <input type="text" name="cylinder_no" class="form-control">
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label> Gas Weight.</label>
+                  <input type="text" name="gas_weight" class="form-control">
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Comment.</label>
+                  <input type="text" name="comment" class="form-control">
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label> Reason.</label>
+                  <input type="text" name="reason" class="form-control">
+                </div>
+              </div>
+
+              <div class="col-md-6" style="height: 75px; display: flex; align-items: center;">
+                <label style="margin-bottom: 0;">
+                  <input type="checkbox" name="one2one" class="flat-red">
+                  One to one Replacement
+                </label>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <input class="btn btn-info" type="submit" value="Save Damage">
+                </div>
+              </div>
+
             </div>
-          </div>
+
+          </form>
           <!-- /.box -->
+
         </div>
-        <!-- /.col (right) -->
+
       </div>
-      <!-- /.row -->
 
     </section>
     <!-- /.content -->
   </div>
-  
+
   <!-- /.content-wrapper -->
-    <?php
+  <?php
   include("dounbr.php");
-?>
+  ?>
   <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
   <div class="control-sidebar-bg"></div>
-</div>
-<!-- ./wrapper -->
+  </div>
+  <!-- ./wrapper -->
 
-<!-- jQuery 2.2.3 -->
-<script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
-<!-- Bootstrap 3.3.6 -->
-<script src="../../bootstrap/js/bootstrap.min.js"></script>
-<!-- Select2 -->
-<script src="../../plugins/select2/select2.full.min.js"></script>
-<!-- InputMask -->
-<script src="../../plugins/input-mask/jquery.inputmask.js"></script>
-<script src="../../plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-<script src="../../plugins/input-mask/jquery.inputmask.extensions.js"></script>
-<!-- date-range-picker -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
-<script src="../../plugins/daterangepicker/daterangepicker.js"></script>
-<!-- bootstrap datepicker -->
-<script src="../../plugins/datepicker/bootstrap-datepicker.js"></script>
-<!-- bootstrap color picker -->
-<script src="../../plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
-<!-- bootstrap time picker -->
-<script src="../../plugins/timepicker/bootstrap-timepicker.min.js"></script>
-<!-- SlimScroll 1.3.0 -->
-<script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
-<!-- iCheck 1.0.1 -->
-<script src="../../plugins/iCheck/icheck.min.js"></script>
-<!-- FastClick -->
-<script src="../../plugins/fastclick/fastclick.js"></script>
-<!-- AdminLTE App -->
-<script src="../../dist/js/app.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="../../dist/js/demo.js"></script>
-<!-- Page script -->
-<script>
-  $(function () {
-    //Initialize Select2 Elements
-    $(".select2").select2();
+  <!-- jQuery 2.2.3 -->
+  <script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
+  <!-- Bootstrap 3.3.6 -->
+  <script src="../../bootstrap/js/bootstrap.min.js"></script>
+  <!-- Select2 -->
+  <script src="../../plugins/select2/select2.full.min.js"></script>
+  <!-- date-range-picker -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+  <script src="../../plugins/daterangepicker/daterangepicker.js"></script>
+  <!-- bootstrap datepicker -->
+  <script src="../../plugins/datepicker/bootstrap-datepicker.js"></script>
+  <!-- SlimScroll 1.3.0 -->
+  <script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
+  <!-- iCheck 1.0.1 -->
+  <script src="../../plugins/iCheck/icheck.min.js"></script>
+  <!-- FastClick -->
+  <script src="../../plugins/fastclick/fastclick.js"></script>
+  <!-- AdminLTE App -->
+  <script src="../../dist/js/app.min.js"></script>
+  <!-- AdminLTE for demo purposes -->
+  <script src="../../dist/js/demo.js"></script>
+  <!-- Dark Theme Btn-->
+  <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
 
-    //Datemask dd/mm/yyyy
-    $("#datemask").inputmask("YYYY/MM/DD", {"placeholder": "YYYY/MM/DD"});
-    //Datemask2 mm/dd/yyyy
-    $("#datemask2").inputmask("YYYY/MM/DD", {"placeholder": "YYYY/MM/DD"});
-    //Money Euro
-    $("[data-mask]").inputmask();
+  <!-- Page script -->
+  <script>
+    $(function() {
+      //Initialize Select2 Elements
+      $(".select2").select2();
 
-    //Date range picker
-    $('#reservation').daterangepicker();
-    //Date range picker with time picker
-    $('#reservationtime').daterangepicker({timePicker: true, timePickerIncrement: 30, format: 'YYYY/MM/DD h:mm A'});
-    //Date range as a button
-    $('#daterange-btn').daterangepicker(
-        {
+      //Date range picker
+      $('#reservation').daterangepicker();
+      //Date range picker with time picker
+      $('#reservationtime').daterangepicker({
+        timePicker: true,
+        timePickerIncrement: 30,
+        format: 'YYYY/MM/DD h:mm A'
+      });
+      //Date range as a button
+      $('#daterange-btn').daterangepicker({
           ranges: {
             'Today': [moment(), moment()],
             'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -310,43 +213,38 @@ include_once("sidebar.php");
           startDate: moment().subtract(29, 'days'),
           endDate: moment()
         },
-        function (start, end) {
+        function(start, end) {
           $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
         }
-    );
+      );
 
-    //Date picker
-	$('#datepicker').datepicker({  autoclose: true, datepicker: true,  format: 'yyyy/mm/dd '});
-    $('#datepicker').datepicker({
-      autoclose: true
-    });
+      //Date picker
+      $('#datepicker').datepicker({
+        autoclose: true,
+        datepicker: true,
+        format: 'yyyy/mm/dd '
+      });
+      $('#datepicker').datepicker({
+        autoclose: true
+      });
 
-    //iCheck for checkbox and radio inputs
-    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-      checkboxClass: 'icheckbox_minimal-blue',
-      radioClass: 'iradio_minimal-blue'
+      //iCheck for checkbox and radio inputs
+      $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+        checkboxClass: 'icheckbox_minimal-blue',
+        radioClass: 'iradio_minimal-blue'
+      });
+      //Red color scheme for iCheck
+      $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+        checkboxClass: 'icheckbox_minimal-red',
+        radioClass: 'iradio_minimal-red'
+      });
+      //Flat red color scheme for iCheck
+      $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+        checkboxClass: 'icheckbox_flat-green',
+        radioClass: 'iradio_flat-green'
+      });
     });
-    //Red color scheme for iCheck
-    $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
-      checkboxClass: 'icheckbox_minimal-red',
-      radioClass: 'iradio_minimal-red'
-    });
-    //Flat red color scheme for iCheck
-    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
-      checkboxClass: 'icheckbox_flat-green',
-      radioClass: 'iradio_flat-green'
-    });
-
-    //Colorpicker
-    $(".my-colorpicker1").colorpicker();
-    //color picker with addon
-    $(".my-colorpicker2").colorpicker();
-
-    //Timepicker
-    $(".timepicker").timepicker({
-      showInputs: false
-    });
-  });
-</script>
+  </script>
 </body>
+
 </html>

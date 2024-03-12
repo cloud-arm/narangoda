@@ -139,7 +139,7 @@
         <!-- -------------------- Logistic Section ----------------------- -->
         <?php if ($dep == 'logistic') { ?>
 
-          <li class="<?php if ($f == 'index.php') {
+          <li class="<?php if ($f == 'index') {
                         echo 'active';
                       } ?>">
             <a href="index.php">
@@ -266,7 +266,9 @@
 
         <?php if ($dep == 'hr') { ?>
 
-          <li>
+          <li class="<?php if ($f == 'hr_index') {
+                        echo 'active';
+                      } ?>">
             <a href="hr_index.php">
               <i class="fa fa-dashboard"></i> <span>Dashboard</span>
             </a>
@@ -295,7 +297,9 @@
 
         <?php if ($dep == 'accounting') { ?>
 
-          <li>
+          <li class="<?php if ($f == 'acc_index') {
+                        echo 'active';
+                      } ?>">
             <a href="acc_index.php">
               <i class="fa fa-dashboard"></i> <span>Dashboard</span>
             </a>
@@ -387,7 +391,9 @@
 
 
         <?php if ($dep == 'management') { ?>
-          <li>
+          <li class="<?php if ($f == 'manage_index') {
+                        echo 'active';
+                      } ?>">
             <a href="manage_index.php">
               <i class="fa fa-dashboard"></i> <span>Dashboard</span>
             </a>
@@ -487,6 +493,35 @@
           <?php $co = '';
           $co0 = '';
           $dis = 'none';
+          if ($f == 'damage' || $f == 'damage_view') {
+            $co = 'active';
+            $co0 = 'menu-open';
+            $dis = 'block';
+          } ?>
+
+          <li class="treeview <?php echo $co; ?>">
+            <a href="#">
+              <i class="fa fa-exclamation-triangle"></i>
+              <span>Damage</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+
+            <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
+              <li class="<?php if ($f == 'damage') {
+                            echo 'active';
+                          } ?>"><a href="damage.php"><i class="fa fa-circle-o text-aqua "></i> Add New Damage</a></li>
+              <li class="<?php if ($f == 'damage_view') {
+                            echo 'active';
+                          } ?>"><a href="damage_view.php"><i class="fa fa-circle-o text-aqua "></i> View Damage</a></li>
+              </a>
+            </ul>
+          </li>
+
+          <?php $co = '';
+          $co0 = '';
+          $dis = 'none';
           if ($f == 'customer' || $f == 'product' || $f == 'rep' || $f == 'lorry' || $f == 'root') {
             $co = 'active';
             $co0 = 'menu-open';
@@ -575,27 +610,6 @@
                 <ul class="treeview-menu">
                   <li><a href="trust.php"><i class="fa fa-circle-o text-aqua "></i> Add New Trust</a></li>
                   <li><a href="trust_view.php"><i class="fa fa-circle-o text-aqua "></i> View Trust</a></li>
-                  </a>
-                </ul>
-              </li>
-
-
-              <li class="treeview">
-                <a href="#">
-                  <i class="fa fa-exclamation-triangle text-yellow"></i>
-                  <span>Damage</span>
-                  <span class="pull-right-container">
-                    <i class="fa fa-angle-left pull-right"></i>
-                  </span>
-                </a>
-
-                <ul class="treeview-menu">
-
-                  <li><a href="damage.php"><i class="fa fa-circle-o text-aqua "></i> Add New Damage</a></li>
-                  <li><a rel="facebox" href="damage_company.php"><i class="fa fa-circle-o text-aqua "></i> Sent Damage to Company</a></li>
-                  <li><a rel="facebox" href="damage_receive.php"><i class="fa fa-circle-o text-aqua "></i> Damage Receive</a></li>
-                  <li><a rel="facebox" href="damage_customer.php"><i class="fa fa-circle-o text-aqua "></i> Sent Damage to Customer</a></li>
-                  <li><a href="damage_view.php"><i class="fa fa-circle-o text-aqua "></i> View Damage</a></li>
                   </a>
                 </ul>
               </li>
