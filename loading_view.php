@@ -197,6 +197,73 @@ include("connect.php");
 
         <!-- /.box-header -->
         <div class="box-body">
+          <table id="example1" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+
+                <th>Product </th>
+                <th>Load Qty</th>
+                <th>Available Qty</th>
+
+
+              </tr>
+
+
+
+
+            </thead>
+            <tbody>
+              <?php
+              include("connect.php");
+
+              $id = $_GET['id'];
+              $result = $db->prepare("SELECT * FROM loading WHERE  transaction_id=$id ");
+              $result->bindParam(':userid', $c);
+              $result->execute();
+              for ($i = 0; $row = $result->fetch(); $i++) {
+
+                $driver = $row['driver'];
+                $lorry_no = $row['lorry_no'];
+                $he1 = $row['helper1'];
+                $he2 = $row['helper2'];
+                $date25 = $row['date'];
+                $unload = $row['action'];
+              }
+
+
+              //$d3=$_SESSION['SESS_FIRST_NAME'];
+              //$d3=$_GET['d3'];
+              $result = $db->prepare("SELECT * FROM loading_list WHERE  loading_id='$id'  ORDER by transaction_id ASC");
+              $result->bindParam(':userid', $date);
+              $result->execute();
+              for ($i = 0; $row = $result->fetch(); $i++) {
+
+
+
+                $date = 0;
+                $time = 0;
+                $term = 0;
+                $load_yard = 0;
+                $unload_yard = 0;
+
+
+              ?>
+
+                <tr>
+                  <td><?php echo $row['product_name']; ?></td>
+
+                  <td><?php echo $row['qty']; ?></td>
+                  <td><?php echo $qty = $row['qty_sold']; ?></td>
+
+
+                <?php
+              }
+                ?></td>
+                </tr>
+            </tbody>
+            <tfoot>
+            </tfoot>
+          </table>
           <div class="row">
 
             <?php
@@ -216,16 +283,16 @@ include("connect.php");
             function check_img($id)
             {
               if ($id == 1 | $id == 5) {
-                return '12.5.png';
+                return array('12.5.png', '40');
               }
               if ($id == 2 | $id == 6) {
-                return '5.png';
+                return array('5.png', '40');
               }
               if ($id == 3 | $id == 7) {
-                return '37.5.png';
+                return array('37.5.png', '27');
               }
               if ($id == 4 | $id == 8) {
-                return '2.png';
+                return array('2.png', '40');
               }
             }
 
@@ -234,7 +301,7 @@ include("connect.php");
               foreach ($lists as $list) {
 
                 if ($list['id'] == $id + 4) {
-                  return $list['qty'];
+                  return $list['st_qty'];
                 }
               }
             }
@@ -243,23 +310,25 @@ include("connect.php");
             <?php foreach ($loading_list as $list) {
               if ($list['id'] < 5) { ?>
 
+                <?php $img = check_img($list['id']); ?>
+
                 <div class="col-md-3 col-sm-6 col-xs-12">
                   <div class="info-box">
                     <span class="info-box-icon bg-yellow">
-                      <img style="width: 60px;height: 70px;" src="icon/<?php echo check_img($list['id']); ?>" alt="">
+                      <img style="width: <?php echo $img[1]; ?>px;" src="icon/<?php echo $img[0]; ?>" alt="">
                     </span>
 
                     <div class="info-box-content">
-                      <span class="info-box-label">Stock: <?php echo $list['st_qty']; ?></span>
+                      <span class="info-box-label">Load Qty: <?php echo $list['qty']; ?></span>
 
                       <div class="info-box-content-set" style="margin-top: 5px;">
                         <span class="info-box-text">Gas:</span>
-                        <span class="info-box-number"><?php echo $list['qty']; ?></span>
+                        <span class="info-box-number"><?php echo $list['st_qty']; ?></span>
                       </div>
 
                       <div class="info-box-content-set">
                         <span class="info-box-text">Empty:</span>
-                        <span class="info-box-number"><?php echo get_empty($loading_list, $list['id']) - $list['qty']; ?></span>
+                        <span class="info-box-number"><?php echo get_empty($loading_list, $list['id']); ?></span>
                       </div>
                     </div>
                   </div>
