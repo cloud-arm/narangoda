@@ -12,7 +12,7 @@ include("connect.php");
   include_once("auth.php");
   $r = $_SESSION['SESS_LAST_NAME'];
   $_SESSION['SESS_DEPARTMENT'] = 'logistic';
-  $_SESSION['SESS_FORM'] = 'index.php';
+  $_SESSION['SESS_FORM'] = 'index';
 
   if ($r == 'lorry') {
 
