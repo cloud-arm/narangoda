@@ -197,73 +197,7 @@ include("connect.php");
 
         <!-- /.box-header -->
         <div class="box-body">
-          <table id="example1" class="table table-bordered table-striped">
-            <thead>
-              <tr>
-
-                <th>Product </th>
-                <th>Load Qty</th>
-                <th>Available Qty</th>
-
-
-              </tr>
-
-
-
-
-            </thead>
-            <tbody>
-              <?php
-              include("connect.php");
-
-              $id = $_GET['id'];
-              $result = $db->prepare("SELECT * FROM loading WHERE  transaction_id=$id ");
-              $result->bindParam(':userid', $c);
-              $result->execute();
-              for ($i = 0; $row = $result->fetch(); $i++) {
-
-                $driver = $row['driver'];
-                $lorry_no = $row['lorry_no'];
-                $he1 = $row['helper1'];
-                $he2 = $row['helper2'];
-                $date25 = $row['date'];
-                $unload = $row['action'];
-              }
-
-
-              //$d3=$_SESSION['SESS_FIRST_NAME'];
-              //$d3=$_GET['d3'];
-              $result = $db->prepare("SELECT * FROM loading_list WHERE  loading_id='$id'  ORDER by transaction_id ASC");
-              $result->bindParam(':userid', $date);
-              $result->execute();
-              for ($i = 0; $row = $result->fetch(); $i++) {
-
-
-
-                $date = 0;
-                $time = 0;
-                $term = 0;
-                $load_yard = 0;
-                $unload_yard = 0;
-
-
-              ?>
-
-                <tr>
-                  <td><?php echo $row['product_name']; ?></td>
-
-                  <td><?php echo $row['qty']; ?></td>
-                  <td><?php echo $qty = $row['qty_sold']; ?></td>
-
-
-                <?php
-              }
-                ?></td>
-                </tr>
-            </tbody>
-            <tfoot>
-            </tfoot>
-          </table>
+          
           <div class="row">
 
             <?php
