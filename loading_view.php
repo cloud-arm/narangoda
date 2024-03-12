@@ -239,12 +239,8 @@ include("connect.php");
               foreach ($lists as $list) {
 
                 if ($list['id'] == $id + 4) {
-                  $cylinder= $list['st_qty'];
+                  return $list['st_qty'];
                 }
-                if ($list['id'] == $id) {
-                  $gas= $list['st_qty'];
-                }
-                return $cylinder-$gas;
               }
             }
             ?>
@@ -270,7 +266,7 @@ include("connect.php");
 
                       <div class="info-box-content-set">
                         <span class="info-box-text">Empty:</span>
-                        <span class="info-box-number"><?php echo get_empty($loading_list, $list['id']); ?></span>
+                        <span class="info-box-number"><?php echo get_empty($loading_list, $list['id'])-$list['st_qty']; ?></span>
                       </div>
                     </div>
                   </div>
