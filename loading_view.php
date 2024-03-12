@@ -239,8 +239,12 @@ include("connect.php");
               foreach ($lists as $list) {
 
                 if ($list['id'] == $id + 4) {
-                  return $list['st_qty'];
+                  $cylinder= $list['st_qty'];
                 }
+                if ($list['id'] == $id) {
+                  $gas= $list['st_qty'];
+                }
+                return $cylinder-$gas;
               }
             }
             ?>
