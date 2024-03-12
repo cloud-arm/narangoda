@@ -110,39 +110,43 @@ include("connect.php");
         <!-- fix for small devices only -->
         <div class="clearfix visible-sm-block"></div>
 
-        <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-light">
-              <div class="info-box-img">
-                <img src="<?php echo $helper1_pic; ?>" alt="">
-              </div>
-            </span>
+        <?php if ($helper1 > '0') { ?>
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+              <span class="info-box-icon bg-light">
+                <div class="info-box-img">
+                  <img src="<?php echo $helper1_pic; ?>" alt="">
+                </div>
+              </span>
 
-            <div class="info-box-content">
-              <span class="info-box-text">Helper-1</span>
-              <span class="info-box-number" style="margin-top: 10px;"><?php echo $helper1; ?></span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
-        </div>
-        <!-- /.col -->
-        <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-light">
-              <div class="info-box-img">
-                <img src="<?php echo $helper2_pic; ?>" alt="">
+              <div class="info-box-content">
+                <span class="info-box-text">Helper-1</span>
+                <span class="info-box-number" style="margin-top: 10px;"><?php echo $helper1; ?></span>
               </div>
-            </span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Helper-1</span>
-              <span class="info-box-number" style="margin-top: 10px;"><?php echo $helper2; ?></span>
+              <!-- /.info-box-content -->
             </div>
-            <!-- /.info-box-content -->
+            <!-- /.info-box -->
           </div>
-          <!-- /.info-box -->
-        </div>
+        <?php } ?>
+
+        <?php if ($helper2 > '0') { ?>
+          <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+              <span class="info-box-icon bg-light">
+                <div class="info-box-img">
+                  <img src="<?php echo $helper2_pic; ?>" alt="">
+                </div>
+              </span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">Helper-1</span>
+                <span class="info-box-number" style="margin-top: 10px;"><?php echo $helper2; ?></span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+        <?php } ?>
         <!-- /.col -->
       </div>
 
