@@ -29,6 +29,11 @@ foreach ($expenses as $list) {
     $time = $list['time'];
 
     $pay_type = 'cash';
+    $acc = 0;
+    $acc_name = '';
+    $type_name = '';
+    $sub_name = '';
+    $driver_name = '';
 
     $type = 2;
     $re = $db->prepare("SELECT * FROM expenses_types WHERE sn=:id ");
