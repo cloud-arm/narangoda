@@ -95,10 +95,8 @@ date_default_timezone_set("Asia/Colombo");
         <div class="box-header with-border">
           <h3 class="box-title" style="text-transform: capitalize;">ETF Payments</h3>
 
-          <a href="hr_etf_rp_print.php?year=<?php echo $year; ?>&month=<?php echo $month; ?>">
-            <button class="btn btn-info" style="width: 123px; height:35px; margin-left:10px;">
-              <i class="icon icon-search icon-large"></i> print
-            </button>
+          <a href="hr_etf_rp_print.php?year=<?php echo $year; ?>&month=<?php echo $month; ?>" class="btn btn-info btn-sm" style="width: 100px; margin-left:10px;">
+            <i class="fa fa-print" style="margin-right: 5px;"></i> Print
           </a>
         </div>
 
