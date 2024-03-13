@@ -264,7 +264,9 @@ include("connect.php");
             $(".popup").addClass("d-none");
             $("#container_up").addClass("d-none");
         }
+    </script>
 
+    <script>
         function des_select(id) {
             if (id == 1) {
                 $('.drive_sec').css('display', 'block');
@@ -272,9 +274,7 @@ include("connect.php");
                 $('.drive_sec').css('display', 'none');
             }
         }
-    </script>
 
-    <script>
         function epf_get() {
 
             var val = document.getElementById('epf_txt').value;
