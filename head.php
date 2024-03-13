@@ -37,7 +37,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
   <!-- <link rel="stylesheet" href="../../dist/css/AdminLTENew.css"> -->
-  <link rel="stylesheet" href="https://dev.colorbiz.org/ashen/cdn/main/dist/css/AdminLTENew.css">
+  <link rel="stylesheet" href="https://dev.colorbiz.org/ashen/cdn/main/dist/css/AdminLTENewv1.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
@@ -50,23 +50,5 @@
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
-
-
-
-  <link href="src/facebox.css" media="screen" rel="stylesheet" type="text/css" />
-  <script src="lib/jquery.js" type="text/javascript"></script>
-  <script src="src/facebox.js" type="text/javascript"></script>
-  <script type="text/javascript">
-    jQuery(document).ready(function($) {
-      $('a[rel*=facebox]').facebox({
-        loadingImage: 'src/loading.gif',
-
-      })
-    })
-  </script>
-
-
-
-
 
 </head>
