@@ -151,7 +151,7 @@ include("connect.php");
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Designation</label>
-                                        <select class="form-control" onchange="des_select(this.options[this.selectedIndex].getAttribute('value'))" name="type">
+                                        <select class="form-control select2" style="width: 100%;" onchange="des_select(this.options[this.selectedIndex].getAttribute('value'))" name="des">
                                             <?php
                                             $result = $db->prepare("SELECT * FROM employees_des ");
                                             $result->bindParam(':userid', $res);
@@ -168,7 +168,7 @@ include("connect.php");
                                 <div class="col-md-6 drive_sec" style="display: block;">
                                     <div class="form-group">
                                         <label>Lorry No</label>
-                                        <select class="form-control" name="lorry">
+                                        <select class="form-control select2" style="width: 100%;" name="lorry">
                                             <?php
                                             $result = $db->prepare("SELECT * FROM lorry ");
                                             $result->bindParam(':userid', $res);
@@ -185,7 +185,7 @@ include("connect.php");
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>EPF NO <span id="epf_err" style="color: #ff0000;display: none">* This number is duplicate !!</span></label>
-                                        <input class="form-control" onkeyup="epf_get()" id="epf_txt" type="text" name="etf_no">
+                                        <input class="form-control" onkeyup="epf_get()" id="epf_txt" type="text" name="epf_no">
                                     </div>
 
                                 </div>
@@ -193,7 +193,7 @@ include("connect.php");
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>EPF Amount</label>
-                                        <input class="form-control" type="text" name="etf_amount">
+                                        <input class="form-control" type="text" name="epf_amount">
                                     </div>
                                 </div>
 
@@ -201,7 +201,7 @@ include("connect.php");
                                     <div class="form-group">
                                         <label>OT</label>
 
-                                        <select class="form-control" name="ot" id="">
+                                        <select class="form-control select2 hidden-search" style="width: 100%;" name="ot" id="">
                                             <option value="1">Eligible</option>
                                             <option value="2">Not Eligible</option>
                                         </select>
@@ -211,13 +211,14 @@ include("connect.php");
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Welfare Amount</label>
-                                        <input class="form-control" type="text" name="well_amount">
+                                        <input class="form-control" type="text" name="well">
                                     </div>
                                 </div>
 
 
                                 <div class="col-md-12">
                                     <div class="form-group">
+                                        <input type="hidden" name="id" value="0">
                                         <input id="emp_save" type="submit" style="margin-top: 23px;" value="Save" class="btn btn-info w-100">
                                     </div>
                                 </div>
@@ -234,7 +235,6 @@ include("connect.php");
     <div class="control-sidebar-bg"></div>
     </div>
     <!-- ./wrapper -->
-
     <!-- jQuery 2.2.3 -->
     <script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
     <!-- Bootstrap 3.3.6 -->
@@ -242,8 +242,17 @@ include("connect.php");
     <!-- DataTables -->
     <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="../../plugins/datatables/dataTables.bootstrap.min.js"></script>
-    <!-- SlimScroll -->
+    <!-- Select2 -->
+    <script src="../../plugins/select2/select2.full.min.js"></script>
+    <!-- date-range-picker -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+    <script src="../../plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- bootstrap datepicker -->
+    <script src="../../plugins/datepicker/bootstrap-datepicker.js"></script>
+    <!-- SlimScroll 1.3.0 -->
     <script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
+    <!-- iCheck 1.0.1 -->
+    <script src="../../plugins/iCheck/icheck.min.js"></script>
     <!-- FastClick -->
     <script src="../../plugins/fastclick/fastclick.js"></script>
     <!-- AdminLTE App -->
@@ -252,6 +261,7 @@ include("connect.php");
     <script src="../../dist/js/demo.js"></script>
     <!-- Dark Theme Btn-->
     <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
+
     <!-- page script -->
 
     <script>
@@ -279,11 +289,6 @@ include("connect.php");
 
             var val = document.getElementById('epf_txt').value;
 
-
-            fetch("hr_epf_get.php?id=" + val)
-                .then((response) => response.json())
-                .then((json) => console.log(json));
-
             var info = 'id=' + val;
             $.ajax({
                 type: "GET",
@@ -293,8 +298,7 @@ include("connect.php");
                     if (resp == '1') {
                         document.getElementById("epf_err").style.display = "inline";
                         document.getElementById("emp_save").setAttribute("disabled", "");
-                    }
-                    if (!resp) {
+                    } else {
                         document.getElementById("epf_err").style.display = "none";
                         document.getElementById("emp_save").removeAttribute("disabled");
                     }
@@ -313,6 +317,12 @@ include("connect.php");
                 "ordering": true,
                 "info": true,
                 "autoWidth": false
+            });
+
+            //Initialize Select2 Elements
+            $(".select2").select2();
+            $('.select2.hidden-search').select2({
+                minimumResultsForSearch: -1
             });
         });
     </script>

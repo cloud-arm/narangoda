@@ -53,15 +53,22 @@ include("connect.php");
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
-                            <?php $id = $_GET["id"];
-                            $result = $db->prepare("SELECT * FROM employee WHERE id='$id' ");
-                            $result->bindParam(':userid', $res);
-                            $result->execute();
-                            for ($i = 0; $row = $result->fetch(); $i++) {
-                                $ot = $row['ot'];
-                                $well = $row['well'];
-                            ?>
-                                <ul class="list-group list-group-unbordered">
+
+                            <ul class="list-group list-group-unbordered">
+                                <?php $id = $_GET["id"];
+                                $result = $db->prepare("SELECT * FROM employee WHERE id='$id' ");
+                                $result->bindParam(':userid', $res);
+                                $result->execute();
+                                for ($i = 0; $row = $result->fetch(); $i++) {
+                                    $ot = $row['ot'];
+                                    $well = $row['well'];
+                                    $lorry = $row['lorry_id'];
+                                    $des = $row['des_id'];
+                                    $dis = 'none';
+                                    if ($des == 1) {
+                                        $dis = 'block';
+                                    }
+                                ?>
                                     <li class="list-group-item">
                                         <b>Name:</b> <i><?php echo $name = $row['name']; ?></i>
                                     </li>
@@ -75,7 +82,7 @@ include("connect.php");
                                         <b>Contact:</b> <i><?php echo $contact = $row['phone_no']; ?></i>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Designation:</b> <i><?php echo $des = $row['des']; ?></i>
+                                        <b>Designation:</b> <i><?php echo $row['des']; ?></i>
                                     </li>
                                     <li class="list-group-item">
                                         <b>Hour Rate:</b> <i><?php echo $rate = $row['hour_rate']; ?></i>
@@ -88,7 +95,8 @@ include("connect.php");
                                     </li>
                                 <?php } ?>
 
-                                </ul>
+                            </ul>
+                            <a href="hr_employee.php" class="btn btn-sm btn-info" style="width: 100%;">Back</a>
                         </div>
                         <!-- /.box-body -->
                     </div>
@@ -104,7 +112,7 @@ include("connect.php");
                         <div class="tab-content">
                             <!-- /.tab-pane -->
                             <div class="active tab-pane" id="settings">
-                                <form method="post" action="hr_emp_profile_save.php" class="form-horizontal">
+                                <form method="post" action="hr_employee_save.php" class="form-horizontal">
                                     <div class="row" style="margin-right: 10px;">
                                         <div class="form-group">
                                             <label for="inputName" class="col-sm-2 control-label">Name</label>
@@ -115,7 +123,7 @@ include("connect.php");
                                         <div class="form-group">
                                             <label for="inputName" class="col-sm-2 control-label">Contact</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" name="contact" value="<?php echo $contact; ?>" id="inputName">
+                                                <input type="text" class="form-control" name="phone_no" value="<?php echo $contact; ?>" id="inputName">
                                             </div>
                                         </div>
 
@@ -137,7 +145,7 @@ include("connect.php");
                                         <div class="form-group">
                                             <label for="inputName" class="col-sm-2 control-label">Designation</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control select2 hidden-search" name="des" style="width: 100%;" autofocus>
+                                                <select class="form-control select2 hidden-search" name="des" onchange="des_select(this.options[this.selectedIndex].getAttribute('value'))" style="width: 100%;" autofocus>
                                                     <?php
                                                     $result = $db->prepare("SELECT * FROM employees_des ");
                                                     $result->bindParam(':userid', $res);
@@ -145,9 +153,32 @@ include("connect.php");
                                                     for ($i = 0; $row = $result->fetch(); $i++) {
 
                                                     ?>
-                                                        <option value="<?php echo $row['name']; ?>" <?php if ($row['name'] == $des) {
+                                                        <option value="<?php echo $row['id']; ?>" <?php if ($row['id'] == $des) {
                                                                                                         echo "selected";
                                                                                                     } ?>><?php echo $row['name']; ?>
+                                                        </option>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </select>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group drive_sec" style="display: <?php echo $dis; ?>">
+                                            <label for="inputName" class="col-sm-2 control-label">Lorry No</label>
+                                            <div class="col-sm-10">
+                                                <select class="form-control select2 hidden-search" name="lorry" style="width: 100%;" autofocus>
+                                                    <?php
+                                                    $result = $db->prepare("SELECT * FROM lorry ");
+                                                    $result->bindParam(':userid', $res);
+                                                    $result->execute();
+                                                    for ($i = 0; $row = $result->fetch(); $i++) {
+
+                                                    ?>
+                                                        <option value="<?php echo $row['lorry_id']; ?>" <?php if ($row['lorry_id'] == $lorry) {
+                                                                                                            echo "selected";
+                                                                                                        } ?>><?php echo $row['lorry_no']; ?>
                                                         </option>
                                                     <?php
                                                     }
@@ -214,6 +245,7 @@ include("connect.php");
                                         <div class="form-group">
                                             <div class="col-sm-offset-2 col-sm-10">
                                                 <input type="hidden" name="id" value="<?php echo $_GET['id']; ?>">
+                                                <input type="hidden" name="end" value="0">
                                                 <button type="submit" class="btn btn-danger">Submit</button>
                                             </div>
                                         </div>
@@ -254,6 +286,9 @@ include("connect.php");
     <script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
     <!-- Bootstrap 3.3.6 -->
     <script src="../../bootstrap/js/bootstrap.min.js"></script>
+    <!-- DataTables -->
+    <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../plugins/datatables/dataTables.bootstrap.min.js"></script>
     <!-- Select2 -->
     <script src="../../plugins/select2/select2.full.min.js"></script>
     <!-- date-range-picker -->
@@ -273,8 +308,16 @@ include("connect.php");
     <script src="../../dist/js/demo.js"></script>
     <!-- Dark Theme Btn-->
     <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
+   
     <!-- Page script -->
     <script>
+        function des_select(id) {
+            if (id == 1) {
+                $('.drive_sec').css('display', 'block');
+            } else {
+                $('.drive_sec').css('display', 'none');
+            }
+        }
         $(function() {
             //Initialize Select2 Elements
             $(".select2").select2();
