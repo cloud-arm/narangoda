@@ -11,14 +11,21 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 
 $result_array=[];
-$result = $db->prepare("SELECT * FROM expenses_sub_type WHERE type_id = '2'");
+$result = $db->prepare("SELECT * FROM damage ");
 $result->bindParam(':userid', $res);
 $result->execute();
 for($i=0; $row = $result->fetch(); $i++){
     $result_array[] = array (
         "id" => $row['id'],
-        "type_id" => $row['type_id'],
-        "name" => $row['name'],
+        "complain_no" => $row['complain_no'],
+        "customer_name" => $row['customer_name'],
+        "customer_id" => $row['customer_id'],
+        "product_id" => $row['product_id'],
+        "product_name" => $row['cylinder_type'],
+        "reason" => $row['reason'],
+        "location" => $row['location'],
+        "action" => $row['action'],
+        "cylinder_no" => $row['cylinder_no'],
     );
     }
  
