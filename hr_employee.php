@@ -114,12 +114,14 @@ include("connect.php");
                         <form method="POST" action="hr_employee_save.php">
 
                             <div class="row" style="display: block;">
+
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Full Name</label>
                                         <input class="form-control" type="text" name="name">
                                     </div>
                                 </div>
+
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Phone No</label>
@@ -143,7 +145,7 @@ include("connect.php");
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Hour Rate</label>
+                                        <label>Day Rate</label>
                                         <input class="form-control" type="text" name="rate">
                                     </div>
                                 </div>
@@ -167,18 +169,15 @@ include("connect.php");
 
                                 <div class="col-md-6 drive_sec" style="display: block;">
                                     <div class="form-group">
-                                        <label>Lorry No</label>
-                                        <select class="form-control select2" style="width: 100%;" name="lorry">
-                                            <?php
-                                            $result = $db->prepare("SELECT * FROM lorry ");
-                                            $result->bindParam(':userid', $res);
-                                            $result->execute();
-                                            for ($i = 0; $row = $result->fetch(); $i++) {
-                                            ?>
-                                                <option value="<?php echo $row['lorry_id']; ?>"><?php echo $row['lorry_no']; ?></option>
-                                            <?php }
-                                            ?>
-                                        </select>
+                                        <label>User Name</label>
+                                        <input class="form-control" type="text" name="user_name">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 drive_sec" style="display: block;">
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <input class="form-control" type="text" name="password">
                                     </div>
                                 </div>
 

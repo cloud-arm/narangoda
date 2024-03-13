@@ -15,9 +15,11 @@ $well = $_POST['well'];
 $ot = $_POST['ot'];
 $id = $_POST['id'];
 
-$lorry = 0;
+$user_name = '';
+$password = '';
 if ($des_id == 1) {
-    $lorry = $_POST['lorry'];
+    $user_name = $_POST['user_name'];
+    $password = $_POST['password'];
 }
 
 $attend_date = date('Y-m-d');
@@ -32,25 +34,17 @@ for ($i = 0; $row = $result->fetch(); $i++) {
     $type = $row['type'];
 }
 
-$lorry_no = '';
-$result = $db->prepare("SELECT * FROM lorry WHERE lorry_id=:id ");
-$result->bindParam(':id', $lorry);
-$result->execute();
-for ($i = 0; $row = $result->fetch(); $i++) {
-    $lorry_no = $row['lorry_no'];
-}
-
 
 if ($id == 0) {
-    
-    $sql = "INSERT INTO employee (name,type,phone_no,nic,address,attend_date,hour_rate,des,des_id,epf_no,epf_amount,ot,well,action,lorry_id,lorry_no) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+    $sql = "INSERT INTO employee (name,type,phone_no,nic,address,attend_date,hour_rate,des,des_id,epf_no,epf_amount,ot,well,action,user_name,password) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $q = $db->prepare($sql);
-    $q->execute(array($name, $type, $phone_no, $nic, $address, $attend_date, $rate, $des, $des_id, $etf_no, $etf_amount, $ot, $well, 1, $lorry, $lorry_no));
+    $q->execute(array($name, $type, $phone_no, $nic, $address, $attend_date, $rate, $des, $des_id, $etf_no, $etf_amount, $ot, $well, 1, $user_name, $password));
 } else {
 
-    $sql = "UPDATE employee SET name = ?, address = ?, nic = ?, phone_no = ?, hour_rate = ?, des = ?, des_id = ?, epf_amount = ?, epf_no = ?, ot = ?, well = ?, lorry_id = ?, lorry_no = ?, type = ? WHERE id = ? ";
+    $sql = "UPDATE employee SET name = ?, address = ?, nic = ?, phone_no = ?, hour_rate = ?, des = ?, des_id = ?, epf_amount = ?, epf_no = ?, ot = ?, well = ?, user_name = ?, password = ?, type = ? WHERE id = ? ";
     $q = $db->prepare($sql);
-    $q->execute(array($name, $address, $nic, $phone_no, $rate, $des, $des_id, $etf_amount, $etf_no, $ot, $well, $lorry, $lorry_no, $type, $id));
+    $q->execute(array($name, $address, $nic, $phone_no, $rate, $des, $des_id, $etf_amount, $etf_no, $ot, $well, $user_name, $password, $type, $id));
 }
 
 if (isset($_POST['end'])) {

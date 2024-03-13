@@ -62,7 +62,6 @@ include("connect.php");
                                 for ($i = 0; $row = $result->fetch(); $i++) {
                                     $ot = $row['ot'];
                                     $well = $row['well'];
-                                    $lorry = $row['lorry_id'];
                                     $des = $row['des_id'];
                                     $dis = 'none';
                                     if ($des == 1) {
@@ -71,6 +70,9 @@ include("connect.php");
                                 ?>
                                     <li class="list-group-item">
                                         <b>Name:</b> <i><?php echo $name = $row['name']; ?></i>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>User Name:</b> <i><?php echo $user = $row['user_name']; ?></i>
                                     </li>
                                     <li class="list-group-item">
                                         <b>NIC:</b> <i><?php echo $nic = $row['nic']; ?></i>
@@ -166,31 +168,21 @@ include("connect.php");
                                         </div>
 
                                         <div class="form-group drive_sec" style="display: <?php echo $dis; ?>">
-                                            <label for="inputName" class="col-sm-2 control-label">Lorry No</label>
+                                            <label for="inputName" class="col-sm-2 control-label">User Name</label>
                                             <div class="col-sm-10">
-                                                <select class="form-control select2 hidden-search" name="lorry" style="width: 100%;" autofocus>
-                                                    <?php
-                                                    $result = $db->prepare("SELECT * FROM lorry ");
-                                                    $result->bindParam(':userid', $res);
-                                                    $result->execute();
-                                                    for ($i = 0; $row = $result->fetch(); $i++) {
-
-                                                    ?>
-                                                        <option value="<?php echo $row['lorry_id']; ?>" <?php if ($row['lorry_id'] == $lorry) {
-                                                                                                            echo "selected";
-                                                                                                        } ?>><?php echo $row['lorry_no']; ?>
-                                                        </option>
-                                                    <?php
-                                                    }
-                                                    ?>
-                                                </select>
-
+                                                <input class="form-control" type="text" value="<?php echo $user; ?>" name="user_name">
                                             </div>
                                         </div>
 
+                                        <div class="form-group drive_sec" style="display: <?php echo $dis; ?>">
+                                            <label for="inputName" class="col-sm-2 control-label">Password</label>
+                                            <div class="col-sm-10">
+                                                <input class="form-control" type="password" name="password">
+                                            </div>
+                                        </div>
 
                                         <div class="form-group">
-                                            <label for="inputEmail" class="col-sm-2 control-label">Hour Rate:</label>
+                                            <label for="inputEmail" class="col-sm-2 control-label">Day Rate:</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" name="rate" value="<?php echo $rate; ?>" id="inputEmail" placeholder="Hour Rate:" required>
                                             </div>
@@ -308,7 +300,7 @@ include("connect.php");
     <script src="../../dist/js/demo.js"></script>
     <!-- Dark Theme Btn-->
     <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
-   
+
     <!-- Page script -->
     <script>
         function des_select(id) {
