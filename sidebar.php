@@ -274,6 +274,75 @@
             </a>
           </li>
 
+          <?php $co = '';
+          $co0 = '';
+          $dis = 'none';
+          if ($f == 'hr_employee' || $f == 'hr_attendance' || $f == 'hr_allowances' || $f == 'hr_salary_advance' || $f == 'hr_payroll' || $f == 'hr_pay_out' || $f == 'hr_salary_rp' || $f == 'hr_epf_rp' || $f == 'hr_etf_rp') {
+            $co = 'active';
+            $co0 = 'menu-open';
+            $dis = 'block';
+          } ?>
+
+          <li class="treeview <?php echo $co; ?>">
+            <a href="#">
+              <i class="fa fa-user"></i> <span>HR</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+
+            <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
+
+              <li class="<?php if ($f == 'hr_employee') {
+                            echo 'active';
+                          } ?>"><a href="hr_employee.php"><i class="fa fa-user text-yellow"></i>Employee</a></li>
+              <li class="<?php if ($f == 'hr_attendance') {
+                            echo 'active';
+                          } ?>"><a href="hr_attendance.php"><i class="fa  fa-500px text-yellow"></i>Attendance</a></li>
+              <!-- <li class="<?php if ($f == 'hr_allowances') {
+                                echo 'active';
+                              } ?>"><a href="hr_allowances.php"><i class="fa fa-star-o text-yellow"></i>Allowances</a></li> -->
+              <li class="<?php if ($f == 'hr_salary_advance') {
+                            echo 'active';
+                          } ?>"><a href="hr_salary_advance.php"><i class="fa fa-money text-yellow"></i>Advance</a></li>
+              <li class="<?php if ($f == 'hr_payroll') {
+                            echo 'active';
+                          } ?>"><a href="hr_payroll.php"><i class="fa fa-list-alt text-red"></i>Payroll </a></li>
+              <!-- <li class="<?php if ($f == 'hr_pay_out') {
+                                echo 'active';
+                              } ?>"><a href="hr_pay_out.php?date=<?php echo date('Y-m'); ?>"><i class="fa fa-list-alt text-yellow"></i>Pay Out </a></li> -->
+
+              <?php $co = '';
+              if ($f == 'hr_salary_rp' || $f == 'hr_epf_rp' || $f == 'hr_etf_rp') {
+                $co = 'active';
+              } ?>
+              <li class="treeview <?php echo $co; ?>">
+
+                <a href="#"><i class="fa fa-list-alt text-blue"></i>
+                  Payroll Report
+                  <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                  </span>
+                </a>
+
+                <ul class="treeview-menu">
+
+                  <li class="<?php if ($f == 'hr_salary_rp') {
+                                echo 'active';
+                              } ?>"><a href="hr_salary_rp.php?date=<?php echo date('Y-m') ?>"><i class="fa fa-circle-o"></i> Salary Summery</a></li>
+                  <li class="<?php if ($f == 'hr_epf_rp') {
+                                echo 'active';
+                              } ?>"><a href="hr_epf_rp.php"><i class="fa fa-circle-o"></i> EPF</a></li>
+                  <li class="<?php if ($f == 'hr_etf_rp') {
+                                echo 'active';
+                              } ?>"><a href="hr_etf_rp.php"><i class="fa fa-circle-o"></i> ETF</a></li>
+                  <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Welfare</a></li> -->
+
+                </ul>
+              </li>
+            </ul>
+          </li>
+
           <li class="treeview">
             <a href="#">
               <i class="fa fa-line-chart"></i>
@@ -305,10 +374,81 @@
             </a>
           </li>
 
-          <li>
+          <li class="<?php if ($f == 'expenses') {
+                        echo 'active';
+                      } ?>">
             <a href="expenses.php">
               <i class="fa fa-suitcase"></i> <span>Expenses</span>
             </a>
+          </li>
+
+          <?php $co = '';
+          $co0 = '';
+          $dis = 'none';
+          if ($f == 'hr_employee' || $f == 'hr_attendance' || $f == 'hr_allowances' || $f == 'hr_salary_advance' || $f == 'hr_payroll' || $f == 'hr_pay_out' || $f == 'hr_salary_rp' || $f == 'hr_epf_rp' || $f == 'hr_etf_rp') {
+            $co = 'active';
+            $co0 = 'menu-open';
+            $dis = 'block';
+          } ?>
+
+          <li class="treeview <?php echo $co; ?>">
+            <a href="#">
+              <i class="fa fa-user"></i> <span>HR</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+
+            <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
+
+              <li class="<?php if ($f == 'hr_employee') {
+                            echo 'active';
+                          } ?>"><a href="hr_employee.php"><i class="fa fa-user text-yellow"></i>Employee</a></li>
+              <li class="<?php if ($f == 'hr_attendance') {
+                            echo 'active';
+                          } ?>"><a href="hr_attendance.php"><i class="fa  fa-500px text-yellow"></i>Attendance</a></li>
+              <!-- <li class="<?php if ($f == 'hr_allowances') {
+                                echo 'active';
+                              } ?>"><a href="hr_allowances.php"><i class="fa fa-star-o text-yellow"></i>Allowances</a></li> -->
+              <li class="<?php if ($f == 'hr_salary_advance') {
+                            echo 'active';
+                          } ?>"><a href="hr_salary_advance.php"><i class="fa fa-money text-yellow"></i>Advance</a></li>
+              <li class="<?php if ($f == 'hr_payroll') {
+                            echo 'active';
+                          } ?>"><a href="hr_payroll.php"><i class="fa fa-list-alt text-red"></i>Payroll </a></li>
+              <!-- <li class="<?php if ($f == 'hr_pay_out') {
+                                echo 'active';
+                              } ?>"><a href="hr_pay_out.php?date=<?php echo date('Y-m'); ?>"><i class="fa fa-list-alt text-yellow"></i>Pay Out </a></li> -->
+
+              <?php $co = '';
+              if ($f == 'hr_salary_rp' || $f == 'hr_epf_rp' || $f == 'hr_etf_rp') {
+                $co = 'active';
+              } ?>
+              <li class="treeview <?php echo $co; ?>">
+
+                <a href="#"><i class="fa fa-list-alt text-blue"></i>
+                  Payroll Report
+                  <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                  </span>
+                </a>
+
+                <ul class="treeview-menu">
+
+                  <li class="<?php if ($f == 'hr_salary_rp') {
+                                echo 'active';
+                              } ?>"><a href="hr_salary_rp.php?date=<?php echo date('Y-m') ?>"><i class="fa fa-circle-o"></i> Salary Summery</a></li>
+                  <li class="<?php if ($f == 'hr_epf_rp') {
+                                echo 'active';
+                              } ?>"><a href="hr_epf_rp.php"><i class="fa fa-circle-o"></i> EPF</a></li>
+                  <li class="<?php if ($f == 'hr_etf_rp') {
+                                echo 'active';
+                              } ?>"><a href="hr_etf_rp.php"><i class="fa fa-circle-o"></i> ETF</a></li>
+                  <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Welfare</a></li> -->
+
+                </ul>
+              </li>
+            </ul>
           </li>
 
           <?php $co = '';
@@ -399,12 +539,82 @@
             </a>
           </li>
 
-          <li>
+          <li class="<?php if ($f == 'expenses') {
+                        echo 'active';
+                      } ?>">
             <a href="expenses.php">
               <i class="fa fa-suitcase"></i> <span>Expenses</span>
             </a>
           </li>
 
+          <?php $co = '';
+          $co0 = '';
+          $dis = 'none';
+          if ($f == 'hr_employee' || $f == 'hr_attendance' || $f == 'hr_allowances' || $f == 'hr_salary_advance' || $f == 'hr_payroll' || $f == 'hr_pay_out' || $f == 'hr_salary_rp' || $f == 'hr_epf_rp' || $f == 'hr_etf_rp') {
+            $co = 'active';
+            $co0 = 'menu-open';
+            $dis = 'block';
+          } ?>
+
+          <li class="treeview <?php echo $co; ?>">
+            <a href="#">
+              <i class="fa fa-user"></i> <span>HR</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+
+            <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
+
+              <li class="<?php if ($f == 'hr_employee') {
+                            echo 'active';
+                          } ?>"><a href="hr_employee.php"><i class="fa fa-user text-yellow"></i>Employee</a></li>
+              <li class="<?php if ($f == 'hr_attendance') {
+                            echo 'active';
+                          } ?>"><a href="hr_attendance.php"><i class="fa  fa-500px text-yellow"></i>Attendance</a></li>
+              <!-- <li class="<?php if ($f == 'hr_allowances') {
+                                echo 'active';
+                              } ?>"><a href="hr_allowances.php"><i class="fa fa-star-o text-yellow"></i>Allowances</a></li> -->
+              <li class="<?php if ($f == 'hr_salary_advance') {
+                            echo 'active';
+                          } ?>"><a href="hr_salary_advance.php"><i class="fa fa-money text-yellow"></i>Advance</a></li>
+              <li class="<?php if ($f == 'hr_payroll') {
+                            echo 'active';
+                          } ?>"><a href="hr_payroll.php"><i class="fa fa-list-alt text-red"></i>Payroll </a></li>
+              <!-- <li class="<?php if ($f == 'hr_pay_out') {
+                                echo 'active';
+                              } ?>"><a href="hr_pay_out.php?date=<?php echo date('Y-m'); ?>"><i class="fa fa-list-alt text-yellow"></i>Pay Out </a></li> -->
+
+              <?php $co = '';
+              if ($f == 'hr_salary_rp' || $f == 'hr_epf_rp' || $f == 'hr_etf_rp') {
+                $co = 'active';
+              } ?>
+              <li class="treeview <?php echo $co; ?>">
+
+                <a href="#"><i class="fa fa-list-alt text-blue"></i>
+                  Payroll Report
+                  <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                  </span>
+                </a>
+
+                <ul class="treeview-menu">
+
+                  <li class="<?php if ($f == 'hr_salary_rp') {
+                                echo 'active';
+                              } ?>"><a href="hr_salary_rp.php?date=<?php echo date('Y-m') ?>"><i class="fa fa-circle-o"></i> Salary Summery</a></li>
+                  <li class="<?php if ($f == 'hr_epf_rp') {
+                                echo 'active';
+                              } ?>"><a href="hr_epf_rp.php"><i class="fa fa-circle-o"></i> EPF</a></li>
+                  <li class="<?php if ($f == 'hr_etf_rp') {
+                                echo 'active';
+                              } ?>"><a href="hr_etf_rp.php"><i class="fa fa-circle-o"></i> ETF</a></li>
+                  <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Welfare</a></li> -->
+
+                </ul>
+              </li>
+            </ul>
+          </li>
 
           <?php $co = '';
           $co0 = '';
