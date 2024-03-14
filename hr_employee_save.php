@@ -132,5 +132,5 @@ if (isset($_POST['end'])) {
     header("location: hr_employee_profile.php?id=$id");
 } else {
 
-    // header("location: hr_employee.php");
+    header("location: hr_employee.php");
 }
