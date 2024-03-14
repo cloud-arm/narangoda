@@ -111,7 +111,7 @@ include("connect.php");
                     </div>
 
                     <div class="box-body d-block">
-                        <form method="POST" action="hr_employee_save.php">
+                        <form method="POST" action="hr_employee_save.php" enctype="multipart/form-data">
 
                             <div class="row" style="display: block;">
 
@@ -186,7 +186,6 @@ include("connect.php");
                                         <label>EPF NO <span id="epf_err" style="color: #ff0000;display: none">* This number is duplicate !!</span></label>
                                         <input class="form-control" onkeyup="epf_get()" id="epf_txt" type="text" name="epf_no">
                                     </div>
-
                                 </div>
 
                                 <div class="col-md-6">
@@ -214,6 +213,18 @@ include("connect.php");
                                     </div>
                                 </div>
 
+                                <div class="col-md-6" style="display: flex;justify-content: space-around;gap: 10px;">
+                                    <div class="form-group" style="width: 100%;">
+                                        <label for="img-file">Upload Image</label>
+                                        <label class="form-control" for="img-file" style="cursor: pointer;">
+                                            <input accept=".jpg, .jpeg, .png" name="image" id="img-file" onchange="" type="file" style="opacity: 0;position: absolute;">
+                                            <i class="fa fa-cloud-upload"></i> Custom Upload
+                                        </label>
+                                    </div>
+                                    <div class="form-img" id="img-preview" style="display: none;">
+                                        <img src="#" id="img" alt="user_pic">
+                                    </div>
+                                </div>
 
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -276,6 +287,20 @@ include("connect.php");
     </script>
 
     <script>
+        function previewImage(event) {
+            var input = event.target;
+            var reader = new FileReader();
+
+            reader.onload = function() {
+                var img_preview = document.getElementById("img-preview");
+                var img = document.getElementById("img");
+                img.src = reader.result;
+                img_preview.style.display = "flex";
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+
         function des_select(id) {
             if (id == 1) {
                 $('.drive_sec').css('display', 'block');
