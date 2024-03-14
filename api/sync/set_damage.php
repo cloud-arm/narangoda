@@ -24,11 +24,12 @@ foreach ($damage as $list) {
     $customer = $list['customer_id'];
     $cylinder_no = $list['cylinder_no'];
     $product = $list['product_id'];
-    $reason = $list['reason'];
+    $reason = $list['reason_id'];
     $gas_weight = $list['gas_weight'];
     $comment = $list['comment'];
     $date = $list['date'];
     $invoice = $list['invoice_no'];
+    $repl = $list['replacement'];
 
     $type = 'damage';
     $action = "register";
@@ -77,17 +78,19 @@ foreach ($damage as $list) {
 
         if ($con == 0) {
 
-            $sql = "INSERT INTO damage (complain_no,customer_id,customer_name,product_id,cylinder_no,cylinder_type,reason,date,action,gas_weight,comment,type,location,invoice_no,position,loading_id,lorry_id,lorry_no,app_id,user_id,user_name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $sql = "INSERT INTO damage (complain_no,customer_id,customer_name,product_id,cylinder_no,cylinder_type,reason,date,action,gas_weight,comment,type,location,invoice_no,position,loading_id,lorry_id,lorry_no,app_id,user_id,user_name,replacement) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             $q = $db->prepare($sql);
-            $q->execute(array($complain_no, $customer, $customer_name, $product, $cylinder_no, $product_name, $reason, $date, $action, $gas_weight, $comment, $type, 'Lorry', $invoice, 1, $load_id, $lorry, $lorry_no, $app_id, $user_id, $user_name));
+            $q->execute(array($complain_no, $customer, $customer_name, $product, $cylinder_no, $product_name, $reason, $date, $action, $gas_weight, $comment, $type, 'Lorry', $invoice, 1, $load_id, $lorry, $lorry_no, $app_id, $user_id, $user_name, $repl));
 
             $sql = "UPDATE products  SET damage = damage + ? WHERE product_id = ?";
             $q = $db->prepare($sql);
             $q->execute(array(1, $product));
 
-            $sql = "UPDATE loading_list  SET qty_sold = qty_sold - ?, damage = damage + ? WHERE product_code = ? AND loading_id = ? ";
-            $q = $db->prepare($sql);
-            $q->execute(array(1, 1, $product, $load_id));
+            if ($repl == 1) {
+                $sql = "UPDATE loading_list  SET qty_sold = qty_sold - ?, damage = damage + ? WHERE product_code = ? AND loading_id = ? ";
+                $q = $db->prepare($sql);
+                $q->execute(array(1, 1, $product, $load_id));
+            }
 
             $sql = "INSERT INTO damage_order (complain_no,date,action,type,location) VALUES (?,?,?,?,?)";
             $q = $db->prepare($sql);
