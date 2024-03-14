@@ -43,6 +43,7 @@ include("connect.php");
       <div class="box box-info">
         <div class="box-header with-border">
           <h3 class="box-title">New Damage</h3>
+          <small class="btn btn-success mx-2" style="padding: 5px 10px;" title="Add Reason" onclick="click_open(1)">Add Reason</small>
         </div>
 
 
@@ -121,7 +122,18 @@ include("connect.php");
               <div class="col-md-6">
                 <div class="form-group">
                   <label> Reason.</label>
-                  <input type="text" name="reason" class="form-control">
+                  <select class="form-control select2" name="reason" style="width:100%;">
+                    <?php
+                    $result = $db->prepare("SELECT * FROM damage_reason  ");
+                    $result->bindParam(':userid', $res);
+                    $result->execute();
+                    for ($i = 0; $row = $result->fetch(); $i++) {
+                    ?>
+                      <option value="<?php echo $row['id']; ?>"><?php echo $row['name']; ?> </option>
+                    <?php
+                    }
+                    ?>
+                  </select>
                 </div>
               </div>
 
@@ -134,6 +146,7 @@ include("connect.php");
 
               <div class="col-md-6">
                 <div class="form-group">
+                  <input type="hidden" name="unit" value="1">
                   <input class="btn btn-info" type="submit" value="Save Damage">
                 </div>
               </div>
@@ -155,9 +168,47 @@ include("connect.php");
   <?php
   include("dounbr.php");
   ?>
-  <!-- /.control-sidebar -->
-  <!-- Add the sidebar's background. This div must be placed
-       immediately after the control sidebar -->
+
+  <div class="container-up d-none" id="container_up">
+    <div class="container-close" onclick="click_close()"></div>
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="box box-success popup d-none" id="popup_1">
+          <div class="box-header with-border">
+            <h3 class="box-title w-100">
+              New Damage Reason
+              <i onclick="click_close()" class="btn me-2 pull-right fa fa-remove" style="font-size: 25px"></i>
+            </h3>
+          </div>
+
+          <div class="box-body d-block">
+            <form method="POST" action="damage_save.php">
+
+              <div class="row" style="display: block;">
+                <div class="col-md-9">
+                  <div class="form-group">
+                    <label>Reason</label>
+                    <input type="text" name="name" value="" class="form-control" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <input type="hidden" name="unit" value="2">
+                    <input type="submit" style="margin-top: 23px;" value="Save" class="btn btn-info">
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
   <div class="control-sidebar-bg"></div>
   </div>
   <!-- ./wrapper -->
@@ -187,6 +238,17 @@ include("connect.php");
   <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
 
   <!-- Page script -->
+  <script>
+    function click_open(i) {
+      $("#popup_" + i).removeClass("d-none");
+      $("#container_up").removeClass("d-none");
+    }
+
+    function click_close() {
+      $(".popup").addClass("d-none");
+      $("#container_up").addClass("d-none");
+    }
+  </script>
   <script>
     $(function() {
       //Initialize Select2 Elements
