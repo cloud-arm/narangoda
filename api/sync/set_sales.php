@@ -112,8 +112,8 @@ foreach ($sales as $list) {
 
         // create success respond 
         $res = array(
-            "cloud_id" => '"'.$id.'"',
-            "app_id" => '"'.$ap_id.'"',
+            "cloud_id" => $id,
+            "app_id" => $ap_id,
             "invoice_no" => $invo,
             "status" => "success",
             "message" => "",
