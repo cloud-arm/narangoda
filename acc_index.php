@@ -50,52 +50,7 @@ include("connect.php");
             date_default_timezone_set("Asia/Colombo");
             $cash = $_SESSION['SESS_FIRST_NAME'];
 
-            $date =  date("Y/m/d");
-
-            $result = $db->prepare("SELECT sum(amount) FROM sales WHERE    date='$date' ");
-
-            $result->bindParam(':userid', $date);
-            $result->execute();
-            for ($i = 0; $row = $result->fetch(); $i++) {
-
-                $amount = $row['sum(amount)'];
-            }
-
-
-
-
-            $result = $db->prepare("SELECT sum(amount) FROM sales WHERE    date='$date' AND cashier='$cash' ");
-
-            $result->bindParam(':userid', $date);
-            $result->execute();
-            for ($i = 0; $row = $result->fetch(); $i++) {
-
-                $amount_cash = $row['sum(amount)'];
-            }
-
-
-
-
-            $result = $db->prepare("SELECT sum(amount) FROM sales WHERE    date='$date' AND cashier='Buddika' ");
-
-            $result->bindParam(':userid', $date);
-            $result->execute();
-            for ($i = 0; $row = $result->fetch(); $i++) {
-
-                $bamount_cash = $row['sum(amount)'];
-            }
-
-            $result = $db->prepare("SELECT * FROM customer  ");
-            $result->bindParam(':userid', $date);
-            $result->execute();
-            $tre = $result->rowcount();
-
-
-            date_default_timezone_set("Asia/Colombo");
             $date = date("Y-m-d");
-            $month = date("Y-M");
-
-
 
             ?>
 

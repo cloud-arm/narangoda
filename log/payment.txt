@@ -1,0 +1,2 @@
+cloud_id: 45, app_id: 1, invoice: 201, status: success, message: - , Date: 2024-03-11, Time: 16:27:57
+cloud_id: 46, app_id: 2, invoice: 201, status: success, message: - , Date: 2024-03-11, Time: 16:27:57

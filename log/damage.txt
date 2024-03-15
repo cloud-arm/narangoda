@@ -1,0 +1,12 @@
+cloud_id: 0, app_id: 1, invoice: 215, status: failed, message: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'reason' cannot be null, Date: 2024-03-13, Time: 06:45:41
+cloud_id: 0, app_id: 1, invoice: 215, status: failed, message: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'lorry_id' cannot be null, Date: 2024-03-13, Time: 06:09:42
+cloud_id: 0, app_id: 1, invoice: 215, status: failed, message: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'user_id' cannot be null, Date: 2024-03-13, Time: 06:47:42
+cloud_id: 5, app_id: 1, invoice: 215, status: success, message: - , Date: 2024-03-13, Time: 06:02:43
+cloud_id: 5, app_id: 1, invoice: 215, status: success, message: - , Date: 2024-03-13, Time: 06:13:49
+cloud_id: 0, app_id: 1, invoice: 225, status: failed, message: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '1506' for key 'complain_no', Date: 2024-03-13, Time: 06:48:49
+cloud_id: 7, app_id: 1, invoice: 225, status: success, message: - , Date: 2024-03-13, Time: 06:11:50
+cloud_id: 8, app_id: 1, invoice: 235, status: success, message: - , Date: 2024-03-13, Time: 06:20:51
+cloud_id: 15, app_id: 2, invoice: 236, status: success, message: - , Date: 2024-03-14, Time: 08:06:12
+cloud_id: 15, app_id: 2, invoice: 236, status: success, message: - , Date: 2024-03-14, Time: 08:00:15
+cloud_id: 15, app_id: 2, invoice: 236, status: success, message: - , Date: 2024-03-14, Time: 08:05:15
+cloud_id: 15, app_id: 2, invoice: 236, status: success, message: - , Date: 2024-03-14, Time: 18:43:45

@@ -1,0 +1,10 @@
+cloud_id: 0, app_id: 25, invoice: 001, status: failed, message: The stock qty balance is insufficient., Date: 2024-03-14, Time: 06:39:25
+cloud_id: 0, app_id: 26, invoice: 001, status: failed, message: The stock qty balance is insufficient., Date: 2024-03-14, Time: 06:39:25
+cloud_id: 0, app_id: 27, invoice: 001, status: failed, message: The stock qty balance is insufficient., Date: 2024-03-14, Time: 06:39:25
+cloud_id: 0, app_id: 28, invoice: 002, status: failed, message: The stock qty balance is insufficient., Date: 2024-03-14, Time: 06:39:25
+cloud_id: 0, app_id: 29, invoice: 002, status: failed, message: The stock qty balance is insufficient., Date: 2024-03-14, Time: 06:39:25
+cloud_id: 113, app_id: 25, invoice: 001, status: success, message: - , Date: 2024-03-14, Time: 06:50:26
+cloud_id: 0, app_id: 26, invoice: 001, status: failed, message: The stock qty balance is insufficient., Date: 2024-03-14, Time: 06:50:26
+cloud_id: 0, app_id: 27, invoice: 001, status: failed, message: The stock qty balance is insufficient., Date: 2024-03-14, Time: 06:50:26
+cloud_id: 114, app_id: 28, invoice: 002, status: success, message: - , Date: 2024-03-14, Time: 06:50:26
+cloud_id: 0, app_id: 29, invoice: 002, status: failed, message: The stock qty balance is insufficient., Date: 2024-03-14, Time: 06:50:26

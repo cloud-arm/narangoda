@@ -1,0 +1,2 @@
+cloud_id: 0, app_id: 16, invoice: 215, status: failed, message: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'cashier' cannot be null, Date: 2024-03-11, Time: 16:06:57
+cloud_id: 0, app_id: 17, invoice: 216, status: failed, message: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'cashier' cannot be null, Date: 2024-03-11, Time: 16:06:57

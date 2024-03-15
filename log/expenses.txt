@@ -1,0 +1,4 @@
+cloud_id: 0, app_id: 1, invoice: 215, status: failed, message: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'acc_id' cannot be null, Date: 2024-03-12, Time: 10:54:44
+cloud_id: 0, app_id: 1, invoice: 215, status: failed, message: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'acc_id' cannot be null, Date: 2024-03-12, Time: 10:54:44
+cloud_id: 0, app_id: 1, invoice: 215, status: failed, message: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'sub_type_name' cannot be null, Date: 2024-03-12, Time: 10:24:47
+cloud_id: 2, app_id: 1, invoice: 215, status: success, message: - , Date: 2024-03-12, Time: 10:15:48
