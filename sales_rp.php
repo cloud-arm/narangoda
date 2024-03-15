@@ -25,6 +25,14 @@ include("connect.php");
   }
   ?>
 
+
+
+  <link rel="stylesheet" href="datepicker.css" type="text/css" media="all" />
+  <script src="datepicker.js" type="text/javascript"></script>
+  <script src="datepicker.ui.min.js" type="text/javascript"></script>
+
+
+
   <style>
     th {
       vertical-align: bottom;
@@ -232,10 +240,10 @@ include("connect.php");
 
         if ($product == '1') { //product 0 - 5
           $pro1 = '0';
-          $pro2 = '4';
+          $pro2 = '5';
         }
         if ($product == '2') { //product 4 - 9
-          $pro1 = '5';
+          $pro1 = '4';
           $pro2 = '9';
         }
         if ($product == '3') { //product 9 - 50
@@ -285,7 +293,7 @@ include("connect.php");
         // 2 - product 1 and one customer and date range
         if ($lorry == 'all' & $product != 'all' & $filter == 'cus') {
 
-          $sql1 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
+          $sql1 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > '$pro2' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
           $sql2 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.cus_id = '$cus' AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
           $sql3 = " SELECT *  FROM sales WHERE (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
           $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.cus_id = '$cus' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty

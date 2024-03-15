@@ -43,14 +43,144 @@ include("connect.php");
     <!-- Main content -->
     <section class="content">
 
+
+
       <?php
       include('connect.php');
       date_default_timezone_set("Asia/Colombo");
       $cash = $_SESSION['SESS_FIRST_NAME'];
 
+      $date =  date("Y/m/d");
+
+      $result = $db->prepare("SELECT sum(amount) FROM sales WHERE    date='$date' ");
+
+      $result->bindParam(':userid', $date);
+      $result->execute();
+      for ($i = 0; $row = $result->fetch(); $i++) {
+
+        $amount = $row['sum(amount)'];
+      }
+
+
+
+
+      $result = $db->prepare("SELECT sum(amount) FROM sales WHERE    date='$date' AND cashier='$cash' ");
+
+      $result->bindParam(':userid', $date);
+      $result->execute();
+      for ($i = 0; $row = $result->fetch(); $i++) {
+
+        $amount_cash = $row['sum(amount)'];
+      }
+
+
+
+
+      $result = $db->prepare("SELECT sum(amount) FROM sales WHERE    date='$date' AND cashier='Buddika' ");
+
+      $result->bindParam(':userid', $date);
+      $result->execute();
+      for ($i = 0; $row = $result->fetch(); $i++) {
+
+        $bamount_cash = $row['sum(amount)'];
+      }
+
+      $result = $db->prepare("SELECT * FROM customer  ");
+      $result->bindParam(':userid', $date);
+      $result->execute();
+      $tre = $result->rowcount();
+
+
+      date_default_timezone_set("Asia/Colombo");
       $date = date("Y-m-d");
+      $month = date("Y-M");
+
+
 
       ?>
+
+      <div class="row">
+        <div class="col-md-3">
+          <!-- Info Boxes Style 2 -->
+          <div class="info-box bg-yellow">
+            <span class="info-box-icon"><i class="glyphicon glyphicon-signal"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Sales Value</span>
+              <span class="info-box-number">24,587<?php // echo $date; 
+                                                  ?></span>
+
+              <div class="progress">
+                <div class="progress-bar" style="width: 50%"></div>
+              </div>
+              <span class="progress-description">
+                50% Increase in 30 Days
+              </span>
+            </div>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+        <div class="col-md-3">
+          <!-- /.info-box -->
+          <div class="info-box bg-green">
+            <span class="info-box-icon"><i class="glyphicon glyphicon-user"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">New Customer</span>
+              <span class="info-box-number">12</span>
+
+              <div class="progress">
+                <div class="progress-bar" style="width: 20%"></div>
+              </div>
+              <span class="progress-description">
+                20% Increase in 30 Days
+              </span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+        </div>
+        <div class="col-md-3">
+          <!-- /.info-box -->
+          <div class="info-box bg-red">
+            <span class="info-box-icon"><i class="glyphicon glyphicon-resize-small"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Credit Recovery</span>
+              <span class="info-box-number">114,381</span>
+
+              <div class="progress">
+                <div class="progress-bar" style="width: 70%"></div>
+              </div>
+              <span class="progress-description">
+                70% Increase in 30 Days
+              </span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+        </div>
+        <div class="col-md-3">
+          <!-- /.info-box -->
+          <div class="info-box bg-aqua">
+            <span class="info-box-icon"><i class="glyphicon glyphicon-signal"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Day Average</span>
+              <span class="info-box-number">163,921</span>
+
+              <div class="progress">
+                <div class="progress-bar" style="width: 20%"></div>
+              </div>
+              <span class="progress-description">
+                40% Increase in 30 Days
+              </span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+        </div>
+        <!-- /.info-box -->
+
+      </div> <!-- /.box -->
+
 
       <div class="row">
 
@@ -169,6 +299,7 @@ include("connect.php");
         </div>
       </div>
 
+
       <div class="row">
 
         <!-- /----------------------------------------------------.Lorry-view --------------------------------------------------------------- -->
@@ -251,6 +382,7 @@ include("connect.php");
 
       <div class="row">
 
+
         <div class="col-md-6 hidden">
           <!-- LINE CHART -->
           <div class="box box-solid bg-teal-gradient">
@@ -294,6 +426,8 @@ include("connect.php");
         </div>
         <!-- /.col (RIGHT) -->
 
+
+
         <div class="col-md-12">
           <!-- BAR CHART -->
           <div class="box box-solid ">
@@ -314,6 +448,9 @@ include("connect.php");
         </div>
 
       </div>
+
+
+
 
     </section>
   </div>
