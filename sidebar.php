@@ -382,6 +382,14 @@
             </a>
           </li>
 
+          <li class="<?php if ($f == 'credit_collection') {
+                        echo 'active';
+                      } ?>">
+            <a href="credit_collection.php">
+              <i class="fa fa-usd"></i> <span>Credit Collection</span>
+            </a>
+          </li>
+
           <?php $co = '';
           $co0 = '';
           $dis = 'none';
