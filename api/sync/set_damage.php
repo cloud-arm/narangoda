@@ -64,6 +64,12 @@ foreach ($damage as $list) {
         $user_name = $row['rep'];
     }
 
+    $result = $db->prepare("SELECT * FROM damage_reason WHERE id = :id ");
+    $result->bindParam(':id', $reason);
+    $result->execute();
+    for ($i = 0; $row = $result->fetch(); $i++) {
+        $reason_name = $row['name'];
+    }
 
     try {
 
@@ -78,9 +84,9 @@ foreach ($damage as $list) {
 
         if ($con == 0) {
 
-            $sql = "INSERT INTO damage (complain_no,customer_id,customer_name,product_id,cylinder_no,cylinder_type,reason,date,action,gas_weight,comment,type,location,invoice_no,position,loading_id,lorry_id,lorry_no,app_id,user_id,user_name,replacement) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $sql = "INSERT INTO damage (complain_no,customer_id,customer_name,product_id,cylinder_no,cylinder_type,reason_id,reason,date,action,gas_weight,comment,type,location,invoice_no,position,loading_id,lorry_id,lorry_no,app_id,user_id,user_name,replacement) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             $q = $db->prepare($sql);
-            $q->execute(array($complain_no, $customer, $customer_name, $product, $cylinder_no, $product_name, $reason, $date, $action, $gas_weight, $comment, $type, 'Lorry', $invoice, 1, $load_id, $lorry, $lorry_no, $app_id, $user_id, $user_name, $repl));
+            $q->execute(array($complain_no, $customer, $customer_name, $product, $cylinder_no, $product_name, $reason, $reason_name, $date, $action, $gas_weight, $comment, $type, 'Lorry', $invoice, 1, $load_id, $lorry, $lorry_no, $app_id, $user_id, $user_name, $repl));
 
             $sql = "UPDATE products  SET damage = damage + ? WHERE product_id = ?";
             $q = $db->prepare($sql);
