@@ -23,7 +23,7 @@ if ($invo == "qb") {
 
 
   $result = $db->prepare("SELECT * FROM credit_payment WHERE tr_id='$invo' AND action='2' AND  pay_id='$pay_id' ");
-  $result->bindParam(':id', $inva);
+  $result->bindParam(':id', $invo);
   $result->execute();
   for ($i = 0; $row = $result->fetch(); $i++) {
     $error_id = $row['id'];

@@ -15,7 +15,7 @@ $result = $db->prepare("SELECT * FROM collection WHERE  id='$id'  ");
 $result->bindParam(':userid', $inva);
 $result->execute();
 for ($i = 0; $row = $result->fetch(); $i++) {
-  $sales_id = $row['invoice_no'];
+  $invoice_no = $row['invoice_no'];
   $customer_id = $row['customer_id'];
   $loading_id = $row['loading_id'];
   $amount = $row['amount'];
@@ -48,7 +48,7 @@ if ($pay_id == 0) {
     $credit = $amount - $pay_amount;
   }
 
-  $invoice_no = 'blk' . $sales_id;
+  $sales_id = 0;
 
 
   $sql = "INSERT INTO payment (collection_id,pay_amount,amount,type,pay_type,date,chq_no,chq_date,chq_bank,sales_id,customer_id,pay_credit,action,loading_id,credit_balance,time,invoice_no,paycose) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
