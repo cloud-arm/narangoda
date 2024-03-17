@@ -21,27 +21,6 @@ include("connect.php");
   }
   ?>
 
-
-
-
-  <link rel="stylesheet" href="datepicker.css" type="text/css" media="all" />
-  <script src="datepicker.js" type="text/javascript"></script>
-  <script src="datepicker.ui.min.js" type="text/javascript"></script>
-  <script type="text/javascript">
-    $(function() {
-      $("#datepicker1").datepicker({
-        dateFormat: 'yy/mm/dd'
-      });
-      $("#datepicker2").datepicker({
-        dateFormat: 'yy/mm/dd'
-      });
-
-    });
-  </script>
-
-
-
-
   <!-- /.sidebar -->
   </aside>
 
@@ -60,9 +39,7 @@ include("connect.php");
       <div class="box box-success">
         <div class="box-header">
           <h3 class="box-title">Root Data</h3>
-          <a rel="facebox" href="root_add.php">
-            <button class="btn btn-info">Add Root</button>
-          </a>
+          <small class="btn btn-success mx-2" style="padding: 5px 10px;" title="Add Root" onclick="click_open(1,0)">Add Root</small>
         </div>
         <!-- /.box-header -->
 
@@ -87,19 +64,22 @@ include("connect.php");
               for ($i = 0; $row = $result->fetch(); $i++) {
               ?>
                 <tr class="record">
-                  <td><?php echo $row['root_id']; ?></td>
-                  <td><?php echo $row['root_name']; ?></td>
-                  <td><?php echo $row['root_area']; ?></td>
+                  <td><?php echo $id = $row['root_id']; ?></td>
+                  <td><?php echo $name = $row['root_name']; ?></td>
+                  <td><?php echo $area = $row['root_area']; ?></td>
                   <td>
-                    <a href="#" id="<?php echo $row['root_id']; ?>" class="delbutton" title="Click to Delete">
+                    <a href="#" id="<?php echo $id; ?>" class="delbutton" title="Click to Delete">
                       <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
                     </a>
-                    <a rel="facebox" href="root_edit.php?id=<?php echo $row['root_id']; ?>" title="Click to Edit">
+                    <a onclick="click_open(2,'<?php echo $id; ?>')" href="#" title="Click to Edit">
                       <button class="btn btn-warning"><i class="fa fa-pencil"></i></button>
                     </a>
-                    <a href="root_view.php?id=<?php echo $row['root_id']; ?>" title="Click to View">
+                    <a href="root_view.php?id=<?php echo $id; ?>" title="Click to View">
                       <button class="btn btn-success"><i class="fa fa-eye"></i></button>
                     </a>
+
+                    <input type="hidden" id="root_name_<?php echo $id; ?>" value="<?php echo $name; ?>">
+                    <input type="hidden" id="root_area_<?php echo $id; ?>" value="<?php echo $area; ?>">
                   </td>
                 </tr>
               <?php  } ?>
@@ -118,9 +98,102 @@ include("connect.php");
   <?php
   include("dounbr.php");
   ?>
-  <!-- /.control-sidebar -->
-  <!-- Add the sidebar's background. This div must be placed
-       immediately after the control sidebar -->
+
+  <div class="container-up d-none" id="container_up">
+    <div class="container-close" onclick="click_close()"></div>
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="box box-success popup d-none" id="popup_1">
+          <div class="box-header with-border">
+            <h3 class="box-title w-100">
+              New Root
+              <i onclick="click_close()" class="btn me-2 pull-right fa fa-remove" style="font-size: 25px"></i>
+            </h3>
+          </div>
+
+          <div class="box-body d-block">
+            <form method="POST" action="root_save.php">
+
+              <div class="row" style="display: block;">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Root name</label>
+                    <input type="text" name="root_name" value="" class="form-control" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Area</label>
+                    <select class="form-control select2 hidden-search" name="area" style="width: 100%;" autofocus>
+
+                      <option> Galle </option>
+                      <option> Matara </option>
+
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <input type="hidden" name="id" value="0">
+                    <input type="submit" style="margin-top: 23px;" value="Save" class="btn btn-info">
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <div class="box box-success popup d-none" id="popup_2">
+          <div class="box-header with-border">
+            <h3 class="box-title w-100">
+              Update Root
+              <i onclick="click_close()" class="btn me-2 pull-right fa fa-remove" style="font-size: 25px"></i>
+            </h3>
+          </div>
+
+          <div class="box-body d-block">
+            <form method="POST" action="root_save.php">
+
+              <div class="row" style="display: block;">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Root name</label>
+                    <input type="text" name="root_name" id="popup_name" value="" class="form-control" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Area</label>
+                    <select class="form-control select2 hidden-search" id="popup_area" name="area" style="width: 100%;" autofocus>
+
+                      <option> Galle </option>
+                      <option> Matara </option>
+
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <input type="hidden" id="popup_id" name="id" value="">
+                    <input type="submit" style="margin-top: 23px;" value="Update" class="btn btn-info">
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
   <div class="control-sidebar-bg"></div>
   </div>
   <!-- ./wrapper -->
@@ -129,6 +202,8 @@ include("connect.php");
   <script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
   <!-- Bootstrap 3.3.6 -->
   <script src="../../bootstrap/js/bootstrap.min.js"></script>
+  <!-- Select2 -->
+  <script src="../../plugins/select2/select2.full.min.js"></script>
   <!-- DataTables -->
   <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
   <script src="../../plugins/datatables/dataTables.bootstrap.min.js"></script>
@@ -142,6 +217,27 @@ include("connect.php");
   <script src="../../dist/js/demo.js"></script>
   <!-- page script -->
   <script>
+    function click_open(i, id) {
+      $("#popup_" + i).removeClass("d-none");
+      $("#container_up").removeClass("d-none");
+
+
+      let name = $('#root_name_' + id).val();
+      let area = $('#root_area_' + id).val();
+
+      $('#popup_id').val(id);
+      $('#popup_name').val(name);
+      $('#popup_area').val(area).change();
+
+    }
+
+    function click_close() {
+      $(".popup").addClass("d-none");
+      $("#container_up").addClass("d-none");
+    }
+  </script>
+
+  <script>
     $(function() {
       $("#example1").DataTable();
       $('#example2').DataTable({
@@ -151,6 +247,12 @@ include("connect.php");
         "ordering": true,
         "info": true,
         "autoWidth": false
+      });
+
+      //Initialize Select2 Elements
+      $(".select2").select2();
+      $('.select2.hidden-search').select2({
+        minimumResultsForSearch: -1
       });
     });
   </script>
