@@ -181,8 +181,8 @@ foreach ($sales_list as $list) {
             array_push($result_array, $res);
 
             // Create log
-            $content = "cloud_id: " . $id . ", app_id: " . $ap_id . ", invoice: " . $invo . ", status: success, message: - , Date: " . date('Y-m-d') . ", Time: " . date('H:s:i');
-            log_init('sales_list', $content);
+            // $content = "cloud_id: " . $id . ", app_id: " . $ap_id . ", invoice: " . $invo . ", status: success, message: - , Date: " . date('Y-m-d') . ", Time: " . date('H:s:i');
+            // log_init('sales_list', $content);
         } catch (PDOException $e) {
 
             // create error respond 

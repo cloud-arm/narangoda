@@ -99,8 +99,8 @@ foreach ($payment as $list) {
         array_push($result_array, $res);
 
         // Create log
-        $content = "cloud_id: " . $id . ", app_id: " . $ap_id . ", invoice: " . $invo . ", status: success, message: - , Date: " . date('Y-m-d') . ", Time: " . date('H:s:i');
-        log_init('payment', $content);
+        // $content = "cloud_id: " . $id . ", app_id: " . $ap_id . ", invoice: " . $invo . ", status: success, message: - , Date: " . date('Y-m-d') . ", Time: " . date('H:s:i');
+        // log_init('payment', $content);
     } catch (PDOException $e) {
 
         // create error respond 
