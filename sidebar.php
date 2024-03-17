@@ -758,7 +758,6 @@
             <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
               <li><a href="customer.php"><i class="fa fa-circle-o text-aqua "></i> Customer</a></li>
               <li><a href="product.php"><i class="fa fa-circle-o text-aqua "></i> Product</a></li>
-              <li><a href="rep.php"><i class="fa fa-circle-o text-aqua "></i> Rep</a></li>
               <li><a href="lorry.php"><i class="fa fa-circle-o text-aqua "></i>Lorry </a></li>
               <li class="<?php if ($f == 'root') {
                             echo 'active';
