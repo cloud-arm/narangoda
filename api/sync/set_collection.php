@@ -19,7 +19,7 @@ $result_array = array();
 foreach ($collection as $list) {
 
     // get values
-    $invoice = $list['invoice_no'];
+    $invoice = $list['pay_invoice'];
     $amount = $list['amount'];
     $pay_type = $list['pay_type'];
     $chq_no = $list['chq_no'];
@@ -27,11 +27,13 @@ foreach ($collection as $list) {
     $date = $list['date'];
     $user = $list['user_id'];
     $bank = $list['bank'];
-    $cus = $list['cus_id'];
     $load = $list['loading_id'];
     $app_id = $list['id'];
 
     $time = date('H:i:s');
+
+    $cus = 0;//
+    $cus_name = '';//
 
     // get customer details
     $result = $db->prepare("SELECT * FROM customer WHERE customer_id=:id  ");

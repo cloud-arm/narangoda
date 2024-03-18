@@ -20,18 +20,20 @@ foreach ($credit_payment as $list) {
 
     // get values
     $invoice = $list['invoice_no'];
+    $pay_invoice = $list['pay_invoice'];
     $pay_amount = $list['pay_amount'];
     $credit_amount = $list['credit_amount'];
     $pay_type = $list['pay_type'];
     $date = $list['date'];
     $cus = $list['cus_id'];
     $load = $list['loading_id'];
-    $pay_id = $list['pay_id'];
-    $collection = $list['collection_id'];
-    $sales_id = $list['sales_id'];
-    $tr_id = $list['tr_id'];
     $app_id = $list['id'];
 
+
+    $pay_id = 0; //
+    $collection = 0; //
+    $sales_id = 0; //
+    $tr_id = 0; //
 
     // get customer details
     $result = $db->prepare("SELECT * FROM customer WHERE customer_id=:id  ");
@@ -40,12 +42,38 @@ foreach ($credit_payment as $list) {
     for ($i = 0; $row = $result->fetch(); $i++) {
         $cus_name = $row['customer_name'];
     }
+
+    // get collection details
+    $result = $db->prepare("SELECT * FROM collection WHERE invoice_no=:id  ");
+    $result->bindParam(':id', $pay_invoice);
+    $result->execute();
+    for ($i = 0; $row = $result->fetch(); $i++) {
+        $collection = $row['id'];
+    }
+
+    // get credit details
+    $result = $db->prepare("SELECT * FROM payment WHERE invoice_no=:id  ");
+    $result->bindParam(':id', $invoice);
+    $result->execute();
+    for ($i = 0; $row = $result->fetch(); $i++) {
+        $tr_id = $row['transaction_id'];
+        $sales_id = $row['sales_id'];
+    }
+
+    // get bulk details
+    $result = $db->prepare("SELECT * FROM payment WHERE invoice_no=:id  ");
+    $result->bindParam(':id', $pay_invoice);
+    $result->execute();
+    for ($i = 0; $row = $result->fetch(); $i++) {
+        $pay_id = $row['transaction_id'];
+    }
+
     //------------------------------------------------------------------//
     try {
 
         //checking duplicate
         $con = 0;
-        $result = $db->prepare("SELECT * FROM credit_payment WHERE invoice_no = '$invoice' AND app_id = '$app_id' AND loading_id = '$load' ");
+        $result = $db->prepare("SELECT * FROM credit_payment WHERE pay_invoice = '$pay_invoice' AND app_id = '$app_id' AND loading_id = '$load' ");
         $result->bindParam(':id', $cus);
         $result->execute();
         for ($i = 0; $row = $result->fetch(); $i++) {
@@ -55,9 +83,9 @@ foreach ($credit_payment as $list) {
         if ($con == 0) {
 
             // insert query
-            $sql = "INSERT INTO credit_payment (invoice_no,pay_amount,credit_amount,type,date,cus_id,cus,action,loading_id,pay_id,collection_id,sales_id,tr_id,app_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $sql = "INSERT INTO credit_payment (invoice_no,pay_amount,credit_amount,type,date,cus_id,cus,action,loading_id,pay_id,collection_id,sales_id,tr_id,app_id,pay_invoice) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             $ql = $db->prepare($sql);
-            $ql->execute(array($invoice, $pay_amount, $credit_amount, $pay_type,  $date,  $cus, $cus_name, 2, $load, $pay_id, $collection, $sales_id, $tr_id, $app_id));
+            $ql->execute(array($invoice, $pay_amount, $credit_amount, $pay_type,  $date,  $cus, $cus_name, 2, $load, $pay_id, $collection, $sales_id, $tr_id, $app_id, $pay_invoice));
         }
 
         // get sales  data
