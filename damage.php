@@ -43,7 +43,7 @@ include("connect.php");
       <div class="box box-info">
         <div class="box-header with-border">
           <h3 class="box-title">New Damage</h3>
-          <small class="btn btn-success mx-2" style="padding: 5px 10px;" title="Add Reason" onclick="click_open(1)">Add Reason</small>
+          <small class="btn btn-success btn-sm mx-2" style="padding: 5px 10px;" title="Add Reason" onclick="click_open(1)">Add Reason</small>
         </div>
 
 
@@ -219,6 +219,9 @@ include("connect.php");
   <script src="../../bootstrap/js/bootstrap.min.js"></script>
   <!-- Select2 -->
   <script src="../../plugins/select2/select2.full.min.js"></script>
+  <!-- DataTables -->
+  <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+  <script src="../../plugins/datatables/dataTables.bootstrap.min.js"></script>
   <!-- date-range-picker -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
   <script src="../../plugins/daterangepicker/daterangepicker.js"></script>
