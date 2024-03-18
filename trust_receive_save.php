@@ -8,64 +8,39 @@ date_default_timezone_set("Asia/Colombo");
 
 
 
-$a = $_POST['id'];
+$id = $_POST['id'];
 
 $f = $_POST['location'];
 
 
 
-$d='Clear';
+
+$status = 'clear';
 
 
 
-
-
-$e='Clear';
-
-$gas=0;
-
-
-
-$sql = "UPDATE trust 
-        SET status=?
-		WHERE transaction_id=?";
+$sql = "UPDATE trust  SET status=? WHERE transaction_id=?";
 $q = $db->prepare($sql);
-$q->execute(array($e,$a));
+$q->execute(array($status, $id));
 
 
-
-
-$result = $db->prepare("SELECT * FROM trust WHERE  transaction_id= :userid ");
-$result->bindParam(':userid', $a);
+$result = $db->prepare("SELECT * FROM trust WHERE  transaction_id= :id ");
+$result->bindParam(':id', $id);
 $result->execute();
-for($i=0; $row = $result->fetch(); $i++){
-$qty=$row['qty'];
-$pr=$row['product'];
-$pro_id=$row['product_id'];
+for ($i = 0; $row = $result->fetch(); $i++) {
+    $qty = $row['qty'];
+    $pr = $row['product'];
+    $pro_id = $row['product_id'];
 }
 
 
-
-$sql = "UPDATE products 
-        SET qty=qty+?
-		WHERE product_id=?";
+$sql = "UPDATE products  SET qty=qty+? WHERE product_id=?";
 $q = $db->prepare($sql);
-$q->execute(array($qty,$pro_id));
+$q->execute(array($qty, $pro_id));
 
-$sql = "UPDATE products 
-        SET trust=trust-?
-		WHERE product_id=?";
+$sql = "UPDATE products  SET trust=trust-? WHERE product_id=?";
 $q = $db->prepare($sql);
-$q->execute(array($qty,$pro_id));
-
-
-
+$q->execute(array($qty, $pro_id));
 
 
 header("location: trust_view.php");
-
-
-
-
-
-?>
