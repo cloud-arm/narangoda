@@ -9,6 +9,7 @@ include("connect.php");
   <?php
   include_once("auth.php");
   $r = $_SESSION['SESS_LAST_NAME'];
+  $_SESSION['SESS_FORM'] = 'special_price';
   if ($r == 'Cashier') {
     header("location:./../../../index.php");
   }
@@ -40,8 +41,6 @@ include("connect.php");
           <small class="btn btn-success btn-sm mx-2" style="padding: 5px 10px;" title="Add New Price" onclick="click_open(1)">Add New Price</small>
           <small class="btn btn-danger btn-sm mx-2" style="padding: 5px 10px;" title="Price Update" onclick="click_open(2)">Price Update</small>
         </div>
-        <a rel="facebox" href="special_price_update.php"><button class="btn btn-danger">Price Update</button></a>
-        <!-- /.box-header -->
 
         <div class="box-body">
           <table id="example1" class="table table-bordered table-striped">
@@ -70,7 +69,7 @@ include("connect.php");
                   <td><?php echo $row['customer']; ?></td>
                   <td><?php echo $row['product_name']; ?></td>
                   <td><?php echo $row['price']; ?></td>
-                  <td><a href="#" id="<?php echo $row2['id']; ?>" class="delbutton" title="Click to Delete"><button class="btn btn-danger">
+                  <td><a href="#" id="<?php echo $row['id']; ?>" class="delbutton" title="Click to Delete"><button class="btn btn-danger">
                         <i class="fa fa-trash"></i></button></a></td>
                 </tr>
               <?php  }  ?>
