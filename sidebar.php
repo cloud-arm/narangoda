@@ -283,79 +283,54 @@
             $dis = 'block';
           } ?>
 
+
+          <li class="<?php if ($f == 'hr_employee') {
+                        echo 'active';
+                      } ?>"><a href="hr_employee.php"><i class="fa fa-user"></i>Employee</a></li>
+          <li class="<?php if ($f == 'hr_attendance') {
+                        echo 'active';
+                      } ?>"><a href="hr_attendance.php"><i class="fa  fa-500px"></i>Attendance</a></li>
+          <!-- <li class="<?php if ($f == 'hr_allowances') {
+                            echo 'active';
+                          } ?>"><a href="hr_allowances.php"><i class="fa fa-star-o"></i>Allowances</a></li> -->
+          <li class="<?php if ($f == 'hr_salary_advance') {
+                        echo 'active';
+                      } ?>"><a href="hr_salary_advance.php"><i class="fa fa-money"></i>Advance</a></li>
+          <li class="<?php if ($f == 'hr_payroll') {
+                        echo 'active';
+                      } ?>"><a href="hr_payroll.php"><i class="fa fa-list-alt "></i>Payroll </a></li>
+          <!-- <li class="<?php if ($f == 'hr_pay_out') {
+                            echo 'active';
+                          } ?>"><a href="hr_pay_out.php?date=<?php echo date('Y-m'); ?>"><i class="fa fa-list-alt"></i>Pay Out </a></li> -->
+
+          <?php $co = '';
+          if ($f == 'hr_salary_rp' || $f == 'hr_epf_rp' || $f == 'hr_etf_rp') {
+            $co = 'active';
+          } ?>
           <li class="treeview <?php echo $co; ?>">
-            <a href="#">
-              <i class="fa fa-user"></i> <span>HR</span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
-            </a>
 
-            <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
-
-              <li class="<?php if ($f == 'hr_employee') {
-                            echo 'active';
-                          } ?>"><a href="hr_employee.php"><i class="fa fa-user text-yellow"></i>Employee</a></li>
-              <li class="<?php if ($f == 'hr_attendance') {
-                            echo 'active';
-                          } ?>"><a href="hr_attendance.php"><i class="fa  fa-500px text-yellow"></i>Attendance</a></li>
-              <!-- <li class="<?php if ($f == 'hr_allowances') {
-                                echo 'active';
-                              } ?>"><a href="hr_allowances.php"><i class="fa fa-star-o text-yellow"></i>Allowances</a></li> -->
-              <li class="<?php if ($f == 'hr_salary_advance') {
-                            echo 'active';
-                          } ?>"><a href="hr_salary_advance.php"><i class="fa fa-money text-yellow"></i>Advance</a></li>
-              <li class="<?php if ($f == 'hr_payroll') {
-                            echo 'active';
-                          } ?>"><a href="hr_payroll.php"><i class="fa fa-list-alt text-red"></i>Payroll </a></li>
-              <!-- <li class="<?php if ($f == 'hr_pay_out') {
-                                echo 'active';
-                              } ?>"><a href="hr_pay_out.php?date=<?php echo date('Y-m'); ?>"><i class="fa fa-list-alt text-yellow"></i>Pay Out </a></li> -->
-
-              <?php $co = '';
-              if ($f == 'hr_salary_rp' || $f == 'hr_epf_rp' || $f == 'hr_etf_rp') {
-                $co = 'active';
-              } ?>
-              <li class="treeview <?php echo $co; ?>">
-
-                <a href="#"><i class="fa fa-list-alt text-blue"></i>
-                  Payroll Report
-                  <span class="pull-right-container">
-                    <i class="fa fa-angle-left pull-right"></i>
-                  </span>
-                </a>
-
-                <ul class="treeview-menu">
-
-                  <li class="<?php if ($f == 'hr_salary_rp') {
-                                echo 'active';
-                              } ?>"><a href="hr_salary_rp.php?date=<?php echo date('Y-m') ?>"><i class="fa fa-circle-o"></i> Salary Summery</a></li>
-                  <li class="<?php if ($f == 'hr_epf_rp') {
-                                echo 'active';
-                              } ?>"><a href="hr_epf_rp.php"><i class="fa fa-circle-o"></i> EPF</a></li>
-                  <li class="<?php if ($f == 'hr_etf_rp') {
-                                echo 'active';
-                              } ?>"><a href="hr_etf_rp.php"><i class="fa fa-circle-o"></i> ETF</a></li>
-                  <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Welfare</a></li> -->
-
-                </ul>
-              </li>
-            </ul>
-          </li>
-
-          <li class="treeview">
             <a href="#">
               <i class="fa fa-line-chart"></i>
               <span>Report</span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
+              <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
             </a>
+
             <ul class="treeview-menu">
-              <li><a href="sales_rp.php?d1=<?php echo date("Y-m-d"); ?>&d2=<?php echo date("Y-m-d"); ?>&cus=all"><i class="fa fa-circle-o text-aqua "></i> Sales Report</a></li>
+
+              <li class="<?php if ($f == 'hr_salary_rp') {
+                            echo 'active';
+                          } ?>"><a href="hr_salary_rp.php?date=<?php echo date('Y-m') ?>"><i class="fa fa-circle-o  text-aqua"></i> Salary Summery</a></li>
+              <li class="<?php if ($f == 'hr_epf_rp') {
+                            echo 'active';
+                          } ?>"><a href="hr_epf_rp.php"><i class="fa fa-circle-o text-aqua"></i> EPF</a></li>
+              <li class="<?php if ($f == 'hr_etf_rp') {
+                            echo 'active';
+                          } ?>"><a href="hr_etf_rp.php"><i class="fa fa-circle-o text-aqua"></i> ETF</a></li>
+              <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Welfare</a></li> -->
 
             </ul>
           </li>
+
 
 
         <?php } ?>
@@ -390,143 +365,43 @@
             </a>
           </li>
 
-          <?php $co = '';
-          $co0 = '';
-          $dis = 'none';
-          if ($f == 'hr_employee' || $f == 'hr_attendance' || $f == 'hr_allowances' || $f == 'hr_salary_advance' || $f == 'hr_payroll' || $f == 'hr_pay_out' || $f == 'hr_salary_rp' || $f == 'hr_epf_rp' || $f == 'hr_etf_rp') {
-            $co = 'active';
-            $co0 = 'menu-open';
-            $dis = 'block';
-          } ?>
+          <li class="<?php if ($f == 'acc_transfer') {
+                        echo 'active';
+                      } ?>"><a href="acc_transfer.php"><i class="fa fa-exchange"></i> Account Transfer</a></li>
 
-          <li class="treeview <?php echo $co; ?>">
-            <a href="#">
-              <i class="fa fa-user"></i> <span>HR</span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
-            </a>
+          <li class="<?php if ($f == 'acc_bank_transfer') {
+                        echo 'active';
+                      } ?>"><a href="acc_bank_transfer.php"><i class="fa fa-bank"></i> Bank Transfer</a></li>
 
-            <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
+          <li class="<?php if ($f == 'acc_bank_loan') {
+                        echo 'active';
+                      } ?>"><a href="acc_bank_loan.php"><i class="fa fa-money"></i> Bank Loan</a></li>
 
-              <li class="<?php if ($f == 'hr_employee') {
-                            echo 'active';
-                          } ?>"><a href="hr_employee.php"><i class="fa fa-user text-yellow"></i>Employee</a></li>
-              <li class="<?php if ($f == 'hr_attendance') {
-                            echo 'active';
-                          } ?>"><a href="hr_attendance.php"><i class="fa  fa-500px text-yellow"></i>Attendance</a></li>
-              <!-- <li class="<?php if ($f == 'hr_allowances') {
-                                echo 'active';
-                              } ?>"><a href="hr_allowances.php"><i class="fa fa-star-o text-yellow"></i>Allowances</a></li> -->
-              <li class="<?php if ($f == 'hr_salary_advance') {
-                            echo 'active';
-                          } ?>"><a href="hr_salary_advance.php"><i class="fa fa-money text-yellow"></i>Advance</a></li>
-              <li class="<?php if ($f == 'hr_payroll') {
-                            echo 'active';
-                          } ?>"><a href="hr_payroll.php"><i class="fa fa-list-alt text-red"></i>Payroll </a></li>
-              <!-- <li class="<?php if ($f == 'hr_pay_out') {
-                                echo 'active';
-                              } ?>"><a href="hr_pay_out.php?date=<?php echo date('Y-m'); ?>"><i class="fa fa-list-alt text-yellow"></i>Pay Out </a></li> -->
-
-              <?php $co = '';
-              if ($f == 'hr_salary_rp' || $f == 'hr_epf_rp' || $f == 'hr_etf_rp') {
-                $co = 'active';
-              } ?>
-              <li class="treeview <?php echo $co; ?>">
-
-                <a href="#"><i class="fa fa-list-alt text-blue"></i>
-                  Payroll Report
-                  <span class="pull-right-container">
-                    <i class="fa fa-angle-left pull-right"></i>
-                  </span>
-                </a>
-
-                <ul class="treeview-menu">
-
-                  <li class="<?php if ($f == 'hr_salary_rp') {
-                                echo 'active';
-                              } ?>"><a href="hr_salary_rp.php?date=<?php echo date('Y-m') ?>"><i class="fa fa-circle-o"></i> Salary Summery</a></li>
-                  <li class="<?php if ($f == 'hr_epf_rp') {
-                                echo 'active';
-                              } ?>"><a href="hr_epf_rp.php"><i class="fa fa-circle-o"></i> EPF</a></li>
-                  <li class="<?php if ($f == 'hr_etf_rp') {
-                                echo 'active';
-                              } ?>"><a href="hr_etf_rp.php"><i class="fa fa-circle-o"></i> ETF</a></li>
-                  <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Welfare</a></li> -->
-
-                </ul>
-              </li>
-            </ul>
-          </li>
+          <li class="<?php if ($f == 'acc_chq_realizing') {
+                        echo 'active';
+                      } ?>"><a href="acc_chq_realizing.php"><i class="fa fa-random"></i> Chq Realizing</a></li>
 
           <?php $co = '';
-          $co0 = '';
-          $dis = 'none';
-          if ($f == 'acc_transfer' || $f == 'acc_bank_transfer' || $f == 'acc_bank_loan' || $f == 'acc_chq_realizing' || $f == 'acc_regeneration' || $f == 'acc_bank_regeneration') {
+          if ($f == 'acc_regeneration' || $f == 'acc_bank_regeneration') {
             $co = 'active';
-            $co0 = 'menu-open';
-            $dis = 'block';
           } ?>
-
           <li class="treeview <?php echo $co; ?>">
-            <a href="#"><i class="fa fa-pie-chart"></i><span>Accounting</span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
-            </a>
-
-            <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
-
-              <li class="<?php if ($f == 'acc_transfer') {
-                            echo 'active';
-                          } ?>"><a href="acc_transfer.php"><i class="fa fa-circle-o text-aqua"></i> Account Transfer</a></li>
-
-              <li class="<?php if ($f == 'acc_bank_transfer') {
-                            echo 'active';
-                          } ?>"><a href="acc_bank_transfer.php"><i class="fa fa-circle-o text-aqua"></i> Bank Transfer</a></li>
-
-              <li class="<?php if ($f == 'acc_bank_loan') {
-                            echo 'active';
-                          } ?>"><a href="acc_bank_loan.php"><i class="fa fa-circle-o text-aqua"></i> Bank Loan</a></li>
-
-              <li class="<?php if ($f == 'acc_chq_realizing') {
-                            echo 'active';
-                          } ?>"><a href="acc_chq_realizing.php"><i class="fa fa-circle-o text-aqua"></i> Chq Realizing</a></li>
-
-              <?php $co = '';
-              if ($f == 'acc_regeneration' || $f == 'acc_bank_regeneration') {
-                $co = 'active';
-              } ?>
-              <li class="treeview <?php echo $co; ?>">
-                <a href="#">
-                  <i class="fa fa-line-chart"></i>
-                  <span>Report</span>
-                  <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
-                </a>
-
-                <ul class="treeview-menu">
-
-                  <li class="<?php if ($f == 'acc_regeneration') {
-                                echo 'active';
-                              } ?>"><a href="acc_regeneration.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>&account=1"><i class="fa fa-circle-o text-red"></i> Transfer Recode</a></li>
-
-                  <li class="<?php if ($f == 'acc_bank_regeneration') {
-                                echo 'active';
-                              } ?>"><a href="acc_bank_regeneration.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>&bank=1"><i class="fa fa-circle-o text-red"></i> Bank Reconciliation</a></li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-
-          <li class="treeview">
             <a href="#">
               <i class="fa fa-line-chart"></i>
               <span>Report</span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
+              <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
             </a>
+
             <ul class="treeview-menu">
+
+              <li class="<?php if ($f == 'acc_regeneration') {
+                            echo 'active';
+                          } ?>"><a href="acc_regeneration.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>&account=1"><i class="fa fa-circle-o text-red"></i> Transfer Recode</a></li>
+
+              <li class="<?php if ($f == 'acc_bank_regeneration') {
+                            echo 'active';
+                          } ?>"><a href="acc_bank_regeneration.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>&bank=1"><i class="fa fa-circle-o text-red"></i> Bank Reconciliation</a></li>
+
               <li><a href="sales_rp.php?d1=<?php echo date("Y-m-d"); ?>&d2=<?php echo date("Y-m-d"); ?>&cus=all"><i class="fa fa-circle-o text-aqua "></i> Sales Report</a></li>
 
             </ul>
