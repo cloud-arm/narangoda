@@ -23,12 +23,7 @@ date_default_timezone_set("Asia/Colombo");
 
     <!-- /.sidebar -->
     </aside>
-    <style>
-        .input-group .select2-container--default .select2-selection--single,
-        .select2-selection .select2-selection--single {
-            border-radius: 0 10px 10px 0;
-        }
-    </style>
+
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -93,7 +88,7 @@ date_default_timezone_set("Asia/Colombo");
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label>Pay Type</label>
-                                                <select class="form-control" onchange="select_pay()" name="pay_type" id="method">
+                                                <select class="form-control select2 hidden-search" onchange="select_pay()" name="pay_type" id="method">
                                                     <option>Cash</option>
                                                     <option>Card</option>
                                                     <option>Bank</option>
@@ -136,14 +131,23 @@ date_default_timezone_set("Asia/Colombo");
                                         <div class="col-md-3 slt-chq" style="display:none;">
                                             <div class="form-group">
                                                 <label>Chq Bank</label>
-                                                <input class="form-control" type="text" name="chq_bank" autocomplete="off">
+                                                <?php
+                                                $result = $db->prepare("SELECT * FROM bank_balance ");
+                                                $result->bindParam(':id', $res);
+                                                $result->execute(); ?>
+                                                <select class="form-control select2 hidden-search" name="chq_bank"  style="width: 100%;" tabindex="1">
+                                                    <option value="0" selected disabled> Select Bank </option>
+                                                    <?php for ($i = 0; $row = $result->fetch(); $i++) {  ?>
+                                                        <option value="<?php echo $row['id']; ?>"> <?php echo $row['name']; ?> </option>
+                                                    <?php  } ?>
+                                                </select>
                                             </div>
                                         </div>
 
                                         <div class="col-md-3 slt-chq" style="display:none;">
                                             <div class="form-group">
                                                 <label>Chq Date</label>
-                                                <input class="form-control" id="datepicker1" type="text" name="chq_date" autocomplete="off">
+                                                <input class="form-control" id="datepicker" type="text" name="chq_date" autocomplete="off">
                                             </div>
                                         </div>
 
@@ -400,7 +404,11 @@ date_default_timezone_set("Asia/Colombo");
     <script>
         $(function() {
             //Initialize Select2 Elements
+            //Initialize Select2 Elements
             $(".select2").select2();
+            $('.select2.hidden-search').select2({
+                minimumResultsForSearch: -1
+            });
 
             //Date range picker
             $('#reservation').daterangepicker();

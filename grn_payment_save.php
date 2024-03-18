@@ -25,8 +25,15 @@ if ($pay_type == 'Bank') {
 
 if ($pay_type == 'Chq') {
     $chq_no = $_POST['chq_no'];
-    $chq_bank = $_POST['chq_bank'];
+    $bank = $_POST['chq_bank'];
     $chq_date = $_POST['chq_date'];
+
+    $result = $db->prepare("SELECT * FROM bank_balance WHERE id=:id ");
+    $result->bindParam(':id', $bank);
+    $result->execute();
+    for ($i = 0; $row = $result->fetch(); $i++) {
+        $chq_bank = $row['name'];
+    }
 }
 
 
@@ -46,9 +53,10 @@ for ($i = 0; $row = $result->fetch(); $i++) {
 
 
 if ($pay_amount > 0) {
-    $sql = 'INSERT INTO supply_payment(amount,pay_amount,pay_type,date,invoice_no,supply_id,supply_name,supplier_invoice,type,chq_no,chq_bank,chq_date,bank_name,acc_no) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+
+    $sql = 'INSERT INTO supply_payment(amount,pay_amount,pay_type,date,invoice_no,supply_id,supply_name,supplier_invoice,type,chq_no,chq_bank,chq_date,bank_id,bank_name,acc_no,action) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
     $q = $db->prepare($sql);
-    $q->execute(array($pay_amount, $pay_amount, $pay_type, $date, $invo, $sup_id, $sup_name, $sup_invo, 'Credit_payment', $chq_no, $chq_bank, $chq_date, $bank_name, $acc_no));
+    $q->execute(array($pay_amount, $pay_amount, $pay_type, $date, $invo, $sup_id, $sup_name, $sup_invo, 'Credit_payment', $chq_no, $chq_bank, $chq_date, $bank, $bank_name, $acc_no, 1));
 
     $c_b = 0;
     $blc = 0;
@@ -111,7 +119,7 @@ if ($pay_amount > 0) {
 
         $sql = "INSERT INTO transaction_record (transaction_type,type,record_no,amount,action,credit_acc_no,credit_acc_type,credit_acc_name,credit_acc_balance,debit_acc_type,debit_acc_name,debit_acc_id,debit_acc_balance,date,time,user_id,user_name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $ql = $db->prepare($sql);
-        $ql->execute(array('GRN', 'Debit', $invo, $pay_amount, 0, $p, $cr_type, 'Cash GRN', 0, $cr_type, $cr_name, $cr_id, $de_blc, $date, $time, $ui, $un));
+        $ql->execute(array('grn_payment', 'Debit', $invo, $pay_amount, 0, 0, $cr_type, 'Cash GRN', 0, $cr_type, $cr_name, $cr_id, $de_blc, $date, $time, $ui, $un));
 
         $sql = "UPDATE  cash SET amount=? WHERE id=?";
         $ql = $db->prepare($sql);

@@ -51,7 +51,7 @@ if ($pay_type == 'cash') {
 
 $sql = "INSERT INTO transaction_record (transaction_type,type,record_no,amount,action,credit_acc_no,credit_acc_type,credit_acc_name,credit_acc_balance,debit_acc_type,debit_acc_name,debit_acc_id,debit_acc_balance,date,time,user_id,user_name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 $ql = $db->prepare($sql);
-$ql->execute(array('expenses_payment_delete', 'Credit', $id, $amount, 0, $acc_id, 'Payment Delete', $acc_name, $cr_blc, 'Expenses Delete', $type, $id, 0, $date, $time, $ui, $un));
+$ql->execute(array('expenses_payment_delete', 'Credit', $id, $amount, 0, $acc_id, 'payment_delete', $acc_name, $cr_blc, 'expenses_delete', $type, 0, 0, $date, $time, $ui, $un));
 
 $sql = "UPDATE  expenses_records SET dll=?, amount=? WHERE id=?";
 $ql = $db->prepare($sql);

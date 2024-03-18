@@ -138,9 +138,9 @@ if ($unit == 1) {
         $chq_no = $_POST['chq_no'];
         $chq_date = $_POST['chq_date'];
 
-        $sql = 'INSERT INTO payment (amount,pay_amount,pay_type,date,invoice_no,customer_id,chq_no,chq_bank,bank_id,chq_date,bank_name,type,action) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+        $sql = 'INSERT INTO payment (amount,pay_amount,pay_type,date,invoice_no,customer_id,chq_no,chq_bank,bank_id,chq_date,bank_name,type,action,chq_action) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
         $q = $db->prepare($sql);
-        $q->execute(array($amount, $amount, $pay_type, $date, $invo, 0, $chq_no, $acc_name, $acc, $chq_date, '', 3, 1));
+        $q->execute(array($amount, $amount, $pay_type, $date, $invo, 0, $chq_no, $acc_name, $acc, $chq_date, '', $pay_type, 2, 1));
     }
 
     $sql = "INSERT INTO expenses_records (date,type_id,type,invoice_no,acc_id,acc_name,comment,amount,user,loading_id,util_id,util_name,util_date,util_invoice,util_bill_amount,util_balance,util_forward_balance,pay_type,chq_no,chq_date,sub_type,sub_type_name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";

@@ -9,6 +9,7 @@ include("connect.php");
     <?php
     include_once("auth.php");
     $r = $_SESSION['SESS_LAST_NAME'];
+    $_SESSION['SESS_FORM'] = 'acc_chq_realizing';
     if ($r == 'Cashier') {
         include_once("sidebar2.php");
     }
@@ -58,7 +59,7 @@ include("connect.php");
                                     <tbody>
                                         <?php $total = 0;
                                         $style = "";
-                                        $result = $db->prepare("SELECT *, bank_balance.ac_no AS sn, payment.transaction_id AS pid , payment.amount AS payamount FROM payment JOIN bank_balance ON payment.bank_id = bank_balance.id WHERE payment.action = 1 AND payment.type = 1 AND payment.pay_type='chq' ORDER BY payment.chq_date ASC ");
+                                        $result = $db->prepare("SELECT *, bank_balance.ac_no AS sn, payment.transaction_id AS pid , payment.amount AS payamount FROM payment JOIN bank_balance ON payment.bank_id = bank_balance.id WHERE payment.chq_action = 1 AND payment.type = 1 AND payment.pay_type='chq' ORDER BY payment.chq_date ASC ");
                                         $result->bindParam(':userid', $res);
                                         $result->execute();
                                         for ($i = 0; $row = $result->fetch(); $i++) {
@@ -128,7 +129,7 @@ include("connect.php");
                                     <tbody>
                                         <?php $total = 0;
                                         $style = "";
-                                        $result = $db->prepare("SELECT *,bank_balance.ac_no AS sn, payment.amount AS pamount,payment.transaction_id AS pid FROM payment JOIN bank_balance ON payment.bank_id = bank_balance.id WHERE  payment.action = 1 AND payment.type = 3 AND payment.pay_type='chq'  ORDER BY payment.chq_date ASC ");
+                                        $result = $db->prepare("SELECT *,bank_balance.ac_no AS sn, payment.amount AS pamount,payment.transaction_id AS pid FROM payment JOIN bank_balance ON payment.bank_id = bank_balance.id WHERE  payment.chq_action = 1 AND payment.type = 3 AND payment.pay_type='chq'  ORDER BY payment.chq_date ASC ");
                                         $result->bindParam(':userid', $res);
                                         $result->execute();
                                         for ($i = 0; $row = $result->fetch(); $i++) {
@@ -389,6 +390,7 @@ include("connect.php");
                 url: "acc_bank_transfer_save.php",
                 data: info,
                 success: function(res) {
+                    console.log(res);
                     $('#re_' + res).animate({
                             backgroundColor: "#fbc7c7"
                         }, "fast")
