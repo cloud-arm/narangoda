@@ -15,13 +15,14 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 	<!-- Theme style -->
 
+	<style>
+		@media print {
 
-	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
+			body .table {
+				font-size: 10px;
+			}
+		}
+	</style>
 </head>
 
 <body onload="window.print() " style=" font-size: 13px; font-family: arial;">
@@ -35,15 +36,13 @@
 			<!-- title row -->
 			<div class="row">
 				<div class="col-xs-12">
-					<h2 class="page-header">
+					<h3 class="page-header">
 						<i class="fa fa-globe"></i> NARANGODA GROUP.
 
 						<small class="pull-right">Date: <?php date_default_timezone_set("Asia/Colombo");
 														echo date("Y-m-d  h:ia")  ?></small>
-					</h2>
-					<h4>
-						Unloading Report
-						<h4>
+					</h3>
+					<h5> Unloading Report <h4>
 				</div>
 				<!-- /.col -->
 			</div>
@@ -84,24 +83,17 @@
 						$result->execute();
 						for ($i = 0; $row = $result->fetch(); $i++) {
 
-
-
 							$date = 0;
 							$time = 0;
 							$term = 0;
 							$load_yard = 0;
 							$unload_yard = 0;
-
-
 						?>
 
 							<tr>
 								<td><?php echo $row['product_name']; ?></td>
-
 								<td><?php echo $row['qty']; ?></td>
 								<td><?php echo $qty = $row['unload_qty']; ?></td>
-
-
 							<?php
 						}
 							?></td>
@@ -120,46 +112,40 @@
 				</td>
 				<br>
 
-
-
 				<td> Lorry NO:
 					<?php echo $lorry_no; ?>
 				</td>
 				<br>
 
-				<td> Driver:
-					<?php
-					$result = $db->prepare("SELECT * FROM employee WHERE  id='$driver'  ");
-					$result->bindParam(':userid', $date);
-					$result->execute();
-					for ($i = 0; $row = $result->fetch(); $i++) {
-						echo $row['name'];
-					}
-					//echo $driver; 
-					?>
-				</td>
-				<br>
+				<?php
+				$result = $db->prepare("SELECT * FROM employee WHERE  id='$driver'  ");
+				$result->bindParam(':userid', $date);
+				$result->execute();
+				for ($i = 0; $row = $result->fetch(); $i++) { ?>
+					<td> Driver:
+						<?php echo $row['name']; ?>
+					</td>
+					<br>
+				<?php } ?>
 
-				<td> Helper 1:
-					<?php $result = $db->prepare("SELECT * FROM employee WHERE  id='$he1'  ");
-					$result->bindParam(':userid', $date);
-					$result->execute();
-					for ($i = 0; $row = $result->fetch(); $i++) {
-						echo $row['name'];
-					} ?>
-				</td>
-				<br>
+				<?php $result = $db->prepare("SELECT * FROM employee WHERE  id='$he1'  ");
+				$result->bindParam(':userid', $date);
+				$result->execute();
+				for ($i = 0; $row = $result->fetch(); $i++) { ?>
+					<td> Helper 1:
+						<?php echo $row['name']; ?>
+					</td>
+					<br>
+				<?php } ?>
 
-
-				<td> Helper 2:
-					<?php $result = $db->prepare("SELECT * FROM employee WHERE  id='$he2'  ");
-					$result->bindParam(':userid', $date);
-					$result->execute();
-					for ($i = 0; $row = $result->fetch(); $i++) {
-						echo $row['name'];
-					} ?>
-				</td>
-				<br>
+				<?php $result = $db->prepare("SELECT * FROM employee WHERE  id='$he2'  ");
+				$result->bindParam(':userid', $date);
+				for ($i = 0; $row = $result->fetch(); $i++) { ?>
+					<td> Helper 2:
+						<?php echo $row['name']; ?>
+					</td>
+					<br>
+				<?php } ?>
 
 
 			</div>
@@ -168,25 +154,10 @@
 			<!-- /.row -->
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 			<!------------------------------------------------------------- /.Sales view------------------------------------------------------------------------------ -->
 
 			<div class="box-header with-border">
-				<h3 class="box-title">Lorry Sales Report
-					<span class="pull-right badge bg-muted">Empty</span>
-					<span class="pull-right badge bg-yellow">Refill</span>
-				</h3>
+				<h5>Lorry Sales Report</h5>
 
 
 				<table id="" class="table table-bordered table-striped">
@@ -399,9 +370,6 @@
 							<th>Bank</th>
 						</tr>
 
-
-
-
 					</thead>
 					<tbody>
 						<?php
@@ -416,10 +384,10 @@
 						for ($i = 0; $row = $result->fetch(); $i++) {
 							$invo = $row['invoice_no'];
 
-							$result1 = $db->prepare("SELECT * FROM sales WHERE  invoice_number=$invo and action='1' ");
+							$result1 = $db->prepare("SELECT * FROM sales WHERE  invoice_number='$invo' and action='1' ");
 							$result1->bindParam(':userid', $c);
 							$result1->execute();
-							for ($i = 0; $row1 = $result1->fetch(); $i++) {
+							for ($a = 0; $row1 = $result1->fetch(); $a++) {
 
 								$in = $row1['transaction_id'];
 								$cus = $row1['name'];
@@ -504,15 +472,15 @@
 				}
 				?>
 
-				<h3>
+				<h4>
 					Cash- Rs.<?php echo $cash + $c_cash; ?><br>
 					CHQ- Rs.<?php echo $chq + $c_chq; ?><br>
 					Credit- Rs.<?php echo $credit; ?><br>
-				</h3>
+				</h4>
 
 				<div class="row">
 					<div class="col-md-5">
-						<h3>Remove bill</h3>
+						<h5>Remove bill</h5>
 						<table id="example1" class="table table-bordered table-striped" style="width:350px">
 							<thead>
 								<tr>
@@ -542,7 +510,7 @@
 					</div>
 
 					<div class="col-md-5">
-						<h3>Expenses</h3>
+						<h5>Expenses</h5>
 						<table id="example1" class="table table-bordered table-striped" style="width:450px">
 							<thead>
 								<tr>
@@ -550,12 +518,6 @@
 									<th>Type</th>
 									<th>Amount (Rs.)</th>
 									<th>Comment</th>
-
-
-
-
-
-
 								</tr>
 							</thead>
 							<tbody>
@@ -566,25 +528,13 @@
 								$result->execute();
 								for ($i = 0; $row = $result->fetch(); $i++) {
 								?>
-
-
-
-
 									<tr class="record">
-
-
-
-
 										<td><?php echo $row['id'];   ?> </td>
 
 										<td><?php echo $row['sub_type_name'];   ?> </td>
 										<td>Rs.<?php echo $row['amount'];   ?></td>
 										<td><?php echo $row['comment'];   ?></td>
-
-
 									</tr>
-
-
 								<?php }   ?>
 							</tbody>
 
@@ -684,13 +634,8 @@
 
 			</div>
 
-	</div>
-
-	<!-- /.col -->
-
-	<!-- /.row -->
-	</section>
-	<!-- /.content -->
+		</section>
+		<!-- /.content -->
 	</div>
 	<!-- ./wrapper -->
 </body>
