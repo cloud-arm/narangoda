@@ -177,14 +177,14 @@ include("connect.php");
               </span>
 
               <div class="info-box-content">
-                <span class="info-box-text"><?php echo ucfirst($row['username']) ?></span>
-                <span class="info-box-number"><?php echo $row['phone_no']; ?></span>
+                <span class="info-box-text" style="font-size: 12px; text-align: end; padding-right: 5px;"><?php echo ucfirst($row['des']) ?></span>
+                <span class="info-box-number" style="font-size: 20px;"><?php echo ucfirst($row['username']); ?></span>
 
                 <div class="progress">
                   <div class="progress-bar" style="width: 0"></div>
                 </div>
                 <span class="progress-description">
-                  <?php echo $row['address']; ?>
+                  <?php echo $row['phone_no']; ?>
                 </span>
               </div>
             </div>
