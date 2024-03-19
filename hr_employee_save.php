@@ -16,7 +16,7 @@ $ot = $_POST['ot'];
 $id = $_POST['id'];
 
 
-$user_name = explode(' ', trim($name ))[0];
+$user_name = explode(' ', trim($name))[0];
 $password = '';
 
 if ($des_id == 1) {
@@ -132,5 +132,5 @@ if (isset($_POST['end'])) {
     header("location: hr_employee_profile.php?id=$id");
 } else {
 
-    header("location: hr_employee.php");
+    // header("location: hr_employee.php");
 }

@@ -217,7 +217,7 @@ include("connect.php");
                                     <div class="form-group" style="width: 100%;">
                                         <label for="img-file">Upload Image</label>
                                         <label class="form-control" for="img-file" style="cursor: pointer;">
-                                            <input accept=".jpg, .jpeg, .png" name="image" id="img-file" onchange="" type="file" style="opacity: 0;position: absolute;">
+                                            <input accept=".jpg, .jpeg, .png" name="image" id="img-file" onchange="previewImage(event)" type="file" style="opacity: 0;position: absolute;">
                                             <i class="fa fa-cloud-upload"></i> Custom Upload
                                         </label>
                                     </div>
