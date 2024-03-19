@@ -135,7 +135,7 @@ date_default_timezone_set("Asia/Colombo");
               <div class="col-md-3" id="acc_sec">
                 <div class="form-group">
                   <label>Account</label>
-                  <select class="form-control select2 hidden-search" name="acc" style="width: 100%;" tabindex="3">
+                  <select class="form-control select2 hidden-search" name="acc" id="cash_acc" style="width: 100%;" tabindex="3">
                     <?php
                     $result = $db->prepare("SELECT * FROM cash ");
                     $result->bindParam(':id', $ttr);
@@ -696,6 +696,8 @@ date_default_timezone_set("Asia/Colombo");
         $('.util_sec.btn').css('display', 'inline-block');
         $('.load_sec').css('display', 'none');
         $('.pur_sec').css('display', 'none');
+        $('#pay_chq').removeAttr('disabled');
+        $("#cash_acc").val("1").change();
       } else
       if (val == 2) {
         $('.util_sec').css('display', 'none');
@@ -705,6 +707,7 @@ date_default_timezone_set("Asia/Colombo");
         $('#pay_chq').attr('disabled', '');
         $('#load_sec').removeAttr('disabled');
         $('#pur_sec').attr('disabled', '');
+        $("#cash_acc").val("1").change();
       } else
       if (val == 3) {
         $('.util_sec').css('display', 'none');
@@ -714,11 +717,13 @@ date_default_timezone_set("Asia/Colombo");
         $('#pay_chq').attr('disabled', '');
         $('#pur_sec').removeAttr('disabled');
         $('#load_sec').attr('disabled', '');
+        $("#cash_acc").val("4").change();
       } else {
         $('.util_sec').css('display', 'none');
         $('.load_sec').css('display', 'none');
         $('.pur_sec').css('display', 'none');
         $('#pay_chq').removeAttr('disabled');
+        $("#cash_acc").val("1").change();
       }
     }
 
