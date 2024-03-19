@@ -24,6 +24,10 @@ for($i=0; $row = $result->fetch(); $i++){
         'vat_no' =>$row['vat_no'],
         'root_id' =>$row['root_id'],
         'root'=>$row['root'],
+        'price12'=>$row['price_12'],
+        'price5'=>$row['price_5'],
+        'price37'=>$row['price_37'],
+        'price2'=>$row['price_2'],
     );
     }
  
