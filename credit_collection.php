@@ -41,7 +41,7 @@ include("connect.php");
         <div class="box-header">
           <h3 class="box-title"> Credit Payment List </h3>
           <a href="credit_collection_print.php" title="Click to Print" style="margin-left: 10px;">
-            <button class="btn btn-sm btn-danger"><i class="fa fa-print"></i> Print</button>
+            <button class="btn btn-sm btn-danger" disabled><i class="fa fa-print"></i> Print</button>
           </a>
         </div>
         <!-- /.box-header -->
@@ -51,7 +51,6 @@ include("connect.php");
             <thead>
               <tr>
                 <th>Invoice no </th>
-                <th>Customer</th>
                 <th>Lorry no</th>
                 <th>Driver</th>
                 <th>Pay type</th>
@@ -72,7 +71,7 @@ include("connect.php");
               for ($i = 0; $row = $result->fetch(); $i++) {
                 $user = $row['user_id'];
                 $loading = $row['loading_id'];
-                $result1 = $db->prepare("SELECT * FROM user WHERE id ='$user' ");
+                $result1 = $db->prepare("SELECT * FROM user WHERE EmployeeId ='$user' ");
                 $result1->bindParam(':userid', $date);
                 $result1->execute();
                 for ($i = 0; $row1 = $result1->fetch(); $i++) {
@@ -85,16 +84,16 @@ include("connect.php");
                 $result1->execute();
                 for ($i = 0; $row1 = $result1->fetch(); $i++) {
                   $action = $row1['action'];
+                  $lorry = $row1['lorry_no'];
                 }
                 if ($action == "load") { ?>
-                  <tr style="background-color:#f0f296">
+                  <tr style="background-color: rgba(var(--bg-text-dark-100), 0.1);opacity: 0.8;">
                   <?php } else { ?>
                   <tr>
                   <?php } ?>
 
                   <td><?php echo $row['invoice_no']; ?></td>
-                  <td><?php echo $row['customer']; ?></td>
-                  <td><?php echo $row1['loading_id']; ?></td>
+                  <td><?php echo $lorry; ?></td>
                   <td><?php echo $dir; ?></td>
                   <td><?php echo $pay_type = $row['pay_type']; ?></td>
                   <td><?php echo $row['chq_no']; ?></td>
@@ -112,6 +111,8 @@ include("connect.php");
 
                       <a href="credit_collection_save.php?id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm"><i class="fa fa-connectdevelop fa-info"></i></a>
 
+                    <?php } else {  ?>
+                      <i class="fa fa-refresh fa-spin"></i>
                     <?php }  ?>
                   </td>
                   </tr>
@@ -129,20 +130,10 @@ include("connect.php");
         </div>
         <!-- /.box-body -->
       </div>
-      <!-- /.box -->
-  </div>
-  <!-- /.col -->
 
 
-
-
-
-  <!-- Main content -->
-
-  <!-- /.row -->
-
-  </section>
-  <!-- /.content -->
+    </section>
+    <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
   <?php
@@ -155,6 +146,7 @@ include("connect.php");
   </div>
   <!-- ./wrapper -->
 
+  <!-- jQuery 2.2.3 -->
   <script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
   <!-- Bootstrap 3.3.6 -->
   <script src="../../bootstrap/js/bootstrap.min.js"></script>
@@ -163,15 +155,24 @@ include("connect.php");
   <!-- DataTables -->
   <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
   <script src="../../plugins/datatables/dataTables.bootstrap.min.js"></script>
-  <!-- SlimScroll -->
+  <!-- date-range-picker -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+  <script src="../../plugins/daterangepicker/daterangepicker.js"></script>
+  <!-- bootstrap datepicker -->
+  <script src="../../plugins/datepicker/bootstrap-datepicker.js"></script>
+  <!-- SlimScroll 1.3.0 -->
   <script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
+  <!-- iCheck 1.0.1 -->
+  <script src="../../plugins/iCheck/icheck.min.js"></script>
   <!-- FastClick -->
   <script src="../../plugins/fastclick/fastclick.js"></script>
   <!-- AdminLTE App -->
   <script src="../../dist/js/app.min.js"></script>
   <!-- AdminLTE for demo purposes -->
   <script src="../../dist/js/demo.js"></script>
-  <script src="../../plugins/datepicker/bootstrap-datepicker.js"></script>
+  <!-- Dark Theme Btn-->
+  <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
+
   <!-- page script -->
   <script>
     $(function() {
