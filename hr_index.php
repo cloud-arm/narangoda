@@ -36,7 +36,7 @@ include("connect.php");
       <h1>
         Home
         <small>Preview</small>
-        <div class="pull-right" style="margin-right: 25px;">
+        <div class="pull-right hidden" style="margin-right: 25px;">
           <span style="font-size:15px;"><i class="fa fa-circle text-yellow"></i> Driver</span>
           <span style="font-size:15px;"><i class="fa fa-circle text-green"></i> Helper</span>
         </div>
@@ -138,76 +138,41 @@ include("connect.php");
       </div> <!-- /.box -->
 
       <div class="row">
-        <?php 
-        $result = $db->prepare("SELECT  * FROM employee WHERE des_id=1  ");
-        $result->bindParam(':userid', $date);
+        <?php
+        $result = $db->prepare("SELECT  * FROM employee ORDER BY des_id  ");
+        $result->bindParam(':id', $date);
         $result->execute();
         for ($i = 0; $row = $result->fetch(); $i++) {
-          $cl1 = '';
-          $cl2 = 'bg-yellow';
+          $cl1 = 'bg-gray';
           $id = $row['id'];
-          $res = $db->prepare("SELECT  * FROM attendance WHERE emp_id='$id' AND date = '$date' ");
-          $res->bindParam(':userid', $date);
+          $res = $db->prepare("SELECT  * FROM attendance WHERE emp_id=:id AND date = '$date' ");
+          $res->bindParam(':id', $id);
           $res->execute();
           for ($i = 0; $ro = $res->fetch(); $i++) {
-            $cl1 = 'bg-yellow';
-            $cl2 = '';
+            $cl1 = 'bg-teal';
+            if ($row['des_id'] == 1) {
+              $cl1 = 'bg-yellow';
+            }
+            if ($row['des_id'] == 2) {
+              $cl1 = 'bg-olive';
+            }
+            if ($row['des_id'] == 3) {
+              $cl1 = 'bg-maroon';
+            }
+            if ($row['des_id'] == 4) {
+              $cl1 = 'bg-blue';
+            }
           }
         ?>
           <div class="col-md-3 col-sm-6 col-xs-12">
             <div class="info-box <?php echo $cl1; ?>">
-              <span class="info-box-icon <?php echo $cl2; ?>">
+              <span class="info-box-icon">
                 <?php if ($row['pic'] != '') { ?>
                   <div class="info-box-img">
                     <img src="<?php echo $row['pic']; ?>" alt="">
                   </div>
                 <?php } else { ?>
-                  <i class="glyphicon glyphicon-user"></i>
-                <?php } ?>
-              </span>
-
-              <div class="info-box-content">
-                <span class="info-box-text"><?php echo ucfirst($row['username']) ?></span>
-                <span class="info-box-number"><?php echo $row['phone_no']; ?></span>
-
-                <div class="progress">
-                  <div class="progress-bar" style="width: 0"></div>
-                </div>
-                <span class="progress-description">
-                  <?php echo $row['address']; ?>
-                </span>
-              </div>
-            </div>
-          </div>
-        <?php } ?>
-      </div>
-
-      <div class="row">
-        <?php 
-        $result = $db->prepare("SELECT  * FROM employee WHERE des_id=2  ");
-        $result->bindParam(':userid', $date);
-        $result->execute();
-        for ($i = 0; $row = $result->fetch(); $i++) {
-          $cl1 = '';
-          $cl2 = 'bg-green';
-          $id = $row['id'];
-          $res = $db->prepare("SELECT  * FROM attendance WHERE emp_id='$id' AND date = '$date' ");
-          $res->bindParam(':userid', $date);
-          $res->execute();
-          for ($i = 0; $ro = $res->fetch(); $i++) {
-            $cl1 = 'bg-green';
-            $cl2 = '';
-          }
-        ?>
-          <div class="col-md-3 col-sm-6 col-xs-12">
-            <div class="info-box <?php echo $cl1; ?>">
-              <span class="info-box-icon <?php echo $cl2; ?>">
-                <?php if ($row['pic'] != '') { ?>
-                  <div class="info-box-img">
-                    <img src="<?php echo $row['pic']; ?>" alt="">
-                  </div>
-                <?php } else { ?>
-                  <i class="glyphicon glyphicon-user"></i>
+                  <i class="glyphicon glyphicon-user" style="color:rgb(var(--bg-light-100))"></i>
                 <?php } ?>
               </span>
 
