@@ -189,7 +189,7 @@
           <?php $co = '';
           $co0 = '';
           $dis = 'none';
-          if ($f == 'grn' || $f == 'grn_supply' || $f == 'grn_payment' || $f == 'grn_return' || $f == 'grn_order' || $f == 'grn_rp' || $f == 'grn_payment_rp' || $f == 'grn_return_rp' || $f == 'grn_order_rp') {
+          if ($f == 'grn' || $f == 'grn_supply' || $f == 'grn_payment' || $f == 'grn_return' || $f == 'grn_order' || $f == 'grn_rp' || $f == 'grn_payment_rp' || $f == 'grn_transport_rp' || $f == 'grn_order_rp') {
             $co = 'active';
             $co0 = 'menu-open';
             $dis = 'block';
@@ -225,7 +225,7 @@
 
 
               <?php $co = '';
-              if ($f == 'grn_rp' || $f == 'grn_payment_rp' || $f == 'grn_return_rp' || $f == 'grn_order_rp') {
+              if ($f == 'grn_rp' || $f == 'grn_payment_rp' || $f == 'grn_transport_rp' || $f == 'grn_order_rp') {
                 $co = 'active';
               } ?>
               <li class="treeview <?php echo $co; ?>">
@@ -245,12 +245,12 @@
                                 echo 'active';
                               } ?>"><a href="grn_payment_rp.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>"><i class="fa fa-circle-o text-red"></i> Payment Record</a></li>
 
-                  <!-- <li class="<?php if ($f == 'grn_return_rp') {
-                                    echo 'active';
-                                  } ?>"><a href="grn_return_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Return Record</a></li>
-                  <li class="<?php if ($f == 'grn_order_rp') {
+                  <li class="<?php if ($f == 'grn_transport_rp') {
                                 echo 'active';
-                              } ?>"><a href="grn_order_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Order Record</a></li> -->
+                              } ?>"><a href="grn_transport_rp.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>"><i class="fa fa-circle-o text-red"></i> Transport Record</a></li>
+                  <!-- <li class="<?php if ($f == 'grn_order_rp') {
+                                    echo 'active';
+                                  } ?>"><a href="grn_order_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Order Record</a></li> -->
                 </ul>
               </li>
             </ul>
@@ -501,7 +501,7 @@
           <?php $co = '';
           $co0 = '';
           $dis = 'none';
-          if ($f == 'grn' || $f == 'grn_supply' || $f == 'grn_payment' || $f == 'grn_return' || $f == 'grn_order' || $f == 'grn_rp' || $f == 'grn_payment_rp' || $f == 'grn_return_rp' || $f == 'grn_order_rp') {
+          if ($f == 'grn' || $f == 'grn_supply' || $f == 'grn_payment' || $f == 'grn_return' || $f == 'grn_order' || $f == 'grn_rp' || $f == 'grn_payment_rp' || $f == 'grn_transport_rp' || $f == 'grn_order_rp') {
             $co = 'active';
             $co0 = 'menu-open';
             $dis = 'block';
@@ -535,7 +535,7 @@
                               } ?>"><a href="grn_order.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> Purchase Order</a></li> -->
 
               <?php $co = '';
-              if ($f == 'grn_rp' || $f == 'grn_payment_rp' || $f == 'grn_return_rp' || $f == 'grn_order_rp') {
+              if ($f == 'grn_rp' || $f == 'grn_payment_rp' || $f == 'grn_transport_rp' || $f == 'grn_order_rp') {
                 $co = 'active';
               } ?>
 
@@ -555,9 +555,9 @@
                                 echo 'active';
                               } ?>"><a href="grn_payment_rp.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>"><i class="fa fa-circle-o text-red"></i> Payment Record</a></li>
 
-                  <!-- <li class="<?php if ($f == 'grn_return_rp') {
-                                    echo 'active';
-                                  } ?>"><a href="grn_return_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Return Record</a></li> -->
+                  <li class="<?php if ($f == 'grn_transport_rp') {
+                                echo 'active';
+                              } ?>"><a href="grn_transport_rp.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>"><i class="fa fa-circle-o text-red"></i> Transport Record</a></li>
                   <!-- <li class="<?php if ($f == 'grn_order_rp') {
                                     echo 'active';
                                   } ?>"><a href="grn_order_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-red"></i> Order Record</a></li> -->
