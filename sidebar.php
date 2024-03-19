@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div class="wrapper" style="overflow-y: hidden;">
   <header class="main-header">
     <!-- Logo -->
     <a href="index.php" class="logo">
@@ -474,11 +474,10 @@
               } ?>
               <li class="treeview <?php echo $co; ?>">
 
-                <a href="#"><i class="fa fa-list-alt text-blue"></i>
-                  Payroll Report
-                  <span class="pull-right-container">
-                    <i class="fa fa-angle-left pull-right"></i>
-                  </span>
+                <a href="#">
+                  <i class="fa fa-line-chart text-blue"></i>
+                  <span>Report</span>
+                  <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
                 </a>
 
                 <ul class="treeview-menu">
@@ -631,13 +630,75 @@
             </a>
 
             <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
-              <li><a href="customer.php"><i class="fa fa-circle-o text-aqua "></i> Customer</a></li>
+              <li class="<?php if ($f == 'customer') {
+                            echo 'active';
+                          } ?>"><a href="customer.php"><i class="fa fa-circle-o text-aqua "></i> Customer</a></li>
               <li><a href="product.php"><i class="fa fa-circle-o text-aqua "></i> Product</a></li>
               <li><a href="lorry.php"><i class="fa fa-circle-o text-aqua "></i>Lorry </a></li>
               <li class="<?php if ($f == 'root') {
                             echo 'active';
                           } ?>"><a href="root.php"><i class="fa fa-circle-o text-aqua "></i>Root</a></li>
               </a>
+            </ul>
+          </li>
+
+          <?php $co = '';
+          $co0 = '';
+          $dis = 'none';
+          if ($f == 'customer_category' || $f == 'bill_return' || $f == 'special_price' || $f == 'trust' || $f == 'trust_view') {
+            $co = 'active';
+            $co0 = 'menu-open';
+            $dis = 'block';
+          } ?>
+
+          <li class="treeview <?php echo $co; ?>">
+
+            <a href="#">
+              <i class="fa fa-exchange"></i>
+              <span>SUB Menu</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+
+            <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
+
+              <li class="<?php if ($f == 'customer_category') {
+                            echo 'active';
+                          } ?>"> <a href="customer_category.php"><i class="fa fa-circle-o text-aqua"></i> Customer Category</a></li>
+
+              <li class="<?php if ($f == 'bill_return') {
+                            echo 'active';
+                          } ?>"><a href="new/go/bill_return.php"><i class="fa fa-circle-o text-aqua"></i> <span>Product Return</span></a></li>
+
+              <li class="<?php if ($f == 'special_price') {
+                            echo 'active';
+                          } ?>"><a href="special_price.php"> <i class="fa fa-circle-o text-aqua"></i> <span>Special Price</span></a></li>
+
+              <?php $co = '';
+              if ($f == 'trust' || $f == 'trust_view') {
+                $co = 'active';
+              } ?>
+
+              <li class="treeview <?php echo $co; ?>">
+                <a href="#">
+                  <i class="fa fa-random text-aqua"></i>
+                  <span>Trust</span>
+                  <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                  </span>
+                </a>
+
+                <ul class="treeview-menu">
+                  <li class="<?php if ($f == 'trust') {
+                                echo 'active';
+                              } ?>"><a href="trust.php"><i class="fa fa-circle-o text-red "></i> Add New Trust</a></li>
+                  <li class="<?php if ($f == 'trust_view') {
+                                echo 'active';
+                              } ?>"><a href="trust_view.php"><i class="fa fa-circle-o text-red "></i> View Trust</a></li>
+                  </a>
+                </ul>
+              </li>
             </ul>
           </li>
 
@@ -654,60 +715,6 @@
 
             </ul>
           </li>
-
-          <li class="treeview">
-
-            <a href="#">
-              <i class="fa fa-exchange"></i>
-              <span>SUB Menu</span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
-            </a>
-
-            <ul class="treeview-menu">
-
-              <li>
-                <a href="customer_category.php"><i class="fa fa-usd"></i> Customer Category</a>
-              </li>
-
-              <li>
-                <a href="new/go/bill_return.php">
-                  <i class="fa fa-level-down"></i> <span>Product Return</span>
-                  <span class="pull-right-container">
-
-                  </span>
-                </a>
-              </li>
-
-              <li>
-                <a href="special_price.php">
-                  <i class="fa fa-usd"></i> <span>Special Price</span>
-                  <span class="pull-right-container">
-
-                  </span>
-                </a>
-              </li>
-
-
-              <li class="treeview">
-                <a href="#">
-                  <i class="fa fa-retweet text-white"></i>
-                  <span>Trust</span>
-                  <span class="pull-right-container">
-                    <i class="fa fa-angle-left pull-right"></i>
-                  </span>
-                </a>
-
-                <ul class="treeview-menu">
-                  <li><a href="trust.php"><i class="fa fa-circle-o text-aqua "></i> Add New Trust</a></li>
-                  <li><a href="trust_view.php"><i class="fa fa-circle-o text-aqua "></i> View Trust</a></li>
-                  </a>
-                </ul>
-              </li>
-            </ul>
-          </li>
-
 
         <?php }
         if (false) { ?>
