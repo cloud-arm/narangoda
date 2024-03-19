@@ -266,7 +266,7 @@ include("connect.php");
 
                       <div class="info-box-content-set">
                         <span class="info-box-text">Empty:</span>
-                        <span class="info-box-number"><?php echo get_empty($loading_list, $list['id'])-$list['st_qty']; ?></span>
+                        <span class="info-box-number"><?php echo get_empty($loading_list, $list['id']) - $list['st_qty']; ?></span>
                       </div>
                     </div>
                   </div>
@@ -517,21 +517,30 @@ include("connect.php");
                 for ($i = 0; $row = $result->fetch(); $i++) {
                   $invo = $row['invoice_no'];
 
+                  $cus = '';
                   $result1 = $db->prepare("SELECT * FROM sales WHERE  invoice_number='$invo' and action='1' ");
                   $result1->bindParam(':userid', $c);
                   $result1->execute();
-                  for ($i = 0; $row1 = $result1->fetch(); $i++) {
+                  for ($k = 0; $row1 = $result1->fetch(); $k++) {
 
                     $in = $row1['transaction_id'];
                     $cus = $row1['name'];
                   }
 
+                  $paycose = $row['paycose'];
 
+                  $cr = '';
+                  $color_code = '';
+                  if ($paycose == 'credit_payment') {
+                    $color_code = 'background-color:#7FB3D5';
+                    $cr = '(credit)';
+                  }
                 ?>
 
-                  <tr>
-                    <td><?php echo $invo; ?></td>
-
+                  <tr style="<?php echo $color_code; ?>">
+                    <td>
+                      <?php echo $invo . ' ' . $cr; ?>
+                    </td>
                     <td><?php echo $cus; ?></td>
                     <td><?php echo $row['type']; ?></td>
                     <td><?php echo $row['amount']; ?></td>
@@ -539,39 +548,7 @@ include("connect.php");
                     <td><?php echo $row['chq_date']; ?></td>
                     <td><?php echo $row['chq_bank']; ?> </td>
                   </tr>
-                <?php
-                }
-
-                //------------ Credit payment--------//
-                $result1 = $db->prepare("SELECT * FROM collection WHERE  loading_id=$id ");
-                $result1->bindParam(':userid', $c);
-                $result1->execute();
-                for ($i = 0; $row = $result1->fetch(); $i++) {
-                  $action = $row['action'];
-                  if ($action == 0) {
-                    $color_code = '#7FB3D5';
-                  } else {
-                    $color_code = '#E84141';
-                  }
-                ?>
-                  <tr style="background-color:<?php echo $color_code; ?>">
-                    <td><?php echo $row['invoice_no']; ?>(credit)</td>
-                    <td><?php echo $row['customer']; ?></td>
-                    <td><?php echo $row['pay_type']; ?></td>
-                    <td><?php echo $row['amount']; ?></td>
-                    <td><?php echo $row['chq_no']; ?></td>
-                    <td><?php echo $row['chq_date']; ?></td>
-                    <td><?php echo $row['bank'];
-                        if ($user_lewal == '2') {
-                          if ($unload == 'load') {
-                        ?>
-                          <a href="credit_collection_dll.php?id=<?php echo $row['id']; ?>&lid=<?php echo $_GET['id']; ?>">
-                            <span style="font-size: 12px" class="label label-danger">Remove</span> </a>
-                    </td>
-                <?php }
-                        } ?>
-                  </tr>
-                <?php   }    ?>
+                <?php }?>
               </tbody>
               <tfoot>
               </tfoot>
@@ -598,24 +575,10 @@ include("connect.php");
             for ($i = 0; $row = $result->fetch(); $i++) {
               $credit = $row['sum(amount)'];
             }
-
-            $result = $db->prepare("SELECT sum(amount) FROM collection WHERE  loading_id='$id' AND pay_type='cash' and action ='0'  ");
-            $result->bindParam(':userid', $c);
-            $result->execute();
-            for ($i = 0; $row = $result->fetch(); $i++) {
-              $c_cash = $row['sum(amount)'];
-            }
-
-            $result = $db->prepare("SELECT sum(amount) FROM collection WHERE  loading_id='$id' AND pay_type='chq' and action ='0'  ");
-            $result->bindParam(':userid', $c);
-            $result->execute();
-            for ($i = 0; $row = $result->fetch(); $i++) {
-              $c_chq = $row['sum(amount)'];
-            }
             ?>
 
-            <h3 style="color: green">Cash- Rs.<?php echo $cash + $c_cash; ?></h3>
-            <h3>CHQ- Rs.<?php echo $chq + $c_chq; ?></h3>
+            <h3 style="color: green">Cash- Rs.<?php echo $cash; ?></h3>
+            <h3>CHQ- Rs.<?php echo $chq; ?></h3>
             <h3 style="color: red">Credit- Rs.<?php echo $credit; ?></h3>
 
             <div class="row">

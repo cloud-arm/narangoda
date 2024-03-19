@@ -406,25 +406,7 @@
 								<td><?php echo $row['chq_date']; ?></td>
 								<td><?php echo $row['bank_name']; ?></td>
 							</tr>
-						<?php
-						}
-						//------------ Credit payment--------//
-
-						$result1 = $db->prepare("SELECT * FROM collection WHERE  loading_id=$id and action='0' ");
-						$result1->bindParam(':userid', $c);
-						$result1->execute();
-						for ($i = 0; $row = $result1->fetch(); $i++) {
-						?>
-							<tr style="background-color:#7FB3D5">
-								<td><?php echo $row['invoice_no']; ?>(credit)</td>
-								<td><?php echo $row['customer']; ?></td>
-								<td><?php echo $row['pay_type']; ?></td>
-								<td><?php echo $row['amount']; ?></td>
-								<td><?php echo $row['chq_no']; ?></td>
-								<td><?php echo $row['chq_date']; ?></td>
-								<td><?php echo $row['bank']; ?></td>
-							</tr>
-						<?php   }    ?>
+						<?php }  ?>
 
 					</tbody>
 					<tfoot>
@@ -457,24 +439,11 @@
 					$credit = $row['sum(amount)'];
 				}
 
-				$result = $db->prepare("SELECT sum(amount) FROM collection WHERE  loading_id='$id' AND pay_type='cash' and action ='0'  ");
-				$result->bindParam(':userid', $c);
-				$result->execute();
-				for ($i = 0; $row = $result->fetch(); $i++) {
-					$c_cash = $row['sum(amount)'];
-				}
-
-				$result = $db->prepare("SELECT sum(amount) FROM collection WHERE  loading_id='$id' AND pay_type='chq' and action ='0'  ");
-				$result->bindParam(':userid', $c);
-				$result->execute();
-				for ($i = 0; $row = $result->fetch(); $i++) {
-					$c_chq = $row['sum(amount)'];
-				}
 				?>
 
 				<h4>
-					Cash- Rs.<?php echo $cash + $c_cash; ?><br>
-					CHQ- Rs.<?php echo $chq + $c_chq; ?><br>
+					Cash- Rs.<?php echo $cash; ?><br>
+					CHQ- Rs.<?php echo $chq; ?><br>
 					Credit- Rs.<?php echo $credit; ?><br>
 				</h4>
 
