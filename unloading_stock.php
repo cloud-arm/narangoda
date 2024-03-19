@@ -96,7 +96,7 @@ include("connect.php");
 
             <div class="info-box-content">
               <span class="info-box-text">Driver</span>
-              <span class="info-box-number" style="margin-top: 10px;"><?php echo $driver; ?></span>
+              <span class="info-box-number" style="margin-top: 10px;"><?php echo ucfirst($driver); ?></span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -118,7 +118,7 @@ include("connect.php");
 
               <div class="info-box-content">
                 <span class="info-box-text">Helper-1</span>
-                <span class="info-box-number" style="margin-top: 10px;"><?php echo $helper1; ?></span>
+                <span class="info-box-number" style="margin-top: 10px;"><?php echo ucfirst($helper1); ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -137,7 +137,7 @@ include("connect.php");
 
               <div class="info-box-content">
                 <span class="info-box-text">Helper-2</span>
-                <span class="info-box-number" style="margin-top: 10px;"><?php echo $helper2; ?></span>
+                <span class="info-box-number" style="margin-top: 10px;"><?php echo ucfirst($helper2); ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
