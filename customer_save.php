@@ -30,13 +30,13 @@ for ($i = 0; $row = $result->fetch(); $i++) {
 }
 
 if ($type == 1) {
-    $type = 'Channel';
+    // $type = 'Channel';
 }
 if ($type == 2) {
-    $type = 'Commercial';
+    // $type = 'Commercial';
 }
 if ($type == 3) {
-    $type = 'Apartment';
+    // $type = 'Apartment';
 }
 
 if ($id == 0) {
