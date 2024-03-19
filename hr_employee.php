@@ -122,6 +122,13 @@ include("connect.php");
                                     </div>
                                 </div>
 
+                                <div class="col-md-6" >
+                                    <div class="form-group">
+                                        <label>Nick Name</label>
+                                        <input class="form-control" type="text" name="nickname">
+                                    </div>
+                                </div>
+
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>Phone No</label>

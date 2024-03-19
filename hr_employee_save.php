@@ -4,6 +4,7 @@ include('connect.php');
 date_default_timezone_set("Asia/Colombo");
 
 $name = $_POST['name'];
+$nickname = $_POST['nickname'];
 $phone_no = $_POST['phone_no'];
 $address = $_POST['address'];
 $nic = $_POST['nic'];
@@ -16,8 +17,12 @@ $ot = $_POST['ot'];
 $id = $_POST['id'];
 
 
-$user_name = explode(' ', trim($name))[0];
+$user_name = $nickname;
 $password = '';
+
+if ($nickname == '') {
+    $user_name = explode(' ', trim($name))[0];
+}
 
 if ($des_id == 1) {
     $user_name = $_POST['username'];

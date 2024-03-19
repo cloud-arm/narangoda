@@ -122,6 +122,14 @@ include("connect.php");
                                                 <input type="text" class="form-control" name="name" value="<?php echo $name; ?>" id="inputName">
                                             </div>
                                         </div>
+
+                                        <div class="form-group">
+                                            <label for="inputName" class="col-sm-2 control-label">Name</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" name="nickname" value="<?php echo $user; ?>" id="inputName">
+                                            </div>
+                                        </div>
+
                                         <div class="form-group">
                                             <label for="inputName" class="col-sm-2 control-label">Contact</label>
                                             <div class="col-sm-10">
