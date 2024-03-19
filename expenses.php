@@ -88,6 +88,7 @@ date_default_timezone_set("Asia/Colombo");
           <small class="btn btn-success mx-2" style="padding: 5px 10px;" title="Add Expenses Type" onclick="click_open(1)">Add Expenses Type</small>
           <small class="btn btn-success mx-2 util_sec" style="padding: 5px 10px;" title="Add Utility Bill" onclick="click_open(2)">Add Utility Bill</small>
           <small class="btn btn-success mx-2 load_sec" style="display: none;padding: 5px 10px;" title="Add Root Expenses Sub Type" onclick="click_open(3)">Add Root Expenses</small>
+          <small class="btn btn-success mx-2 pur_sec" style="display: none;padding: 5px 10px;" title="Add Purchase Expenses Sub Type" onclick="click_open(4)">Add Purchase Expenses</small>
         </div>
 
         <!-- /.box-header -->
@@ -124,8 +125,8 @@ date_default_timezone_set("Asia/Colombo");
                 <div class="form-group">
                   <label>Pay Type</label>
                   <select class="form-control select2 hidden-search" id="pay_type" name="pay_type" onchange="select_pay()" style="width: 100%;" tabindex="2">
-                    <option value="cash"> Cash </option>
-                    <option value="chq"> Chq </option>
+                    <option id="pay_cash" value="cash"> Cash </option>
+                    <option id="pay_chq" value="chq"> Chq </option>
                     <option value="bank" disabled> Bank </option>
                   </select>
                 </div>
@@ -185,8 +186,8 @@ date_default_timezone_set("Asia/Colombo");
 
               <div class="col-md-3 load_sec" style="display: none;">
                 <div class="form-group">
-                  <label>Loading ID</label> <span id="blc" class="badge bg-red"></span>
-                  <select class="form-control select2" name="load_id" style="width: 100%;" tabindex="8" onchange="select_bill(this.options[this.selectedIndex].getAttribute('balance'))">
+                  <label>Loading ID</label>
+                  <select class="form-control select2" name="load_id" style="width: 100%;" tabindex="8">
                     <option value="0" disabled selected></option>
                     <?php
                     $result = $db->prepare("SELECT * FROM loading WHERE  action='load'  ");
@@ -203,13 +204,53 @@ date_default_timezone_set("Asia/Colombo");
                 </div>
               </div>
 
-              <div class="col-md-3 load_sec" style="display: none;">
+              <div class="col-md-3 pur_sec" style="display: none;">
                 <div class="form-group">
-                  <label>Sub Type</label> <span id="blc" class="badge bg-red"></span>
-                  <select class="form-control select2" name="sub_type" style="width: 100%;" tabindex="8" onchange="select_bill(this.options[this.selectedIndex].getAttribute('balance'))">
+                  <label>Lorry No</label>
+                  <select class="form-control select2" name="lorry" style="width: 100%;" tabindex="8">
                     <option value="0" disabled selected></option>
                     <?php
-                    $result = $db->prepare("SELECT * FROM expenses_sub_type  ");
+                    $result = $db->prepare("SELECT * FROM lorry  WHERE type = '0' ");
+                    $result->bindParam(':id', $res);
+                    $result->execute();
+                    for ($i = 0; $row = $result->fetch(); $i++) {
+                    ?>
+                      <option value="<?php echo $row['lorry_id']; ?>"><?php echo $row['lorry_no']; ?> </option>
+                    <?php
+                    }
+                    ?>
+                  </select>
+
+                </div>
+              </div>
+
+              <div class="col-md-3 load_sec" style="display: none;">
+                <div class="form-group">
+                  <label>Sub Type</label>
+                  <select class="form-control select2" name="sub_type" id="load_sec" style="width: 100%;" tabindex="8">
+                    <option value="0" disabled selected></option>
+                    <?php
+                    $result = $db->prepare("SELECT * FROM expenses_sub_type WHERE type_id = 2 ");
+                    $result->bindParam(':id', $res);
+                    $result->execute();
+                    for ($i = 0; $row = $result->fetch(); $i++) {
+                    ?>
+                      <option value="<?php echo $row['id']; ?>"><?php echo $row['name']; ?> </option>
+                    <?php
+                    }
+                    ?>
+                  </select>
+
+                </div>
+              </div>
+
+              <div class="col-md-3 pur_sec" style="display: none;">
+                <div class="form-group">
+                  <label>Sub Type</label>
+                  <select class="form-control select2" name="sub_type" id="pur_sec" style="width: 100%;" tabindex="8">
+                    <option value="0" disabled selected></option>
+                    <?php
+                    $result = $db->prepare("SELECT * FROM expenses_sub_type WHERE type_id = 3 ");
                     $result->bindParam(':id', $res);
                     $result->execute();
                     for ($i = 0; $row = $result->fetch(); $i++) {
@@ -365,8 +406,7 @@ date_default_timezone_set("Asia/Colombo");
                 <th>Type</th>
                 <th>Comment</th>
                 <th>Pay Type</th>
-                <th>Chq No</th>
-                <th>Chq Date</th>
+                <th>Chq Details</th>
                 <th>Amount (Rs.)</th>
                 <th>#</th>
               </tr>
@@ -398,14 +438,25 @@ date_default_timezone_set("Asia/Colombo");
                     } else {
                       echo $row['type'];
                     }  ?>
-                    <?php if ($type == 2) { ?> <br> <span class="badge bg-blue">Loading ID: <?php echo $row['loading_id']; ?> </span> <?php } ?>
+                    <?php if ($type == 2) { ?> <br> <span class="badge bg-blue">Loading ID: <?php echo $row['loading_id']; ?> </span> <br> <span class="badge bg-green"><?php echo $row['lorry_no']; ?> </span> <?php } ?>
+                    <?php if ($type == 3) { ?> <br> <span class="badge bg-green"><?php echo $row['lorry_no']; ?> </span> <?php } ?>
                   </td>
-                  <td><?php echo $row['comment'];   ?></td>
+                  <td>
+                    <?php if ($type == 1) { ?> <span class="badge bg-blue"> Utility </span> <br> <?php } else 
+                     if ($type == 2) { ?> <span class="badge bg-green"> Root </span> <br> <?php } else  
+                     if ($type == 3) { ?> <span class="badge bg-yellow"> Purchase </span> <br> <?php } else {  ?> <span class="badge bg-red"> Expenses </span> <br> <?php } ?>
+                    <?php echo $row['comment'];   ?>
+                  </td>
                   <td><?php echo $row['pay_type'];   ?></td>
-                  <td><?php echo $row['chq_no'];   ?></td>
-                  <td><?php echo $row['chq_date'];   ?></td>
+                  <td>
+                    NO: <span class="badge bg-blue"><?php echo $row['chq_no']; ?> </span> <br>
+                    Date: <span class="badge bg-green"><?php echo $row['chq_date']; ?> </span> <br>
+                  </td>
                   <td>Rs.<?php echo $row['amount'];
-                          $tot += $row['amount'];  ?></td>
+                          $tot += $row['amount'];  ?> <br>
+                    <?php if ($type == 1) { ?>Balance: <?php echo $row['util_balance']; ?> <br> <?php } ?>
+                  <?php if ($type == 1) { ?>Forward Balance: <?php echo $row['util_forward_balance']; ?> <?php } ?>
+                  </td>
                   <td> <?php if ($dll == 0) { ?> <a href="#" id="<?php echo $row['id']; ?>" class="delbutton btn btn-danger" title="Click to Delete">
                         <i class="icon-trash">x</i></a><?php } ?>
                   </td>
@@ -429,7 +480,7 @@ date_default_timezone_set("Asia/Colombo");
     <div class="row">
       <div class="col-md-12">
 
-        <div class="box box-success popup d-none" id="popup_1">
+        <div class="box box-success popup d-none" id="popup_1" style="width: 450px;">
           <div class="box-header with-border">
             <h3 class="box-title w-100">
               New Expenses Type
@@ -460,7 +511,7 @@ date_default_timezone_set("Asia/Colombo");
           </div>
         </div>
 
-        <div class="box box-success popup d-none" id="popup_2">
+        <div class="box box-success popup d-none" id="popup_2" style="width: 450px;">
           <div class="box-header with-border">
             <h3 class="box-title w-100">
               New Utility Type
@@ -491,7 +542,7 @@ date_default_timezone_set("Asia/Colombo");
           </div>
         </div>
 
-        <div class="box box-success popup d-none" id="popup_3">
+        <div class="box box-success popup d-none" id="popup_3" style="width: 450px;">
           <div class="box-header with-border">
             <h3 class="box-title w-100">
               New Root Expenses Sub Type
@@ -513,6 +564,39 @@ date_default_timezone_set("Asia/Colombo");
                 <div class="col-md-3">
                   <div class="form-group">
                     <input type="hidden" name="unit" value="4">
+                    <input type="hidden" name="typeid" value="2">
+                    <input type="submit" style="margin-top: 23px;" value="Save" class="btn btn-info">
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <div class="box box-success popup d-none" id="popup_4" style="width: 450px;">
+          <div class="box-header with-border">
+            <h3 class="box-title w-100">
+              New Purchase Expenses Sub Type
+              <i onclick="click_close()" class="btn p-0 me-2 pull-right fa fa-remove" style="font-size: 25px"></i>
+            </h3>
+          </div>
+
+          <div class="box-body d-block">
+            <form method="POST" action="expenses_save.php">
+
+              <div class="row" style="display: block;">
+                <div class="col-md-9">
+                  <div class="form-group">
+                    <label>Sub Type Name</label>
+                    <input type="text" name="name" value="" class="form-control" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <input type="hidden" name="unit" value="4">
+                    <input type="hidden" name="typeid" value="3">
                     <input type="submit" style="margin-top: 23px;" value="Save" class="btn btn-info">
                   </div>
                 </div>
@@ -611,15 +695,30 @@ date_default_timezone_set("Asia/Colombo");
         $('.util_sec').css('display', 'block');
         $('.util_sec.btn').css('display', 'inline-block');
         $('.load_sec').css('display', 'none');
-        $('.root_sec').css('display', 'none');
+        $('.pur_sec').css('display', 'none');
       } else
       if (val == 2) {
         $('.util_sec').css('display', 'none');
+        $('.pur_sec').css('display', 'none');
         $('.load_sec').css('display', 'block');
         $('.load_sec.btn').css('display', 'inline-block');
+        $('#pay_chq').attr('disabled', '');
+        $('#load_sec').removeAttr('disabled');
+        $('#pur_sec').attr('disabled', '');
+      } else
+      if (val == 3) {
+        $('.util_sec').css('display', 'none');
+        $('.load_sec').css('display', 'none');
+        $('.pur_sec').css('display', 'block');
+        $('.pur_sec.btn').css('display', 'inline-block');
+        $('#pay_chq').attr('disabled', '');
+        $('#pur_sec').removeAttr('disabled');
+        $('#load_sec').attr('disabled', '');
       } else {
         $('.util_sec').css('display', 'none');
         $('.load_sec').css('display', 'none');
+        $('.pur_sec').css('display', 'none');
+        $('#pay_chq').removeAttr('disabled');
       }
     }
 
