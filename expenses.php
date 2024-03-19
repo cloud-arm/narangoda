@@ -717,7 +717,7 @@ date_default_timezone_set("Asia/Colombo");
         $('#pay_chq').attr('disabled', '');
         $('#pur_sec').removeAttr('disabled');
         $('#load_sec').attr('disabled', '');
-        $("#cash_acc").val("4").change();
+        $("#cash_acc").val("3").change();
       } else {
         $('.util_sec').css('display', 'none');
         $('.load_sec').css('display', 'none');
