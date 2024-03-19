@@ -20,11 +20,11 @@ $user_name = explode(' ', trim($name))[0];
 $password = '';
 
 if ($des_id == 1) {
-    $user_name = $_POST['user_name'];
+    $user_name = $_POST['username'];
     $password = $_POST['password'];
 }
 
-$user_name = lcfirst($user_name);
+$user_name = strtolower($user_name);
 
 $attend_date = date('Y-m-d');
 $type = '1';
@@ -117,12 +117,12 @@ if (isset($_POST["image"])) {
 
 if ($id == 0) {
 
-    $sql = "INSERT INTO employee (name,type,phone_no,nic,address,attend_date,hour_rate,des,des_id,epf_no,epf_amount,ot,well,action,user_name,password,pic) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    $sql = "INSERT INTO employee (name,type,phone_no,nic,address,attend_date,hour_rate,des,des_id,epf_no,epf_amount,ot,well,action,username,password,pic) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $q = $db->prepare($sql);
     $q->execute(array($name, $type, $phone_no, $nic, $address, $attend_date, $rate, $des, $des_id, $etf_no, $etf_amount, $ot, $well, 1, $user_name, $password, $imageUploadPath));
 } else {
 
-    $sql = "UPDATE employee SET name = ?, address = ?, nic = ?, phone_no = ?, hour_rate = ?, des = ?, des_id = ?, epf_amount = ?, epf_no = ?, ot = ?, well = ?, user_name = ?, password = ?, type = ? WHERE id = ? ";
+    $sql = "UPDATE employee SET name = ?, address = ?, nic = ?, phone_no = ?, hour_rate = ?, des = ?, des_id = ?, epf_amount = ?, epf_no = ?, ot = ?, well = ?, username = ?, password = ?, type = ? WHERE id = ? ";
     $q = $db->prepare($sql);
     $q->execute(array($name, $address, $nic, $phone_no, $rate, $des, $des_id, $etf_amount, $etf_no, $ot, $well, $user_name, $password, $type, $id));
 }
@@ -132,5 +132,5 @@ if (isset($_POST['end'])) {
     header("location: hr_employee_profile.php?id=$id");
 } else {
 
-    // header("location: hr_employee.php");
+    header("location: hr_employee.php");
 }

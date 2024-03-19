@@ -170,7 +170,7 @@ include("connect.php");
                                 <div class="col-md-6 drive_sec" style="display: block;">
                                     <div class="form-group">
                                         <label>User Name</label>
-                                        <input class="form-control" type="text" name="user_name">
+                                        <input class="form-control" type="text" name="username">
                                     </div>
                                 </div>
 

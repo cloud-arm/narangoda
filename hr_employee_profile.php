@@ -72,7 +72,7 @@ include("connect.php");
                                         <b>Name:</b> <i><?php echo $name = $row['name']; ?></i>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>User Name:</b> <i><?php echo $user = $row['user_name']; ?></i>
+                                        <b>User Name:</b> <i><?php echo $user = $row['username']; ?></i>
                                     </li>
                                     <li class="list-group-item">
                                         <b>NIC:</b> <i><?php echo $nic = $row['nic']; ?></i>
@@ -170,7 +170,7 @@ include("connect.php");
                                         <div class="form-group drive_sec" style="display: <?php echo $dis; ?>">
                                             <label for="inputName" class="col-sm-2 control-label">User Name</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" value="<?php echo $user; ?>" name="user_name">
+                                                <input class="form-control" type="text" value="<?php echo $user; ?>" name="username">
                                             </div>
                                         </div>
 
