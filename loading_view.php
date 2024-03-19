@@ -74,17 +74,17 @@ include("connect.php");
     $result->execute();
     for ($i = 0; $row = $result->fetch(); $i++) {
       if ($row['id'] == $driver) {
-        $driver = $row['name'];
+        $driver = $row['username'];
         $driver_pic = $row['pic'];
       }
 
       if ($row['id'] == $helper1) {
-        $helper1 = $row['name'];
+        $helper1 = $row['username'];
         $helper1_pic = $row['pic'];
       }
 
       if ($row['id'] == $helper2) {
-        $helper2 = $row['name'];
+        $helper2 = $row['username'];
         $helper2_pic = $row['pic'];
       }
     }
