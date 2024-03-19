@@ -23,10 +23,7 @@ foreach ($credit_payment as $list) {
     $pay_invoice = $list['pay_invoice'];
     $pay_amount = $list['pay_amount'];
     $credit_amount = $list['credit_amount'];
-    $pay_type = $list['pay_type'];
-    $date = $list['date'];
     $cus = $list['cus_id'];
-    $load = $list['loading_id'];
     $app_id = $list['id'];
 
 
@@ -49,6 +46,8 @@ foreach ($credit_payment as $list) {
     $result->execute();
     for ($i = 0; $row = $result->fetch(); $i++) {
         $collection = $row['id'];
+        $load = $row['loading_id'];
+        $date = $row['date'];
     }
 
     // get credit details
@@ -66,6 +65,7 @@ foreach ($credit_payment as $list) {
     $result->execute();
     for ($i = 0; $row = $result->fetch(); $i++) {
         $pay_id = $row['transaction_id'];
+        $pay_type = $row['pay_type'];
     }
 
     //------------------------------------------------------------------//

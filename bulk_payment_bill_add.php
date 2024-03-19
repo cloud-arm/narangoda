@@ -37,7 +37,6 @@ if ($invo == "qb") {
     $sales_id = $row['sales_id'];
     $c_amount = $row['amount'];
     $cus_id = $row['customer_id'];
-    $type = $row['type'];
   }
 
 
@@ -47,6 +46,7 @@ if ($invo == "qb") {
   for ($i = 0; $row = $result->fetch(); $i++) {
     $invoice_no = $row['invoice_no'];
     $coll_id = $row['collection_id'];
+    $type = $row['type'];
   }
 
 
