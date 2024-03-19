@@ -30,7 +30,9 @@ foreach ($expenses as $list) {
 
     $pay_type = 'cash';
     $acc = 0;
+    $lorry = 0;
     $acc_name = '';
+    $lorry_no = '';
     $type_name = '';
     $sub_name = '';
     $driver_name = '';
@@ -57,6 +59,14 @@ foreach ($expenses as $list) {
         $driver_name = $row['name'];
     }
 
+    $result = $db->prepare("SELECT * FROM loading WHERE transaction_id=:id ");
+    $result->bindParam(':id', $load_id);
+    $result->execute();
+    for ($i = 0; $row = $result->fetch(); $i++) {
+        $lorry = $row['lorry_id'];
+        $lorry_no = $row['lorry_no'];
+    }
+
     try {
 
         //checking duplicate
@@ -70,9 +80,9 @@ foreach ($expenses as $list) {
 
         if ($con == 0) {
 
-            $sql = "INSERT INTO expenses_records (date,type_id,type,invoice_no,acc_id,acc_name,comment,amount,user,loading_id,pay_type,sub_type,sub_type_name,app_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            $sql = "INSERT INTO expenses_records (date,type_id,type,invoice_no,acc_id,acc_name,comment,amount,user,loading_id,pay_type,sub_type,sub_type_name,app_id,lorry_id,lorry_no) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             $q = $db->prepare($sql);
-            $q->execute(array($date, $type, $type_name, $invoice, $acc, $acc_name, $comment, $amount, $driver, $load_id, $pay_type, $sub_id, $sub_name, $app_id));
+            $q->execute(array($date, $type, $type_name, $invoice, $acc, $acc_name, $comment, $amount, $driver, $load_id, $pay_type, $sub_id, $sub_name, $app_id, $lorry, $lorry_no));
         }
 
         // get sales  data
