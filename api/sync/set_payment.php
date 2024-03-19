@@ -38,14 +38,14 @@ foreach ($payment as $list) {
     $credit = 0;
     $pay_amount = 0;
 
-    if ($pay_type == 'credit') {
+    if ($pay_type == 'credit' | $pay_type == 'Credit') {
 
         $credit = $amount;
         $pay_amount = 0;
         $action = 2;
     } else
 
-    if ($pay_type == 'chq') {
+    if ($pay_type == 'chq' | $pay_type == 'Chq') {
 
         $credit = 0;
         $pay_amount = 0;
@@ -55,6 +55,11 @@ foreach ($payment as $list) {
         $credit = 0;
         $action = 1;
         $pay_amount = $amount;
+    }
+
+    $paycose = 'invoice_payment';
+    if ($pay_type == 'discount' | $pay_type == 'Discount') {
+        $paycose = 'special_payment';
     }
 
     //------------------------------------------------------------------//
@@ -74,7 +79,7 @@ foreach ($payment as $list) {
             // insert query
             $sql = "INSERT INTO payment (invoice_no,pay_amount,amount,type,date,time,chq_no,bank_name,chq_date,chq_action,action,sales_id,customer_id,loading_id,pay_type,chq_bank,credit_balance,app_id,paycose) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             $ql = $db->prepare($sql);
-            $ql->execute(array($invoice, $pay_amount, $amount, $pay_type, $date, $time, $chq_no, '', $chq_date, 0, $action, $sales_id, $cus, $load, $pay_type, $bank, $credit, $app_id, 'invoice_payment'));
+            $ql->execute(array($invoice, $pay_amount, $amount, $pay_type, $date, $time, $chq_no, '', $chq_date, 0, $action, $sales_id, $cus, $load, $pay_type, $bank, $credit, $app_id, $paycose));
         }
 
         // get sales  data
