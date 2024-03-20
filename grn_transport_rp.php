@@ -108,7 +108,7 @@ date_default_timezone_set("Asia/Colombo");
           $total_exp = 0;
 
           $sql1 = "SELECT * FROM transport_record WHERE lorry_id = '$lorry' AND date BETWEEN '$from' AND '$to'";
-          $sql2 = " SELECT * FROM expenses_records  WHERE  date BETWEEN '$from' AND '$to' ";
+          $sql2 = " SELECT * FROM expenses_records  WHERE type_id = 3 AND date BETWEEN '$from' AND '$to' ";
 
           $result = $db->prepare($sql1);
           $result->bindParam(':userid', $date);
@@ -215,7 +215,6 @@ date_default_timezone_set("Asia/Colombo");
             <tbody>
 
               <?php $total_exp = 0;
-              $sql = " SELECT * FROM expenses_records  WHERE  date BETWEEN '$from' AND '$to' ";
               $result = $db->prepare($sql2);
               $result->bindParam(':userid', $date);
               $result->execute();
@@ -245,7 +244,7 @@ date_default_timezone_set("Asia/Colombo");
                   <td>Rs.<?php echo $row['amount'];
                           $total_exp += $row['amount'];  ?>
                   </td>
-                  <td> <?php if ($dll == 0) { ?> <a href="#" id="<?php echo $row['id']; ?>" class="delbutton btn btn-danger" title="Click to Delete">
+                  <td> <?php if ($dll == 0) { ?> <a href="#" id="<?php echo $row['id']; ?>" class="delbutton btn btn-danger btn-sm" title="Click to Delete">
                         <i class="icon-trash">x</i></a><?php } ?>
                   </td>
                 </tr>
