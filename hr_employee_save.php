@@ -17,16 +17,18 @@ $ot = $_POST['ot'];
 $id = $_POST['id'];
 
 
-$user_name = $nickname;
+$user_name = '';
 $password = '';
 
 if ($nickname == '') {
-    $user_name = explode(' ', trim($name))[0];
+    $nickname = explode(' ', trim($name))[0];
 }
 
 if ($des_id == 1) {
     $user_name = $_POST['username'];
     $password = $_POST['password'];
+} else {
+    $user_name = $nickname;
 }
 
 $user_name = strtolower($user_name);

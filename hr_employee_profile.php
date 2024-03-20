@@ -64,7 +64,7 @@ include("connect.php");
                                     $well = $row['well'];
                                     $des = $row['des_id'];
                                     $dis = 'none';
-                                    if ($des == 1 | $des == 0) {
+                                    if ($des == 1) {
                                         $dis = 'block';
                                     }
                                 ?>
@@ -117,35 +117,35 @@ include("connect.php");
                                 <form method="post" action="hr_employee_save.php" class="form-horizontal">
                                     <div class="row" style="margin-right: 10px;">
                                         <div class="form-group">
-                                            <label for="inputName" class="col-sm-2 control-label">Name</label>
+                                            <label class="col-sm-2 control-label">Name</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" name="name" value="<?php echo $name; ?>" autocomplete="off">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="inputName" class="col-sm-2 control-label">Nick Name</label>
+                                            <label class="col-sm-2 control-label">Nick Name</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" name="nickname" value="<?php echo $user; ?>" autocomplete="off">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="inputName" class="col-sm-2 control-label">Contact</label>
+                                            <label class="col-sm-2 control-label">Contact</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" name="phone_no" value="<?php echo $contact; ?>" autocomplete="off">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="inputName" class="col-sm-2 control-label">NIC</label>
+                                            <label class="col-sm-2 control-label">NIC</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" name="nic" value="<?php echo $nic; ?>" autocomplete="off" placeholder="NIC">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="inputName" class="col-sm-2 control-label">Address</label>
+                                            <label class="col-sm-2 control-label">Address</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" name="address" value="<?php echo $address; ?>" autocomplete="off" placeholder="Address">
 
@@ -153,9 +153,10 @@ include("connect.php");
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="inputName" class="col-sm-2 control-label">Designation</label>
+                                            <label class="col-sm-2 control-label">Designation</label>
                                             <div class="col-sm-10">
                                                 <select class="form-control select2 hidden-search" name="des" onchange="des_select(this.options[this.selectedIndex].getAttribute('value'))" style="width: 100%;" autofocus>
+                                                    <option value="0" disabled selected>Select Designation</option>
                                                     <?php
                                                     $result = $db->prepare("SELECT * FROM employees_des ");
                                                     $result->bindParam(':userid', $res);
@@ -176,14 +177,14 @@ include("connect.php");
                                         </div>
 
                                         <div class="form-group drive_sec" style="display: <?php echo $dis; ?>">
-                                            <label for="inputName" class="col-sm-2 control-label">User Name</label>
+                                            <label class="col-sm-2 control-label">User Name:</label>
                                             <div class="col-sm-10">
                                                 <input class="form-control" type="text" value="<?php echo $user; ?>" placeholder="User Name" name="username" autocomplete="off">
                                             </div>
                                         </div>
 
                                         <div class="form-group drive_sec" style="display: <?php echo $dis; ?>">
-                                            <label for="inputName" class="col-sm-2 control-label">Password</label>
+                                            <label class="col-sm-2 control-label">Password:</label>
                                             <div class="col-sm-10">
                                                 <input class="form-control" type="password" name="password" autocomplete="off">
                                             </div>
