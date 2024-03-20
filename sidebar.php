@@ -633,8 +633,12 @@
               <li class="<?php if ($f == 'customer') {
                             echo 'active';
                           } ?>"><a href="customer.php"><i class="fa fa-circle-o text-aqua "></i> Customer</a></li>
-              <li><a href="product.php"><i class="fa fa-circle-o text-aqua "></i> Product</a></li>
-              <li><a href="lorry.php"><i class="fa fa-circle-o text-aqua "></i>Lorry </a></li>
+              <li class="<?php if ($f == 'product') {
+                            echo 'active';
+                          } ?>"><a href="product.php"><i class="fa fa-circle-o text-aqua "></i> Product</a></li>
+              <li class="<?php if ($f == 'lorry') {
+                            echo 'active';
+                          } ?>"><a href="lorry.php"><i class="fa fa-circle-o text-aqua "></i>Lorry </a></li>
               <li class="<?php if ($f == 'root') {
                             echo 'active';
                           } ?>"><a href="root.php"><i class="fa fa-circle-o text-aqua "></i>Root</a></li>
