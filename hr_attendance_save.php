@@ -7,9 +7,9 @@ $time = date('H.i');
 $date = date('Y-m-d');
 
 
-if (isset($_POST['id'])) {
+if (isset($_GET['id'])) {
 
-    $id = $_POST['id'];
+    $id = $_GET['id'];
 
     $result = $db->prepare("SELECT * FROM employee WHERE id ='$id' ");
     $result->bindParam(':userid', $res);
@@ -24,11 +24,11 @@ if (isset($_POST['id'])) {
     $q->execute(array($id, $name, $date, $time));
 } else {
 
-    $id = $_POST['dll'];
+    $id = $_GET['dll'];
 
     $result = $db->prepare("DELETE FROM attendance WHERE  id= :id  ");
     $result->bindParam(':id', $id);
     $result->execute();
 }
 
-header("location: hr_attendance.php");
+// header("location: hr_attendance.php");

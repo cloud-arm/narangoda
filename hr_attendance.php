@@ -45,45 +45,8 @@ include("connect.php");
 
                 <div class="box-body">
 
-                    <div class="row">
+                    <div class="row" id="attendance"></div>
 
-                        <?php
-                        $date = date("Y-m-d");
-                        $result = $db->prepare("SELECT * FROM employee ");
-                        $result->bindParam(':id', $res);
-                        $result->execute();
-                        for ($i = 0; $row = $result->fetch(); $i++) {
-                            $id = $row['id'];
-                            $con = 0;
-                            $checked = '';
-                            $res = $db->prepare("SELECT  * FROM attendance WHERE emp_id=:id AND date = '$date' ");
-                            $res->bindParam(':id', $id);
-                            $res->execute();
-                            for ($i = 0; $ro = $res->fetch(); $i++) {
-                                $con = $ro['id'];
-                            }
-                            if ($con > 0) {
-                                $checked = 'checked';
-                            }
-                        ?>
-
-                            <div class="col-md-3">
-                                <form method="POST" action="hr_attendance_save.php" id="form_<?php echo $row['id']; ?>">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <label class="form-control"><?php echo ucfirst($row['username']); ?></label>
-                                            <input type="hidden" name="dll" value="<?php echo $con; ?>">
-                                            <label class="input-group-addon right" style="cursor: pointer;">
-                                                <input type="checkbox" name="id" value="<?php echo $row['id']; ?>" onchange="save_attendance(<?php echo $row['id']; ?>)" style="cursor: pointer;" <?php echo $checked; ?>>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-
-                        <?php  }  ?>
-
-                    </div>
                 </div>
             </div>
 
@@ -168,7 +131,7 @@ include("connect.php");
 
                         </thead>
 
-                        <tbody>
+                        <tbody id="att_table">
                             <?php
                             $date = date('Y-m-d');
 
@@ -197,8 +160,8 @@ include("connect.php");
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     </td>
-                                <?php    } ?>
                                 </tr>
+                            <?php    } ?>
                         </tbody>
                     </table>
 
@@ -247,10 +210,47 @@ include("connect.php");
     <!-- Page script -->
     <script>
         function save_attendance(id) {
-            $('#form_' + id).submit();
+            var info = 'id=' + id;
+            $.ajax({
+                type: "GET",
+                url: "hr_attendance_save.php",
+                data: info,
+                success: function() {}
+            });
+            get_attendance();
+            get_table();
+        }
+
+        function get_attendance() {
+            var info = 'unit=1';
+            $.ajax({
+                type: "GET",
+                url: "hr_attendance_get.php",
+                data: info,
+                success: function(res) {
+                    $('#attendance').empty();
+                    $('#attendance').append(res);
+                }
+            });
+        }
+
+        function get_table() {
+            var info = 'unit=2';
+            $.ajax({
+                type: "GET",
+                url: "hr_attendance_get.php",
+                data: info,
+                success: function(res) {
+                    $('#att_table').empty();
+                    $('#att_table').append(res);
+                }
+            });
         }
 
         $(function() {
+
+            get_attendance();
+
             $(".delbutton").click(function() {
 
                 //Save the link in a variable called element
@@ -278,10 +278,12 @@ include("connect.php");
                             opacity: "hide"
                         }, "slow");
 
+                    get_attendance();
                 }
 
                 return false;
 
+                get_attendance();
             });
 
         });
