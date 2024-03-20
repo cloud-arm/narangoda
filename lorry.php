@@ -5,10 +5,11 @@ include("head.php");
 include("connect.php");
 ?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-yellow sidebar-mini">
   <?php
   include_once("auth.php");
   $r = $_SESSION['SESS_LAST_NAME'];
+  $_SESSION['SESS_FORM'] = 'lorry';
 
   if ($r == 'Cashier') {
 
@@ -19,26 +20,6 @@ include("connect.php");
     include_once("sidebar.php");
   }
   ?>
-
-
-
-
-  <link rel="stylesheet" href="datepicker.css" type="text/css" media="all" />
-  <script src="datepicker.js" type="text/javascript"></script>
-  <script src="datepicker.ui.min.js" type="text/javascript"></script>
-  <script type="text/javascript">
-    $(function() {
-      $("#datepicker1").datepicker({
-        dateFormat: 'yy/mm/dd'
-      });
-      $("#datepicker2").datepicker({
-        dateFormat: 'yy/mm/dd'
-      });
-
-    });
-  </script>
-
-
 
 
   <!-- /.sidebar -->
@@ -52,26 +33,14 @@ include("connect.php");
         Lorry
         <small>Preview</small>
       </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">Forms</a></li>
-        <li class="active">Lorry</li>
-      </ol>
     </section>
-
-
-
-
-
-
 
     <section class="content">
 
       <div class="box box-success">
         <div class="box-header">
           <h3 class="box-title">Lorry Data</h3>
-          <a rel="facebox" href="lorry_add.php">
-            <button class="btn btn-info"><i class="icon-trash">Add Lorry</i></button></a>
+          <small class="btn btn-success btn-sm mx-2" style="padding: 5px 10px;" title="Add Lorry" onclick="click_open(1)">Add Lorry</small>
         </div>
         <!-- /.box-header -->
 
@@ -80,101 +49,148 @@ include("connect.php");
 
             <thead>
               <tr>
-
+                <th>ID</th>
                 <th>Lorry No</th>
-
-
                 <th>Driver</th>
                 <th>Action</th>
                 <th>#</th>
               </tr>
-
             </thead>
 
             <tbody>
               <?php
-
               $result = $db->prepare("SELECT * FROM lorry   ");
               $result->bindParam(':userid', $date);
               $result->execute();
               for ($i = 0; $row = $result->fetch(); $i++) {
               ?>
                 <tr class="record">
-
-                  <td><?php echo $row['lorry_no']; ?>
-                  </td>
-
+                  <td><?php echo $row['lorry_id']; ?></td>
+                  <td><?php echo $row['lorry_no']; ?></td>
                   <td><?php echo $row['driver']; ?></td>
                   <td><?php echo $row['action']; ?></td>
-
                   <td>
-
                     <a href="#" id="<?php echo $row['lorry_id']; ?>" class="delbutton" title="Click to Delete">
                       <button class="btn btn-danger"><i class="icon-trash">x</i></button></a>
                   </td>
 
-                <?php
-
-              }
-                ?>
                 </tr>
-
+              <?php } ?>
 
             </tbody>
             <tfoot>
-
-
-
-
-
-
-
             </tfoot>
           </table>
         </div>
         <!-- /.box-body -->
       </div>
-      <!-- /.box -->
-  </div>
-  <!-- /.col -->
 
-
-
-
-
-  <!-- Main content -->
-
-  <!-- /.row -->
-
-  </section>
-  <!-- /.content -->
+    </section>
+    <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
   <?php
   include("dounbr.php");
   ?>
-  <!-- /.control-sidebar -->
-  <!-- Add the sidebar's background. This div must be placed
-       immediately after the control sidebar -->
+
+  <div class="container-up d-none" id="container_up">
+    <a href="product.php" class="container-close" onclick="click_close()"></a>
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="box box-success popup d-none" id="popup_1" style="width: 450px;">
+          <div class="box-header with-border">
+            <h3 class="box-title w-100">
+              New Lorry
+              <i onclick="click_close()" class="btn me-2 pull-right fa fa-remove" style="font-size: 25px"></i>
+            </h3>
+          </div>
+
+          <div class="box-body d-block">
+            <form method="POST" action="lorry_save.php">
+
+              <div class="row" style="display: block;">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Lorry no</label>
+                    <input type="text" name="lorry_no" value="" class="form-control" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Driver</label>
+                    <select name="driver" class="form-control select2" style="width: 100%;">
+                      <option value="0" disabled></option>
+                      <?php
+                      $result = $db->prepare("SELECT  * FROM employee WHERE des_id = 1 ORDER BY des_id  ");
+                      $result->bindParam(':id', $date);
+                      $result->execute();
+                      for ($i = 0; $row = $result->fetch(); $i++) { ?>
+                        <option value="<?php echo $row['id'] ?>"><?php echo ucfirst($row['username']); ?></option>
+                      <?php } ?>
+                      <option value="0">None</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <input type="hidden" name="id" value="0">
+                    <input type="submit" style="margin-top: 23px; width:100%" value="Save" class="btn btn-success">
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
   <div class="control-sidebar-bg"></div>
   </div>
-  <!-- ./wrapper -->
-  <script src="js/jquery.js"></script>
+
   <!-- jQuery 2.2.3 -->
   <script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
   <!-- Bootstrap 3.3.6 -->
   <script src="../../bootstrap/js/bootstrap.min.js"></script>
+  <!-- Select2 -->
+  <script src="../../plugins/select2/select2.full.min.js"></script>
   <!-- DataTables -->
   <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
   <script src="../../plugins/datatables/dataTables.bootstrap.min.js"></script>
-  <!-- SlimScroll -->
+  <!-- date-range-picker -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+  <script src="../../plugins/daterangepicker/daterangepicker.js"></script>
+  <!-- bootstrap datepicker -->
+  <script src="../../plugins/datepicker/bootstrap-datepicker.js"></script>
+  <!-- SlimScroll 1.3.0 -->
   <script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
+  <!-- iCheck 1.0.1 -->
+  <script src="../../plugins/iCheck/icheck.min.js"></script>
   <!-- FastClick -->
   <script src="../../plugins/fastclick/fastclick.js"></script>
   <!-- AdminLTE App -->
   <script src="../../dist/js/app.min.js"></script>
   <!-- AdminLTE for demo purposes -->
   <script src="../../dist/js/demo.js"></script>
+  <!-- Dark Theme Btn-->
+  <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
+  <!-- page script -->
+  <script>
+    function click_open(i) {
+      $("#popup_" + i).removeClass("d-none");
+      $("#container_up").removeClass("d-none");
+    }
+
+    function click_close() {
+      $(".popup").addClass("d-none");
+      $("#container_up").addClass("d-none");
+    }
+  </script>
   <!-- page script -->
   <script>
     $(function() {
@@ -187,46 +203,40 @@ include("connect.php");
         "info": true,
         "autoWidth": false
       });
+
+      //Initialize Select2 Elements
+      $(".select2").select2();
+      $('.select2.hidden-search').select2({
+        minimumResultsForSearch: -1
+      });
     });
   </script>
+
   <script type="text/javascript">
-    $(function() {
+    function product_dll(id) {
 
+      var info = 'id=' + id;
+      if (confirm("Sure you want to delete this product? There is NO undo!")) {
 
-      $(".delbutton").click(function() {
+        $.ajax({
+          type: "GET",
+          url: "lorry_dll.php",
+          data: info,
+          success: function() {}
+        });
 
-        //Save the link in a variable called element
-        var element = $(this);
+        $("#record_" + id).animate({
+            backgroundColor: "#fbc7c7"
+          }, "fast")
+          .animate({
+            opacity: "hide"
+          }, "slow");
 
-        //Find the id of the link that was clicked
-        var del_id = element.attr("id");
+      }
 
-        //Built a url to send
-        var info = 'id=' + del_id;
-        if (confirm("Sure you want to delete this Lorry? There is NO undo!")) {
+      return false;
 
-          $.ajax({
-            type: "GET",
-            url: "lorry_dll.php",
-            data: info,
-            success: function() {
-
-            }
-          });
-          $(this).parents(".record").animate({
-              backgroundColor: "#fbc7c7"
-            }, "fast")
-            .animate({
-              opacity: "hide"
-            }, "slow");
-
-        }
-
-        return false;
-
-      });
-
-    });
+    }
   </script>
 </body>
 
