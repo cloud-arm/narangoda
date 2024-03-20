@@ -14,7 +14,6 @@ $sell = 0;
 $stock = 0;
 if ($type == 'GRN') {
     $dic = $_POST['dic'];
-    $sell = $_POST['sell'];
 }
 if ($type == 'Return') {
     $stock = $_POST['stock'];
@@ -43,6 +42,7 @@ if ($type == 'Return') {
     $result->execute();
     for ($i = 0; $row = $result->fetch(); $i++) {
         $pro_name = $row['gen_name'];
+        $sell = $row['sell_price'];
     }
 }
 

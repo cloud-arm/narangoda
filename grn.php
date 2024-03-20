@@ -67,7 +67,7 @@ include("connect.php");
                                         <div class="form-group" id="status"></div>
                                     </div>
 
-                                    <div class="col-md-5">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <div class="input-group-addon">
@@ -99,7 +99,7 @@ include("connect.php");
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-3 hidden">
                                         <div class="form-group">
                                             <div class="input-group date">
                                                 <div class="input-group-addon">
@@ -111,7 +111,7 @@ include("connect.php");
                                     </div>
 
 
-                                    <div class="col-md-4 hidden">
+                                    <div class="col-md-3 hidden">
                                         <div class="form-group">
                                             <div class="input-group date">
                                                 <div class="input-group-addon">
@@ -122,7 +122,7 @@ include("connect.php");
                                         </div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <div class="input-group date">
                                                 <div class="input-group-addon">
@@ -146,48 +146,53 @@ include("connect.php");
 
                         <div class="box-body d-block">
                             <table id="example2" class="table table-bordered table-hover" style="border-radius: 0;">
-                                <tr>
-                                    <th>Product Name</th>
-                                    <th>QTY</th>
-                                    <th>Dic (Rs.)</th>
-                                    <th>Cost (Rs.)</th>
-                                    <th>Amount (Rs.)</th>
-                                    <th>#</th>
-                                </tr>
-                                <?php $total = 0;
-                                $style = "";
-                                $result = $db->prepare("SELECT * FROM purchases_item WHERE invoice = '$invo' ");
-                                $result->bindParam(':userid', $res);
-                                $result->execute();
-                                for ($i = 0; $row = $result->fetch(); $i++) {
-                                    $pro_id = $row['product_id'];
-
-                                    $re = $db->prepare("SELECT * FROM products WHERE product_id = '$pro_id' ");
-                                    $re->bindParam(':userid', $res);
-                                    $re->execute();
-                                    for ($i = 0; $rw = $re->fetch(); $i++) {
-                                        $stock = $rw['qty'];
-                                    }
-                                    if ($stock < 0) {
-                                        $style = 'style="color:red" ';
-                                    }
-
-                                ?>
-                                    <tr <?php echo $style; ?> class="record">
-                                        <td><?php echo $row['name']; ?></td>
-                                        <td><?php echo $row['qty']; ?></td>
-                                        <td><?php echo $row['discount']; ?></td>
-                                        <td><?php echo $row['cost']; ?></td>
-                                        <td><?php echo $row['amount']; ?></td>
-                                        <td> <a href="#" id="<?php echo $row['transaction_id']; ?>" class="dll_btn btn btn-danger" title="Click to Delete"> X</a></td>
-                                        <?php $total += $row['amount']; ?>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Product Name</th>
+                                        <th>QTY</th>
+                                        <th>Dic (Rs.)</th>
+                                        <th>Cost (Rs.)</th>
+                                        <th>Amount (Rs.)</th>
+                                        <th>#</th>
                                     </tr>
-                                <?php
-                                }
-                                ?>
+                                </thead>
+                                <tbody>
+                                    <?php $total = 0;
+                                    $style = "";
+                                    $result = $db->prepare("SELECT * FROM purchases_item WHERE invoice = '$invo' ");
+                                    $result->bindParam(':userid', $res);
+                                    $result->execute();
+                                    for ($i = 0; $row = $result->fetch(); $i++) {
+                                        $pro_id = $row['product_id'];
 
+                                        $re = $db->prepare("SELECT * FROM products WHERE product_id = '$pro_id' ");
+                                        $re->bindParam(':userid', $res);
+                                        $re->execute();
+                                        for ($i = 0; $rw = $re->fetch(); $i++) {
+                                            $stock = $rw['qty'];
+                                        }
+                                        if ($stock < 0) {
+                                            $style = 'style="color:red" ';
+                                        }
+
+                                    ?>
+                                        <tr <?php echo $style; ?> class="record">
+                                            <td><?php echo $i + 1; ?></td>
+                                            <td><?php echo $row['name']; ?></td>
+                                            <td><?php echo $row['qty']; ?></td>
+                                            <td><?php echo $row['discount']; ?></td>
+                                            <td><?php echo $row['cost']; ?></td>
+                                            <td><?php echo $row['amount']; ?></td>
+                                            <td> <a href="#" id="<?php echo $row['transaction_id']; ?>" class="dll_btn btn btn-danger" title="Click to Delete"> X</a></td>
+                                            <?php $total += $row['amount']; ?>
+                                        </tr>
+                                    <?php
+                                    }
+                                    ?>
+                                </tbody>
                             </table>
-                            <h4>Total Rs <b><?php echo number_format($total, 2); ?></h4>
+                            <h4>Total: <small> Rs. </small> <b><?php echo number_format($total, 2); ?> </b></h4>
 
                         </div>
 
@@ -206,27 +211,26 @@ include("connect.php");
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
-                                                <label>Supplier</label>
-                                                <select class="form-control select2" name="supply" style="width: 100%;" tabindex="1" autofocus>
+                                                <label>Lorry</label>
+                                                <select class="form-control select2" name="lorry" style="width: 100%;" tabindex="1" autofocus>
                                                     <?php
-                                                    $result = $db->prepare("SELECT * FROM supplier ");
+                                                    $result = $db->prepare("SELECT * FROM lorry WHERE type = '0' ");
                                                     $result->bindParam(':id', $invo);
                                                     $result->execute();
                                                     for ($i = 0; $row = $result->fetch(); $i++) { ?>
-                                                        <option value="<?php echo $row['supplier_id']; ?>"><?php echo $row['supplier_name']; ?></option>
+                                                        <option value="<?php echo $row['lorry_id']; ?>"><?php echo $row['lorry_no']; ?></option>
                                                     <?php    } ?>
                                                 </select>
                                             </div>
                                         </div>
 
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Pay Type</label>
-                                                <select class="form-control" name="pay_type" onchange="select_pay()" id="method">
-                                                    <option>Cash</option>
-                                                    <option>Card</option>
-                                                    <option>Bank</option>
+                                                <select class="form-control select2 hidden-search" name="pay_type" onchange="select_pay()" id="method">
                                                     <option>Chq</option>
+                                                    <option>Cash</option>
+                                                    <option>Bank</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -245,31 +249,32 @@ include("connect.php");
                                             </div>
                                         </div>
 
-                                        <div class="col-md-3 slt-chq" style="display:none;">
+                                        <div class="col-md-3 slt-chq" style="display:block;">
+                                            <div class="form-group">
+                                                <label>Account No</label>
+                                                <select class="form-control select2 hidden-search" name="acc" style="width: 100%;" tabindex="1" autofocus>
+                                                    <?php
+                                                    $result = $db->prepare("SELECT * FROM bank_balance ");
+                                                    $result->bindParam(':id', $invo);
+                                                    $result->execute();
+                                                    for ($i = 0; $row = $result->fetch(); $i++) { ?>
+                                                        <option value="<?php echo $row['id']; ?>"><?php echo $row['name'] . ' | ' . $row['ac_no']; ?></option>
+                                                    <?php    } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3 slt-chq" style="display:block;">
                                             <div class="form-group">
                                                 <label>Chq Number</label>
                                                 <input class="form-control" type="text" name="chq_no" autocomplete="off">
                                             </div>
                                         </div>
 
-                                        <div class="col-md-3 slt-chq" style="display:none;">
-                                            <div class="form-group">
-                                                <label>Chq Bank</label>
-                                                <input class="form-control" type="text" name="chq_bank" autocomplete="off">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3 slt-chq" style="display:none;">
+                                        <div class="col-md-3 slt-chq" style="display:block;">
                                             <div class="form-group">
                                                 <label>Chq Date</label>
                                                 <input class="form-control" id="datepicker1" type="text" name="chq_date" autocomplete="off">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label>Pay Amount</label>
-                                                <input class="form-control" type="number" name="amount" autocomplete="off" required>
                                             </div>
                                         </div>
 
@@ -287,11 +292,26 @@ include("connect.php");
                                             </div>
                                         </div>
 
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Pay Amount</label>
+                                                <input class="form-control" type="number" step=".01" name="amount" autocomplete="off" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Transport Amount</label>
+                                                <input class="form-control" type="number" step=".01" name="transport" autocomplete="off" required>
+                                            </div>
+                                        </div>
+
                                         <div class="col-md-3" style="height: 75px;display: flex; align-items: end;">
                                             <div class="form-group">
                                                 <input type="hidden" name="id" value="<?php echo $invo; ?>">
+                                                <input type="hidden" name="supply" value="1">
                                                 <input type="hidden" name="type" value="GRN">
-                                                <input class="btn btn-success" type="submit" value="Submit">
+                                                <input class="btn btn-success" type="submit" value="Submit" style="width: 100px;">
                                             </div>
                                         </div>
                                     </div>
@@ -413,9 +433,12 @@ include("connect.php");
     <!-- Page script -->
     <script>
         $(function() {
+            $('#example2').DataTable();
             //Initialize Select2 Elements
             $(".select2").select2();
-
+            $('.select2.hidden-search').select2({
+                minimumResultsForSearch: -1
+            });
             //Date range picker
             $('#reservation').daterangepicker();
             //Date range picker with time picker

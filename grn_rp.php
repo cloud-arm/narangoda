@@ -39,33 +39,47 @@ date_default_timezone_set("Asia/Colombo");
     <!-- Main content -->
     <section class="content">
 
-      <form action="" method="GET">
-        <div class="row" style="margin-bottom: 20px;display: flex;align-items: center;">
-          <div class="col-lg-1"></div>
-          <div class="col-md-2">
-            <div class="form-group">
-              <select class="form-control " name="year" style="width: 100%;" tabindex="1" autofocus>
-                <option> <?php echo date('Y') - 1 ?> </option>
-                <option selected> <?php echo date('Y') ?> </option>
-              </select>
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">Date Selector</h3>
             </div>
-          </div>
-          <div class="col-md-2">
-            <div class="form-group">
-              <select class="form-control " name="month" style="width: 100%;" tabindex="1" autofocus>
-                <?php for ($x = 1; $x <= 12; $x++) { ?>
-                  <option> <?php echo sprintf("%02d", $x); ?> </option>
-                <?php  } ?>
-              </select>
-            </div>
-          </div>
-          <div class="col-md-2">
-            <div class="form-group">
-              <input class="btn btn-info" type="submit" value="Search">
+
+            <div class="box-body">
+              <form action="" method="GET">
+                <div class="row" style="margin-top: 10px;">
+                  <div class="col-lg-1"></div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <select class="form-control " name="year" style="width: 100%;" tabindex="1" autofocus>
+                        <option> <?php echo date('Y') - 1 ?> </option>
+                        <option selected> <?php echo date('Y') ?> </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <select class="form-control " name="month" style="width: 100%;" tabindex="1" autofocus>
+                        <?php for ($x = 1; $x <= 12; $x++) { 
+                          $m = sprintf("%02d", $x); ?>
+                          <option <?php if($m == $_GET['month']){ ?> selected <?php } ?>> <?php echo $m ?> </option>
+                        <?php  } ?>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <input class="btn btn-info" type="submit" value="Search">
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
-      </form>
+      </div>
       <!-- All jobs -->
 
       <?php
@@ -77,7 +91,6 @@ date_default_timezone_set("Asia/Colombo");
 
 
       $sql = " SELECT * FROM `purchases_item` WHERE type='GRN' AND date BETWEEN '$d1' AND '$d2' GROUP BY `invoice` ASC ";
-
 
       ?>
       <div class="box box-info">
@@ -96,7 +109,7 @@ date_default_timezone_set("Asia/Colombo");
                 <th>Supplier Invoice</th>
                 <th>Pay Type</th>
                 <th>Payment</th>
-                <th>Discount</th>
+                <!-- <th>Discount</th> -->
                 <th>Amount</th>
               </tr>
             </thead>
@@ -117,6 +130,7 @@ date_default_timezone_set("Asia/Colombo");
                   $bill = $r0['amount'];
                   $pay = $r0['pay_amount'];
                   $bill_total += $bill;
+                  $pay_total += $pay;
               ?>
                   <tr>
                     <td><?php echo $r0['transaction_id'];  ?></td>
@@ -124,34 +138,20 @@ date_default_timezone_set("Asia/Colombo");
                     <td><?php echo $r0['supplier_name'];  ?></td>
                     <td><?php echo $r0['supplier_invoice'];  ?></td>
                     <td><?php echo $r0['pay_type'];  ?></td>
-                    <td><?php echo $pay;
-                        $pay_total += $pay; ?></td>
-                    <td><?php echo $r0['discount'];  ?></td>
+                    <td><?php echo $pay; ?></td>
+                    <!-- <td><?php echo $r0['discount'];  ?></td> -->
                     <td><?php echo $bill; ?></td>
                   </tr>
               <?php }
               } ?>
 
             </tbody>
-            <tbody>
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                  <h4> Total</h4>
-                </td>
-                <td>
-                  <h4><?php echo $pay_total; ?>.00</h4>
-                </td>
-                <td></td>
-                <td>
-                  <h4><?php echo $bill_total; ?>.00</h4>
-                </td>
-              </tr>
-            </tbody>
           </table>
+          <div style="padding-left: 25px;margin-top: 20px;">
+          <h4>Amount: <small> Rs. </small> <?php echo number_format($bill_total, 2); ?> </h4>
+          <h4>Payment: <small> Rs. </small> <?php echo number_format($pay_total, 2); ?> </h4>
+          <h4>Balance: <small> Rs. </small> <?php echo number_format($bill_total - $pay_total, 2); ?> </h4>
+          </div>
         </div>
 
       </div>
@@ -190,8 +190,8 @@ date_default_timezone_set("Asia/Colombo");
   <script src="../../dist/js/app.min.js"></script>
   <!-- AdminLTE for demo purposes -->
   <script src="../../dist/js/demo.js"></script>
-    <!-- Dark Theme Btn-->
-    <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
+  <!-- Dark Theme Btn-->
+  <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
 
 
 

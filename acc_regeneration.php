@@ -5,10 +5,6 @@ include("head.php");
 include("connect.php");
 ?>
 
-
-<script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
-
-
 <body class="hold-transition skin-yellow sidebar-mini">
     <?php
     include_once("auth.php");

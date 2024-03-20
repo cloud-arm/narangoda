@@ -37,24 +37,38 @@ date_default_timezone_set("Asia/Colombo");
     <!-- Main content -->
     <section class="content">
 
-      <form action="" method="GET">
-        <div class="row" style="margin-bottom: 20px;display: flex;align-items: end;">
-          <div class="col-lg-1"></div>
-          <div class="col-lg-5">
-            <label>Date range:</label>
-            <div class="input-group">
-              <div class="input-group-addon">
-                <i class="fa fa-calendar"></i>
-              </div>
-              <input type="text" class="form-control pull-right" id="reservation" name="dates" value>
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+          <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">Date Selector</h3>
+            </div>
+
+            <div class="box-body">
+              <form action="" method="GET">
+                <div class="row" style="margin-bottom: 20px;display: flex;align-items: end;">
+                  <div class="col-lg-1"></div>
+                  <div class="col-lg-8">
+                    <label>Date range:</label>
+                    <div class="input-group">
+                      <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                      </div>
+                      <input type="text" class="form-control pull-right" id="reservation" name="dates" value="<?php echo $_GET['dates']; ?>">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-2">
+                    <input type="submit" class="btn btn-info" value="Apply">
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
-
-          <div class="col-lg-2">
-            <input type="submit" class="btn btn-info" value="Apply">
-          </div>
         </div>
-      </form>
+      </div>
+
       <?php
       include("connect.php");
       date_default_timezone_set("Asia/Colombo");
@@ -106,17 +120,11 @@ date_default_timezone_set("Asia/Colombo");
 
             </tbody>
             <tfoot>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>
-                <h4> Total</h4>
-              </td>
-              <td>
-                <h4><?php echo $tot; ?> .00</h4>
-              </td>
             </tfoot>
           </table>
+          <div style="padding-left: 25px;margin-top: 20px;">
+            <h4>Total: <small> Rs. </small> <?php echo number_format($tot, 2); ?> </h4>
+          </div>
         </div>
 
       </div>
@@ -154,8 +162,8 @@ date_default_timezone_set("Asia/Colombo");
   <script src="../../dist/js/app.min.js"></script>
   <!-- AdminLTE for demo purposes -->
   <script src="../../dist/js/demo.js"></script>
-    <!-- Dark Theme Btn-->
-    <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
+  <!-- Dark Theme Btn-->
+  <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
 
   <script type="text/javascript">
     $(function() {
