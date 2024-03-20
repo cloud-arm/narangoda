@@ -15,9 +15,9 @@ $unloading = json_decode($json_data, true);
 // respond init
 $result_array = array();
 
-    $load = $list['loading_id'];
-    $lat = $list['lat'];
-    $lng= $list['lng'];
+    $load = $_POST['loading_id'];
+    $lat = $_POST['lat'];
+    $lng= $_POST['lng'];
 
 
     //------------------------------------------------------------------//
