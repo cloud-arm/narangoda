@@ -117,6 +117,12 @@ function fetchGPSData() {
         .then(response => response.json())
         .then(data => {
             // Process the GPS data and add markers to the map
+            // Remove existing markers from the map
+            map.eachLayer(function (layer) {
+                if (layer instanceof L.Marker) {
+                    map.removeLayer(layer);
+                }
+            });
             data.forEach(entry => {
                 var marker = L.marker([entry.lat, entry.lng], { icon: customIcon }).addTo(map);
                 // You can customize the marker popup or icon here
@@ -128,6 +134,7 @@ function fetchGPSData() {
 
 // Call the function to fetch and display GPS data
 fetchGPSData();
+setInterval(fetchGPSData, 20000); 
 
 
 
