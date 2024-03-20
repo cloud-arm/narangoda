@@ -147,6 +147,14 @@
             </a>
           </li>
 
+          <li class="<?php if ($f == 'map') {
+                        echo 'active';
+                      } ?>">
+            <a href="map.php">
+              <i class="fa fa-dashboard"></i> <span>MAP</span>
+            </a>
+          </li>
+
           <?php $co = '';
           if ($f == 'loading' || $f == 'unloading' || $f == 'empty_loading' || $f == 'loading_view' || $f == 'lorry_sales_view') {
             $co = 'active';
