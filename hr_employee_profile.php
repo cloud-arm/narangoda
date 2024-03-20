@@ -63,6 +63,7 @@ include("connect.php");
                                     $ot = $row['ot'];
                                     $well = $row['well'];
                                     $des = $row['des_id'];
+                                    $pass = $row['password'];
                                     $dis = 'none';
                                     if ($des == 1) {
                                         $dis = 'block';
@@ -186,7 +187,7 @@ include("connect.php");
                                         <div class="form-group drive_sec" style="display: <?php echo $dis; ?>">
                                             <label class="col-sm-2 control-label">Password:</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="password" name="password" autocomplete="off">
+                                                <input class="form-control" type="password" value="<?php echo $pass; ?>" name="password" autocomplete="off">
                                             </div>
                                         </div>
 
