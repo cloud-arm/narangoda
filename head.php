@@ -38,7 +38,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/AdminLTE.min.css">
   <!-- <link rel="stylesheet" href="../../dist/css/AdminLTENew.css"> -->
-  <link rel="stylesheet" href="https://dev.colorbiz.org/ashen/cdn/main/dist/css/AdminLTENewv2.css">
+  <link rel="stylesheet" href="https://dev.colorbiz.org/ashen/cdn/main/dist/css/AdminLTENewv3.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="../../dist/css/skins/_all-skins.min.css">
