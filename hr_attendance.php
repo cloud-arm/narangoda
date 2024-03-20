@@ -45,7 +45,47 @@ include("connect.php");
 
                 <div class="box-body">
 
-                    <div class="row" id="attendance"></div>
+                    <form method="POST" action="hr_attendance_save.php">
+                        <div class="row">
+                            <?php
+                            $date = date("Y-m-d");
+                            $result = $db->prepare("SELECT * FROM employee ");
+                            $result->bindParam(':id', $res);
+                            $result->execute();
+                            for ($i = 0; $row = $result->fetch(); $i++) {
+                                $id = $row['id'];
+                                $con = 0;
+                                $checked = '';
+                                $res = $db->prepare("SELECT  * FROM attendance WHERE emp_id=:id AND date = '$date' ");
+                                $res->bindParam(':id', $id);
+                                $res->execute();
+                                for ($i = 0; $ro = $res->fetch(); $i++) {
+                                    $con = $ro['id'];
+                                }
+                                if ($con > 0) {
+                                    $checked = 'checked';
+                                } ?>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <label class="form-control"><?php echo ucfirst($row['username']); ?></label>
+                                            <input type="hidden" name="dll_<?php echo $row['id']; ?>" value="<?php echo $con; ?>">
+                                            <label class="input-group-addon right" style="cursor: pointer;">
+                                                <input type="checkbox" name="empid_<?php echo $row['id']; ?>" value="<?php echo $row['id']; ?>" onclick="save_attendance('<?php echo $row['id']; ?>','<?php echo $con; ?>')" style="cursor: pointer;" <?php echo $checked; ?>>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php  } ?>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-warning" value="Save Attendance">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
 
                 </div>
             </div>
@@ -131,7 +171,7 @@ include("connect.php");
 
                         </thead>
 
-                        <tbody id="att_table">
+                        <tbody>
                             <?php
                             $date = date('Y-m-d');
 
@@ -151,12 +191,12 @@ include("connect.php");
                             $result->bindParam(':userid', $date);
                             $result->execute();
                             for ($i = 0; $row = $result->fetch(); $i++) { ?>
-                                <tr class="record">
+                                <tr id="record_<?php echo $row['id']; ?>">
                                     <td><?php echo $row['id']; ?></td>
                                     <td><?php echo $row['name']; ?></td>
                                     <td><?php echo $row['date'] ?></td>
                                     <td style="width: 5%;">
-                                        <a href="#" id="<?php echo $row['id']; ?>" class="delbutton btn btn-danger btn-sm" title="Click to Delete">
+                                        <a href="#" onclick="attendance_dll('<?php echo $row['id']; ?>')" class="btn btn-danger btn-sm" title="Click to Delete">
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     </td>
@@ -209,84 +249,28 @@ include("connect.php");
     <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
     <!-- Page script -->
     <script>
-        function save_attendance(id) {
+        function attendance_dll(id) {
+
             var info = 'id=' + id;
-            $.ajax({
-                type: "GET",
-                url: "hr_attendance_save.php",
-                data: info,
-                success: function() {}
-            });
-            get_attendance();
-            get_table();
+            if (confirm("Sure you want to delete this Collection? There is NO undo!")) {
+
+                $.ajax({
+                    type: "GET",
+                    url: "hr_attendance_dll.php",
+                    data: info,
+                    success: function() {
+
+                    }
+                });
+                $("#record_" + id).animate({
+                        backgroundColor: "#fbc7c7"
+                    }, "fast")
+                    .animate({
+                        opacity: "hide"
+                    }, "slow");
+
+            }
         }
-
-        function get_attendance() {
-            var info = 'unit=1';
-            $.ajax({
-                type: "GET",
-                url: "hr_attendance_get.php",
-                data: info,
-                success: function(res) {
-                    $('#attendance').empty();
-                    $('#attendance').append(res);
-                }
-            });
-        }
-
-        function get_table() {
-            var info = 'unit=2';
-            $.ajax({
-                type: "GET",
-                url: "hr_attendance_get.php",
-                data: info,
-                success: function(res) {
-                    $('#att_table').empty();
-                    $('#att_table').append(res);
-                }
-            });
-        }
-
-        $(function() {
-
-            get_attendance();
-
-            $(".delbutton").click(function() {
-
-                //Save the link in a variable called element
-                var element = $(this);
-
-                //Find the id of the link that was clicked
-                var del_id = element.attr("id");
-
-                //Built a url to send
-                var info = 'id=' + del_id;
-                if (confirm("Sure you want to delete this Collection? There is NO undo!")) {
-
-                    $.ajax({
-                        type: "GET",
-                        url: "hr_attendance_dll.php",
-                        data: info,
-                        success: function() {
-
-                        }
-                    });
-                    $(this).parents(".record").animate({
-                            backgroundColor: "#fbc7c7"
-                        }, "fast")
-                        .animate({
-                            opacity: "hide"
-                        }, "slow");
-
-                    get_attendance();
-                }
-
-                return false;
-
-                get_attendance();
-            });
-
-        });
 
 
         $(function() {

@@ -7,28 +7,38 @@ $time = date('H.i');
 $date = date('Y-m-d');
 
 
-if (isset($_GET['id'])) {
+$result = $db->prepare("SELECT * FROM employee ");
+$result->bindParam(':id', $date);
+$result->execute();
+for ($i = 0; $row = $result->fetch(); $i++) {
+    $id = $row['id'];
+    $name = $row['name'];
+    $dll = $_POST['dll_' . $id];
 
-    $id = $_GET['id'];
+    $emp = 0;
+    if (isset($_POST['empid_' . $id])) {
+        $emp = $_POST['empid_' . $id];
 
-    $result = $db->prepare("SELECT * FROM employee WHERE id ='$id' ");
-    $result->bindParam(':userid', $res);
-    $result->execute();
-    for ($i = 0; $row = $result->fetch(); $i++) {
-        $name = $row['name'];
+        $con = 0;
+        $res = $db->prepare("SELECT  * FROM attendance WHERE emp_id=:id AND date = '$date' ");
+        $res->bindParam(':id', $id);
+        $res->execute();
+        for ($i = 0; $ro = $res->fetch(); $i++) {
+            $con = $ro['id'];
+        }
+
+        if ($con == 0) {
+
+            $sql = "INSERT INTO attendance (emp_id,name,date,time) VALUES (?,?,?,?)";
+            $q = $db->prepare($sql);
+            $q->execute(array($id, $name, $date, $time));
+        }
+    } else {
+        $res = $db->prepare("DELETE FROM attendance WHERE  id= :id  ");
+        $res->bindParam(':id', $dll);
+        $res->execute();
     }
-
-
-    $sql = "INSERT INTO attendance (emp_id,name,date,time) VALUES (?,?,?,?)";
-    $q = $db->prepare($sql);
-    $q->execute(array($id, $name, $date, $time));
-} else {
-
-    $id = $_GET['dll'];
-
-    $result = $db->prepare("DELETE FROM attendance WHERE  id= :id  ");
-    $result->bindParam(':id', $id);
-    $result->execute();
 }
 
-// header("location: hr_attendance.php");
+
+header("location: hr_attendance.php");
