@@ -37,45 +37,63 @@ date_default_timezone_set("Asia/Colombo");
     <!-- Main content -->
     <section class="content">
 
-      <form action="" method="GET">
-        <div class="row" style="margin-bottom: 20px;display: flex;align-items: end;">
-          <div class="col-lg-1"></div>
-          <div class="col-lg-3">
-            <label>Lorry No:</label>
-            <div class="input-group">
-              <div class="input-group-addon">
-                <i class="fa fa-truck"></i>
-              </div>
-              <select class="form-control select2" name="lorry" style="width: 100%;" tabindex="8">
-                <option value="0" disabled selected></option>
-                <?php
-                $result = $db->prepare("SELECT * FROM lorry  WHERE type = '0' ");
-                $result->bindParam(':id', $res);
-                $result->execute();
-                for ($i = 0; $row = $result->fetch(); $i++) {
-                ?>
-                  <option value="<?php echo $row['lorry_id']; ?>"><?php echo $row['lorry_no']; ?> </option>
-                <?php
-                }
-                ?>
-              </select>
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+          <div class="box">
+            <div class="box-header with-border">
+              <h3 class="box-title">Date Selector</h3>
             </div>
-          </div>
-          <div class="col-lg-4">
-            <label>Date range:</label>
-            <div class="input-group">
-              <div class="input-group-addon">
-                <i class="fa fa-calendar"></i>
-              </div>
-              <input type="text" class="form-control pull-right" id="reservation" name="dates" value>
-            </div>
-          </div>
 
-          <div class="col-lg-2">
-            <input type="submit" class="btn btn-info" value="Apply">
+            <div class="box-body">
+              <form action="" method="GET">
+                <div class="row" style="margin-bottom: 20px;display: flex;align-items: end;">
+                  <div class="col-lg-1"></div>
+                  <div class="col-lg-4">
+                    <label>Lorry No:</label>
+                    <div class="input-group">
+                      <div class="input-group-addon">
+                        <i class="fa fa-truck"></i>
+                      </div>
+                      <select class="form-control select2" name="lorry" style="width: 100%;" tabindex="8">
+                        <option value="0" disabled selected></option>
+                        <?php $l = 0;
+                        if (isset($_GET['lorry'])) {
+                          $l = $_GET['lorry'];
+                        }
+                        $result = $db->prepare("SELECT * FROM lorry  WHERE type = '0' ");
+                        $result->bindParam(':id', $res);
+                        $result->execute();
+                        for ($i = 0; $row = $result->fetch(); $i++) {
+                        ?>
+                          <option value="<?php echo $row['lorry_id']; ?>" <?php if ($l == $row['lorry_id']) { ?> selected <?php } ?>><?php echo $row['lorry_no']; ?> </option>
+                        <?php
+                        }
+                        ?>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-lg-5">
+                    <label>Date range:</label>
+                    <div class="input-group">
+                      <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                      </div>
+                      <input type="text" class="form-control pull-right" id="reservation" name="dates" value="<?php echo $_GET['dates']; ?>">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-2">
+                    <input type="submit" class="btn btn-info" value="Search">
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-      </form>
+      </div>
+
+
       <?php
       include("connect.php");
       date_default_timezone_set("Asia/Colombo");
@@ -121,7 +139,7 @@ date_default_timezone_set("Asia/Colombo");
                     <tr>
                       <td><?php echo $row['id']  ?></td>
                       <td><?php echo $row['invoice_no']  ?></td>
-                      <td><?php echo $row['supply_name']  ?></td>
+                      <td><?php echo $row['supplier_name']  ?></td>
                       <td><?php echo $row['lorry_no']  ?></td>
                       <td><?php echo $row['date']  ?></td>
                       <td><?php echo $row['amount'];
@@ -135,7 +153,9 @@ date_default_timezone_set("Asia/Colombo");
             <tfoot>
             </tfoot>
           </table>
-          <h4>Total: <small>Rs.</small> <?php echo number_format($tot, 2); ?> </h4>
+          <div style="padding-left: 25px;margin-top: 20px;">
+            <h4>Total: <small> Rs. </small> <?php echo number_format($tot, 2); ?> </h4>
+          </div>
         </div>
 
       </div>

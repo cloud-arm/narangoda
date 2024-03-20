@@ -19,14 +19,18 @@ if ($type != 'Order') {
 $pay_type = '';
 $acc_no = '';
 $bank = 0;
+$bank = 0;
 $bank_name = '';
-$bn = '';
+$acc = 0;
 $chq_no = '';
 $chq_bank = '';
 $chq_date = '';
+$lorry_no = '';
 if ($type == 'GRN') {
 
+    $lorry = $_POST['lorry'];
     $pay_type = $_POST['pay_type'];
+    $transport = $_POST['transport'];
 
     if ($pay_type == 'Bank') {
         $acc_no = $_POST['acc_no'];
@@ -34,27 +38,33 @@ if ($type == 'GRN') {
     }
 
     if ($pay_type == 'Chq') {
+        $bank = $_POST['acc'];
         $chq_no = $_POST['chq_no'];
-        $chq_bank = $_POST['chq_bank'];
         $chq_date = $_POST['chq_date'];
+
+        $re = $db->prepare("SELECT * FROM bank_balance WHERE id = :id");
+        $re->bindParam(':id', $bank);
+        $re->execute();
+        for ($k = 0; $r = $re->fetch(); $k++) {
+            $chq_bank = $r['name'];
+        }
     }
 }
 
 $dic = 0;
 
-
 $result = $db->prepare("SELECT * FROM supplier WHERE supplier_id=:id ");
 $result->bindParam(':id', $sup);
 $result->execute();
 for ($i = 0; $row = $result->fetch(); $i++) {
-    $sn = $row['supplier_name'];
+    $sup_name = $row['supplier_name'];
 }
 
-$result = $db->prepare("SELECT * FROM bank_balance WHERE id=:id ");
-$result->bindParam(':id', $bank);
+$result = $db->prepare("SELECT * FROM lorry WHERE lorry_id=:id ");
+$result->bindParam(':id', $lorry);
 $result->execute();
 for ($i = 0; $row = $result->fetch(); $i++) {
-    $bn = $row['name'];
+    $lorry_no = $row['lorry_no'];
 }
 
 $result = $db->prepare("SELECT sum(amount),sum(discount) FROM purchases_item WHERE invoice=:id ");
@@ -69,9 +79,41 @@ $date = date("Y-m-d");
 $time = date('H:i:s');
 
 if ($invo != '') {
-    $sql = "INSERT INTO purchases (invoice_number,amount,remarks,date,supplier_id,supplier_name,supplier_invoice,pay_type,pay_amount,discount,type,user_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+    $sql = "INSERT INTO purchases (invoice_number,amount,remarks,date,supplier_id,supplier_name,supplier_invoice,pay_type,pay_amount,discount,type,user_id,transport,lorry_id,lorry_no,chq_no,chq_date,chq_amount) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $re = $db->prepare($sql);
-    $re->execute(array($invo, $amount, $note, $date, $sup, $sn, $sup_invo, $pay_type, $pay_amount, $dic, $type, $ui));
+    $re->execute(array($invo, $amount, $note, $date, $sup, $sup_name, $sup_invo, $pay_type, $pay_amount, $dic, $type, $ui, $transport, $lorry, $lorry_no, $chq_no, $chq_date, $pay_amount));
+
+    //---Transport details ------
+    $sql = "INSERT INTO transport_record (invoice_no,amount,date,supplier_id,supplier_name,type,user_id,lorry_id,lorry_no,time) VALUES (?,?,?,?,?,?,?,?,?,?)";
+    $re = $db->prepare($sql);
+    $re->execute(array($invo, $transport, $date, $sup, $sup_name, 0, $ui, $lorry, $lorry_no, $time));
+
+    $cr_id = 3;
+
+    $cash_blc = 0;
+    $blc = 0;
+    $re = $db->prepare("SELECT * FROM cash WHERE id = $cr_id ");
+    $re->bindParam(':id', $res);
+    $re->execute();
+    for ($k = 0; $r = $re->fetch(); $k++) {
+        $blc = $r['amount'];
+        $cr_name = $r['name'];
+    }
+
+    $cash_blc = $blc + $transport;
+
+    $cr_type = 'grn_transport';
+
+    $sql = "INSERT INTO transaction_record (transaction_type,type,record_no,amount,action,credit_acc_no,credit_acc_type,credit_acc_name,credit_acc_balance,debit_acc_type,debit_acc_name,debit_acc_id,debit_acc_balance,date,time,user_id,user_name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    $ql = $db->prepare($sql);
+    $ql->execute(array('transport', 'Credit', $invo, $transport, 0, $cr_id, $cr_type, $cr_name, $cash_blc, 'transport', 'Transport', 0, 0, $date, $time, $ui, $un));
+
+    $sql = "UPDATE  cash SET amount=? WHERE id=?";
+    $ql = $db->prepare($sql);
+    $ql->execute(array($cash_blc, $cr_id));
+
+    //-------------------
+
 
     if ($type == 'GRN') {
 
@@ -84,7 +126,7 @@ if ($invo != '') {
 
             $sql = 'INSERT INTO supply_payment (amount,pay_amount,pay_type,date,invoice_no,supply_id,supply_name,supplier_invoice,type,credit_balance) VALUES (?,?,?,?,?,?,?,?,?,?)';
             $q = $db->prepare($sql);
-            $q->execute(array($amount, '0', 'Credit', $date, $invo, $sup, $sn, $sup_invo, $type, $amount));
+            $q->execute(array($amount, '0', 'Credit', $date, $invo, $sup, $sup_name, $sup_invo, $type, $amount));
         }
 
         if ($pay_amount > 0) {
@@ -92,11 +134,11 @@ if ($invo != '') {
             if ($pay_type == 'Chq') {
                 $sql = 'INSERT INTO supply_payment (amount,pay_amount,pay_type,date,invoice_no,supply_id,supply_name,supplier_invoice,type,chq_no,chq_bank,chq_date,bank_name,acc_no,action) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
                 $q = $db->prepare($sql);
-                $q->execute(array($pay_amount, $pay_amount, $pay_type, $date, $invo, $sup, $sn, $sup_invo, $type, $chq_no, $chq_bank, $chq_date, $bank_name, $acc_no, 1));
-            }else {
+                $q->execute(array($pay_amount, $pay_amount, $pay_type, $date, $invo, $sup, $sup_name, $sup_invo, $type, $chq_no, $chq_bank, $chq_date, $bank_name, $acc_no, 1));
+            } else {
                 $sql = 'INSERT INTO supply_payment (amount,pay_amount,pay_type,date,invoice_no,supply_id,supply_name,supplier_invoice,type,bank_name,acc_no) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
                 $q = $db->prepare($sql);
-                $q->execute(array($pay_amount, $pay_amount, $pay_type, $date, $invo, $sup, $sn, $sup_invo, $type, $bank_name, $acc_no));
+                $q->execute(array($pay_amount, $pay_amount, $pay_type, $date, $invo, $sup, $sup_name, $sup_invo, $type, $bank_name, $acc_no));
             }
 
             if ($amount > $pay_amount) {
@@ -118,7 +160,7 @@ if ($invo != '') {
         }
 
         $result = $db->prepare("SELECT * FROM purchases_item WHERE invoice = '$invo' ");
-        $result->bindParam(':userid', $res);
+        $result->bindParam(':id', $res);
         $result->execute();
         for ($i = 0; $row = $result->fetch(); $i++) {
             $p_id = $row['product_id'];
@@ -130,7 +172,7 @@ if ($invo != '') {
 
             $qty_blc = 0;
             $re = $db->prepare("SELECT * FROM products WHERE product_id = '$p_id' ");
-            $re->bindParam(':userid', $res);
+            $re->bindParam(':id', $res);
             $re->execute();
             for ($k = 0; $r = $re->fetch(); $k++) {
                 $st_qty = $r['qty'];
@@ -150,7 +192,7 @@ if ($invo != '') {
             $qty_blc = 0;
             $con = 0;
             $re = $db->prepare("SELECT * FROM stock ");
-            $re->bindParam(':userid', $res);
+            $re->bindParam(':id', $res);
             $re->execute();
             for ($k = 0; $r = $re->fetch(); $k++) {
                 $st_qty = $r['qty_balance'];
@@ -179,43 +221,36 @@ if ($invo != '') {
 
                 $sql = "INSERT INTO stock (product_id,code,name,invoice_no,qty_balance,qty,date,supply_id,supply_name,sell,cost) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
                 $ql = $db->prepare($sql);
-                $ql->execute(array($p_id, $code, $name, $invo, $qty, $qty, $date, $sup, $sn, $sell, $cost));
+                $ql->execute(array($p_id, $code, $name, $invo, $qty, $qty, $date, $sup, $sup_name, $sell, $cost));
             }
         }
 
 
         if ($pay_type == 'Cash') {
 
-            $cr_id = 2;
+            $cr_id = 1;
 
-            $de_blc = 0;
+            $cash_blc = 0;
             $blc = 0;
             $re = $db->prepare("SELECT * FROM cash WHERE id = $cr_id ");
-            $re->bindParam(':userid', $res);
+            $re->bindParam(':id', $res);
             $re->execute();
             for ($k = 0; $r = $re->fetch(); $k++) {
                 $blc = $r['amount'];
                 $cr_name = $r['name'];
             }
 
-            $de_blc = $blc - $pay_amount;
-
-            $re = $db->prepare("SELECT * FROM supply_payment WHERE invoice_no = :id ");
-            $re->bindParam(':id', $invo);
-            $re->execute();
-            for ($k = 0; $r = $re->fetch(); $k++) {
-                $p = $r['id'];
-            }
+            $cash_blc = $blc - $pay_amount;
 
             $cr_type = 'grn_payment';
 
             $sql = "INSERT INTO transaction_record (transaction_type,type,record_no,amount,action,credit_acc_no,credit_acc_type,credit_acc_name,credit_acc_balance,debit_acc_type,debit_acc_name,debit_acc_id,debit_acc_balance,date,time,user_id,user_name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             $ql = $db->prepare($sql);
-            $ql->execute(array('GRN', 'Debit', $invo, $pay_amount, 0, $p, $cr_type, 'Cash GRN', 0, $cr_type, $cr_name, $cr_id, $de_blc, $date, $time, $ui, $un));
+            $ql->execute(array('grn', 'Debit', $invo, $pay_amount, 0, 0, $cr_type, 'GRN Payment', 0, $cr_type, $cr_name, $cr_id, $cash_blc, $date, $time, $ui, $un));
 
             $sql = "UPDATE  cash SET amount=? WHERE id=?";
             $ql = $db->prepare($sql);
-            $ql->execute(array($de_blc, $cr_id));
+            $ql->execute(array($cash_blc, $cr_id));
         }
     } else
 
@@ -227,10 +262,10 @@ if ($invo != '') {
 
         $sql = 'INSERT INTO supply_payment (amount,pay_amount,pay_type,date,invoice_no,supply_id,supply_name,supplier_invoice,type,credit_balance) VALUES (?,?,?,?,?,?,?,?,?,?)';
         $q = $db->prepare($sql);
-        $q->execute(array($amount, 0, 'Credit_note', $date, $invo, $sup, $sn, $sup_invo, $type, $amount));
+        $q->execute(array($amount, 0, 'Credit_note', $date, $invo, $sup, $sup_name, $sup_invo, $type, $amount));
 
         $result = $db->prepare("SELECT * FROM purchases_item WHERE invoice = '$invo' ");
-        $result->bindParam(':userid', $res);
+        $result->bindParam(':id', $res);
         $result->execute();
         for ($i = 0; $row = $result->fetch(); $i++) {
             $p_id = $row['product_id'];
@@ -241,7 +276,7 @@ if ($invo != '') {
 
             $qty_blc = 0;
             $re = $db->prepare("SELECT * FROM products WHERE product_id = '$p_id' ");
-            $re->bindParam(':userid', $res);
+            $re->bindParam(':id', $res);
             $re->execute();
             for ($k = 0; $row0 = $re->fetch(); $k++) {
                 $st_qty = $row0['qty'];
