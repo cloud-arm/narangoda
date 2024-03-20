@@ -40,81 +40,50 @@ include("connect.php");
             <!-- SELECT2 EXAMPLE -->
             <div class="box box-info">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Add New Attendance</h3>
+                    <h3 class="box-title">Today Attendance</h3>
                 </div>
 
                 <div class="box-body">
-                    <form method="post" action="hr_attendance_save.php">
 
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <select class="form-control select2" name="id" style="width: 100%;" tabindex="1" autofocus>
+                    <div class="row">
 
-                                                <?php
-                                                $result = $db->prepare("SELECT * FROM employee ");
-                                                $result->bindParam(':userid', $res);
-                                                $result->execute();
-                                                for ($i = 0; $row = $result->fetch(); $i++) { ?>
-                                                    <option value="<?php echo $row['id']; ?>">
-                                                        <?php echo $row['name']; ?>
+                        <?php
+                        $date = date("Y-m-d");
+                        $result = $db->prepare("SELECT * FROM employee ");
+                        $result->bindParam(':id', $res);
+                        $result->execute();
+                        for ($i = 0; $row = $result->fetch(); $i++) {
+                            $id = $row['id'];
+                            $con = 0;
+                            $checked = '';
+                            $res = $db->prepare("SELECT  * FROM attendance WHERE emp_id=:id AND date = '$date' ");
+                            $res->bindParam(':id', $id);
+                            $res->execute();
+                            for ($i = 0; $ro = $res->fetch(); $i++) {
+                                $con = $ro['id'];
+                            }
+                            if ($con > 0) {
+                                $checked = 'checked';
+                            }
+                        ?>
 
-                                                    </option>
-                                                <?php    } ?>
-                                            </select>
-
+                            <div class="col-md-3">
+                                <form method="POST" action="hr_attendance_save.php" id="form_<?php echo $row['id']; ?>">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <label class="form-control"><?php echo ucfirst($row['username']); ?></label>
+                                            <input type="hidden" name="dll" value="<?php echo $con; ?>">
+                                            <label class="input-group-addon right" style="cursor: pointer;">
+                                                <input type="checkbox" name="id" value="<?php echo $row['id']; ?>" onchange="save_attendance(<?php echo $row['id']; ?>)" style="cursor: pointer;" <?php echo $checked; ?>>
+                                            </label>
                                         </div>
                                     </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <div class="input-group date">
-                                                <div class="input-group-addon">
-                                                    <label>Date</label>
-                                                </div>
-                                                <input type="text" class="form-control" name="date" value="<?php echo date('Y-m-d') ?>" id="datepicker" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                </form>
                             </div>
 
+                        <?php  }  ?>
 
-                            <div class="col-md-7">
-                                <div class="row">
-                                    <div class="col-md-5">
-                                        <div class="form-group">
-                                            <div class="input-group date">
-                                                <div class="input-group-addon">
-                                                    <label>In Time (<b style="color:brown">HH.mm</b>)</label>
-                                                </div>
-                                                <input type="text" class="form-control " name="in_time" value="<?php echo date('H.i') ?>" required>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-5">
-                                        <div class="form-group">
-                                            <div class="input-group date">
-                                                <div class="input-group-addon">
-                                                    <label>Out Time (<b style="color:brown">HH.mm</b>)</label>
-                                                </div>
-                                                <input type="text" class="form-control " name="out_time" value="<?php echo date('H.i') ?>" required>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-1">
-                                        <div class="form-group">
-                                            <input class="btn btn-info" type="submit" value="Submit">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
 
@@ -137,10 +106,10 @@ include("connect.php");
                                 <div class="form-group">
 
                                     <select class="form-control select2" name="id" style="width: 100%;" tabindex="1" autofocus>
-
+                                        <option value="0">All</option>
                                         <?php
                                         $result = $db->prepare("SELECT * FROM employee ");
-                                        $result->bindParam(':userid', $res);
+                                        $result->bindParam(':userid', $date);
                                         $result->execute();
                                         for ($i = 0; $row = $result->fetch(); $i++) { ?>
                                             <option value="<?php echo $row['id']; ?>">
@@ -186,17 +155,14 @@ include("connect.php");
 
                         </div>
                     </form>
-                    <table id="example1" class="table table-bordered table-striped">
+
+                    <table id="example" class="table table-bordered table-striped">
 
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>name</th>
+                                <th>Name</th>
                                 <th>Date</th>
-                                <th>IN</th>
-                                <th>OUT</th>
-                                <th>Hour count</th>
-                                <th>OT</th>
                                 <th>#</th>
                             </tr>
 
@@ -204,17 +170,19 @@ include("connect.php");
 
                         <tbody>
                             <?php
-                            $d1 = date('Y-m') . "-01";
-                            $d2 = date('Y-m') . "-31";
+                            $date = date('Y-m-d');
 
                             if (isset($_GET['id'])) {
                                 $id = $_GET['id'];
                                 $d1 = $_GET['year'] . "-" . $_GET['month'] . "-01";
                                 $d2 = $_GET['year'] . "-" . $_GET['month'] . "-31";
-                                
-                                $result = $db->prepare("SELECT * FROM attendance WHERE emp_id='$id' AND date BETWEEN '$d1' AND '$d2' ORDER BY id DESC LIMIT 50");
+                                if ($id == 0) {
+                                    $result = $db->prepare("SELECT * FROM attendance WHERE  date BETWEEN '$d1' AND '$d2' ORDER BY id DESC LIMIT 50");
+                                } else {
+                                    $result = $db->prepare("SELECT * FROM attendance WHERE emp_id='$id' AND date BETWEEN '$d1' AND '$d2' ORDER BY id DESC");
+                                }
                             } else {
-                                $result = $db->prepare("SELECT * FROM attendance  WHERE date BETWEEN '$d1' AND '$d2' ORDER BY id DESC LIMIT 50");
+                                $result = $db->prepare("SELECT * FROM attendance  WHERE date = '$date' ORDER BY id  ");
                             }
 
                             $result->bindParam(':userid', $date);
@@ -224,12 +192,8 @@ include("connect.php");
                                     <td><?php echo $row['id']; ?></td>
                                     <td><?php echo $row['name']; ?></td>
                                     <td><?php echo $row['date'] ?></td>
-                                    <td><?php echo $row['IN_time']; ?></td>
-                                    <td><?php echo $row['OUT_time']; ?></td>
-                                    <td><?php echo $row['deff_time'] ?></td>
-                                    <td><?php echo $row['ot'] ?></td>
                                     <td style="width: 5%;">
-                                        <a href="#" id="<?php echo $row['id']; ?>" class="delbutton btn btn-danger" title="Click to Delete">
+                                        <a href="#" id="<?php echo $row['id']; ?>" class="delbutton btn btn-danger btn-sm" title="Click to Delete">
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     </td>
@@ -237,6 +201,7 @@ include("connect.php");
                                 </tr>
                         </tbody>
                     </table>
+
                 </div>
             </div>
         </section>
@@ -257,6 +222,9 @@ include("connect.php");
     <script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
     <!-- Bootstrap 3.3.6 -->
     <script src="../../bootstrap/js/bootstrap.min.js"></script>
+    <!-- DataTables -->
+    <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../plugins/datatables/dataTables.bootstrap.min.js"></script>
     <!-- Select2 -->
     <script src="../../plugins/select2/select2.full.min.js"></script>
     <!-- date-range-picker -->
@@ -278,6 +246,10 @@ include("connect.php");
     <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
     <!-- Page script -->
     <script>
+        function save_attendance(id) {
+            $('#form_' + id).submit();
+        }
+
         $(function() {
             $(".delbutton").click(function() {
 
@@ -316,6 +288,8 @@ include("connect.php");
 
 
         $(function() {
+
+            $('#example').DataTable();
             //Initialize Select2 Elements
             $(".select2").select2();
             $('.select2.hidden-search').select2({
