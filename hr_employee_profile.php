@@ -64,7 +64,7 @@ include("connect.php");
                                     $well = $row['well'];
                                     $des = $row['des_id'];
                                     $dis = 'none';
-                                    if ($des == 1) {
+                                    if ($des == 1 | $des == 0) {
                                         $dis = 'block';
                                     }
                                 ?>
@@ -119,35 +119,35 @@ include("connect.php");
                                         <div class="form-group">
                                             <label for="inputName" class="col-sm-2 control-label">Name</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" name="name" value="<?php echo $name; ?>" id="inputName">
+                                                <input type="text" class="form-control" name="name" value="<?php echo $name; ?>" autocomplete="off">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="inputName" class="col-sm-2 control-label">Name</label>
+                                            <label for="inputName" class="col-sm-2 control-label">Nick Name</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" name="nickname" value="<?php echo $user; ?>" id="inputName">
+                                                <input type="text" class="form-control" name="nickname" value="<?php echo $user; ?>" autocomplete="off">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="inputName" class="col-sm-2 control-label">Contact</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" name="phone_no" value="<?php echo $contact; ?>" id="inputName">
+                                                <input type="text" class="form-control" name="phone_no" value="<?php echo $contact; ?>" autocomplete="off">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="inputName" class="col-sm-2 control-label">NIC</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" name="nic" value="<?php echo $nic; ?>" id="inputName" placeholder="NIC">
+                                                <input type="text" class="form-control" name="nic" value="<?php echo $nic; ?>" autocomplete="off" placeholder="NIC">
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label for="inputName" class="col-sm-2 control-label">Address</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" name="address" value="<?php echo $address; ?>" id="inputName" placeholder="Address">
+                                                <input type="text" class="form-control" name="address" value="<?php echo $address; ?>" autocomplete="off" placeholder="Address">
 
                                             </div>
                                         </div>
@@ -178,14 +178,14 @@ include("connect.php");
                                         <div class="form-group drive_sec" style="display: <?php echo $dis; ?>">
                                             <label for="inputName" class="col-sm-2 control-label">User Name</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="text" value="<?php echo $user; ?>" name="username">
+                                                <input class="form-control" type="text" value="<?php echo $user; ?>" placeholder="User Name" name="username" autocomplete="off">
                                             </div>
                                         </div>
 
                                         <div class="form-group drive_sec" style="display: <?php echo $dis; ?>">
                                             <label for="inputName" class="col-sm-2 control-label">Password</label>
                                             <div class="col-sm-10">
-                                                <input class="form-control" type="password" name="password">
+                                                <input class="form-control" type="password" name="password" autocomplete="off">
                                             </div>
                                         </div>
 
@@ -199,7 +199,7 @@ include("connect.php");
                                         <div class="form-group">
                                             <label for="" class="col-sm-2 control-label">EPF no</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" name="epf_no" value="<?php echo $epf_no; ?>" id="" placeholder="EPF no">
+                                                <input type="text" class="form-control" name="epf_no" value="<?php echo $epf_no; ?>" id="" placeholder="EPF no" autocomplete="off">
                                             </div>
                                         </div>
 
@@ -207,7 +207,7 @@ include("connect.php");
                                         <div class="form-group">
                                             <label for="" class="col-sm-2 control-label">EPF Amount</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" name="epf_amount" value="<?php echo $epf_amount; ?>" id="" placeholder="EPF Amount">
+                                                <input type="text" class="form-control" name="epf_amount" value="<?php echo $epf_amount; ?>" id="" placeholder="EPF Amount" autocomplete="off">
                                             </div>
                                         </div>
 
