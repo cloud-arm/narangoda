@@ -23,6 +23,7 @@ foreach ($sales_list as $list) {
     $name = $list['product_name'];
     $qty = $list['qty'];
     $price = $list['price'];
+    $discount = $list['discount'];
     $load = $list['loading_id'];
     $date = $list['date'];
     $cus = $list['cus_id'];
@@ -154,9 +155,9 @@ foreach ($sales_list as $list) {
             if ($con == 0) {
 
                 // insert query
-                $sql = "INSERT INTO sales_list (invoice_no,product_id,name,amount,cost_amount,qty,price,profit,date,loading_id,action,cus_id,price_id,vat,value,app_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                $sql = "INSERT INTO sales_list (invoice_no,product_id,name,amount,cost_amount,dic,qty,price,profit,date,loading_id,action,cus_id,price_id,vat,value,app_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 $ql = $db->prepare($sql);
-                $ql->execute(array($invoice, $pid, $name, $amount, $cost_amount, $qty, $price, $profit, $date, $load, 0, $cus, $price_id, $vat, $value, $app_id));
+                $ql->execute(array($invoice, $pid, $name, $amount, $cost_amount, $discount, $qty, $price, $profit, $date, $load, 0, $cus, $price_id, $vat, $value, $app_id));
             }
 
             // get sales list id
@@ -200,7 +201,7 @@ foreach ($sales_list as $list) {
             $content = "cloud_id: 0, app_id: " . $app_id . ", invoice: " . $invoice . ", status: failed, message: " . $e->getMessage() . ", Date: " . date('Y-m-d') . ", Time: " . date('H:s:i');
             log_init('sales_list', $content);
         }
-    }else{
+    } else {
 
         // create error respond 
         $res = array(

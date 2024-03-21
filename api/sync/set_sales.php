@@ -24,6 +24,7 @@ foreach ($sales as $list) {
     $invoice = $list['invoice_no'];
     $amount = $list['amount'];
     $balance = $list['balance'];
+    $discount = $list['discount'];
     $vat_action = $list['vat_action'];
     $vat_no = $list['vat_no'];
     $date = $list['date'];
@@ -37,6 +38,7 @@ foreach ($sales as $list) {
     $result->execute();
     for ($i = 0; $row = $result->fetch(); $i++) {
         $lorry = $row['lorry_no'];
+        $lorry_id = $row['lorry_id'];
         $root = $row['root'];
         $driver = $row['driver'];
         $term = $row['term'];
@@ -84,10 +86,18 @@ foreach ($sales as $list) {
 
         if ($con == 0) {
 
-            // insert query
-            $sql = "INSERT INTO sales (invoice_number,cashier,date,time,amount,balance,cost,profit,name,root,rep,lorry_no,term,loading_id,customer_id,action,address,vat,value,cus_vat_no,vat_action,app_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            // insert sales
+            $sql = "INSERT INTO sales (invoice_number,cashier,date,time,amount,balance,discount,cost,profit,name,root,rep,lorry_no,term,loading_id,customer_id,action,address,vat,value,cus_vat_no,vat_action,app_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             $ql = $db->prepare($sql);
-            $ql->execute(array($invoice, $driver, $date, $time, $amount, $balance, $cost, $profit, $cus_name, $root, $driver_name, $lorry, $term, $load, $cus, 1, $address, $vat, $value, $vat_no, $vat_action, $app_id));
+            $ql->execute(array($invoice, $driver, $date, $time, $amount, $balance, $discount, $cost, $profit, $cus_name, $root, $driver_name, $lorry, $term, $load, $cus, 1, $address, $vat, $value, $vat_no, $vat_action, $app_id));
+
+            if ($discount > 0) {
+
+                // insert reimbursement
+                $sql = "INSERT INTO reimbursement (invoice_no,type,date,time,amount,balance,pay_type,lorry_no,lorry_id,loading_id,customer_id,customer_name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+                $ql = $db->prepare($sql);
+                $ql->execute(array($invoice, 'active', $date, $time, $discount, $discount, 'credit', $lorry, $lorry_id, $load, $cus, $cus_name));
+            }
 
             //update vat amount
             $sql = "UPDATE vat_account SET amount = amount + ? WHERE vat_no = ?";
