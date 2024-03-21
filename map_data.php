@@ -5,7 +5,7 @@ include('connect.php');
 // Fetch GPS data from the database
 
 
-$result = $db->prepare("SELECT * FROM loading WHERE action='load'   ");
+$result = $db->prepare("SELECT * FROM user   ");
 $result->bindParam(':id', $res);
 $result->execute();
 $gpsData = $result->fetchAll();
