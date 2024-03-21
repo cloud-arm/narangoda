@@ -72,7 +72,7 @@ include("connect.php");
                                             <div class="form-group">
                                                 <label>Accounts</label>
 
-                                                <select class="form-control select2" name="account" style="width: 100%;" tabindex="1" autofocus>
+                                                <select class="form-control select2 hidden-search" name="account" style="width: 100%;" tabindex="1" autofocus>
 
                                                     <?php
                                                     $result = $db->prepare("SELECT * FROM cash ");

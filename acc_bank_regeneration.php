@@ -4,6 +4,7 @@
 include("head.php");
 include("connect.php");
 ?>
+
 <body class="hold-transition skin-yellow sidebar-mini">
     <?php
     include_once("auth.php");
@@ -70,7 +71,7 @@ include("connect.php");
                                             <div class="form-group">
                                                 <label>Bank Accounts</label>
 
-                                                <select class="form-control select2" name="bank" style="width: 100%;" tabindex="1" autofocus>
+                                                <select class="form-control select2 hidden-search" name="bank" style="width: 100%;" tabindex="1" autofocus>
 
                                                     <?php
                                                     $result = $db->prepare("SELECT * FROM bank_balance ");
@@ -133,15 +134,14 @@ include("connect.php");
                                         <th>Trans: Type</th>
                                         <th>CD: Name</th>
                                         <th>CD: Type</th>
-                                        <th>CD: Balance</th>
                                         <th>DB: Name</th>
                                         <th>DB: Type</th>
-                                        <th>DB: Balance</th>
                                         <th>Date</th>
                                         <th>Chq No</th>
                                         <th>Chq Bank</th>
                                         <th>Chq Date</th>
                                         <th>Amount (Rs.)</th>
+                                        <th>Acc: Balance</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -156,15 +156,25 @@ include("connect.php");
                                             <td><?php echo $row['transaction_type']; ?></td>
                                             <td><?php echo $row['credit_acc_name']; ?></td>
                                             <td><?php echo $row['credit_acc_type']; ?></td>
-                                            <td><?php echo $row['credit_acc_balance']; ?></td>
                                             <td><?php echo $row['debit_acc_name']; ?></td>
                                             <td><?php echo $row['debit_acc_type']; ?></td>
-                                            <td><?php echo $row['debit_acc_balance']; ?></td>
                                             <td><?php echo $row['date']; ?></td>
                                             <td><?php echo $row['chq_no']; ?></td>
                                             <td><?php echo $row['chq_bank']; ?></td>
                                             <td><?php echo $row['chq_date']; ?></td>
-                                            <td><?php echo $row['amount']; ?></td>
+                                            <td>
+                                                <?php echo number_format($row['amount'], 2); ?><br>
+                                                <?php if ($row['type'] == 'Credit') { ?>
+                                                    <span class="badge bg-blue"><?php echo $row['type']; ?></span>
+                                                <?php } else { ?>
+                                                    <span class="badge bg-red"><?php echo $row['type']; ?></span>
+                                                <?php } ?>
+                                            </td>
+                                            <?php if ($row['type'] == 'Credit') { ?>
+                                                <td><?php echo number_format($row['credit_acc_balance'], 2); ?></td>
+                                            <?php } else { ?>
+                                                <td><?php echo number_format($row['debit_acc_balance'], 2); ?></td>
+                                            <?php } ?>
                                             <?php $total += $row['amount']; ?>
                                         </tr>
                                     <?php
@@ -199,13 +209,13 @@ include("connect.php");
                                     </thead>
                                     <tbody>
                                         <?php $chq_un = 0;
-                                        $result = $db->prepare("SELECT * FROM payment WHERE action=1 AND pay_type='Chq' ");
+                                        $result = $db->prepare("SELECT * FROM payment WHERE chq_action=1 AND pay_type='Chq' ");
                                         $result->bindParam(':userid', $res);
                                         $result->execute();
                                         for ($i = 0; $row = $result->fetch(); $i++) {
                                         ?>
                                             <tr>
-                                                <td><?php echo $row['id']; ?></td>
+                                                <td><?php echo $row['transaction_id']; ?></td>
                                                 <td><?php echo $row['chq_no']; ?></td>
                                                 <td><?php echo $row['chq_bank']; ?></td>
                                                 <td><?php echo $row['chq_date']; ?></td>
@@ -221,6 +231,75 @@ include("connect.php");
                                 <h4>Total Rs <b><?php echo number_format($chq_un, 2); ?></h4>
 
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h3 class="box-title">Summary</h3>
+                        </div>
+                        <!-- /.box-header -->
+
+                        <?php
+                        $exp = 0;
+                        $rq = $db->prepare("SELECT sum(amount) FROM bank_balance WHERE id=:id");
+                        $rq->bindParam(':id', $bank);
+                        $rq->execute();
+                        for ($i = 0; $r = $rq->fetch(); $i++) {
+                            $tot = $r['sum(amount)'];
+                        }
+
+                        $chq_in = 0;
+                        $result = $db->prepare("SELECT sum(amount) FROM payment WHERE chq_action=0 AND pay_type='Chq' ");
+                        $result->bindParam(':userid', $res);
+                        $result->execute();
+                        for ($i = 0; $row = $result->fetch(); $i++) {
+                            $chq_in = $row['sum(amount)'];
+                        }
+
+                        $chq_un = 0;
+                        $result = $db->prepare("SELECT sum(amount) FROM payment WHERE chq_action=1 AND pay_type='Chq' ");
+                        $result->bindParam(':userid', $res);
+                        $result->execute();
+                        for ($i = 0; $row = $result->fetch(); $i++) {
+                            $chq_un = $row['sum(amount)'];
+                        }
+                        ?>
+                        <div class="box-body d-block">
+                            <table class=" table">
+                                <tr>
+                                    <td style="border: 0;">
+                                        <h4 style="margin: 0">Chq in-hand :</h4>
+                                    </td>
+                                    <td style="border: 0;">
+                                        <h4 style="margin: 0">Rs. <?php echo number_format($chq_in, 2); ?></h4>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h4 style="margin: 0;">Un-realize chq :</h4>
+                                    </td>
+                                    <td>
+                                        <h4 style="margin: 0">Rs. <?php echo number_format($chq_un, 2); ?></h4>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h4 style="margin: 0">Account Balance :</h4>
+                                    </td>
+                                    <td>
+                                        <h4 style="margin: 0">Rs. <?php echo number_format($tot + $chq_un, 2) ?></h4>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h4 style="margin: 0">Available Balance :</h4>
+                                    </td>
+                                    <td>
+                                        <h4 style="margin: 0">Rs. <?php echo number_format($tot, 2); ?></h4>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -245,13 +324,13 @@ include("connect.php");
                                     </thead>
                                     <tbody>
                                         <?php $chq_in = 0;
-                                        $result = $db->prepare("SELECT * FROM payment WHERE action=0 AND pay_type='Chq' ");
+                                        $result = $db->prepare("SELECT * FROM payment WHERE chq_action=0 AND pay_type='Chq' ");
                                         $result->bindParam(':userid', $res);
                                         $result->execute();
                                         for ($i = 0; $row = $result->fetch(); $i++) {
                                         ?>
                                             <tr>
-                                                <td><?php echo $row['id']; ?></td>
+                                                <td><?php echo $row['transaction_id']; ?></td>
                                                 <td><?php echo $row['chq_no']; ?></td>
                                                 <td><?php echo $row['chq_bank']; ?></td>
                                                 <td><?php echo $row['chq_date']; ?></td>
@@ -267,61 +346,6 @@ include("connect.php");
                                 <h4>Total Rs <b><?php echo number_format($chq_in, 2); ?></h4>
 
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="box box-primary">
-                        <div class="box-header">
-                            <h3 class="box-title">Summary</h3>
-                        </div>
-                        <!-- /.box-header -->
-
-                        <?php
-                        $exp = 0;
-                        $rq = $db->prepare("SELECT sum(amount) FROM bank_balance WHERE id=:id");
-                        $rq->bindParam(':id', $bank);
-                        $rq->execute();
-                        for ($i = 0; $r = $rq->fetch(); $i++) {
-                            $tot = $r['sum(amount)'];
-                        }
-                        ?>
-                        <div class="box-body d-block">
-                            <table class=" table">
-                                <tr>
-                                    <td style="border: 0;">
-                                        <h4 style="margin: 0">Chq in-hand :</h4>
-                                    </td>
-                                    <td style="border: 0;">
-                                        <h4 style="margin: 0">Rs. <?php echo $chq_in ?>.00</h4>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <h4 style="margin: 0;">Un-realize chq :</h4>
-                                    </td>
-                                    <td>
-                                        <h4 style="margin: 0">Rs. <?php echo $chq_un ?>.00</h4>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <h4 style="margin: 0">Account Balance :</h4>
-                                    </td>
-                                    <td>
-                                        <h4 style="margin: 0">Rs. <?php echo $tot + $chq_un ?>.00</h4>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <h4 style="margin: 0">Available Balance :</h4>
-                                    </td>
-                                    <td>
-                                        <h4 style="margin: 0">Rs. <?php echo $tot; ?></h4>
-                                    </td>
-                                </tr>
-                            </table>
                         </div>
                     </div>
                 </div>
