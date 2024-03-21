@@ -21,7 +21,7 @@ $result_array = array();
         // unloading
         $sql = "UPDATE user SET   lat = ?, lng = ? WHERE EmployeeId = ? ";
         $q = $db->prepare($sql);
-        $q->execute(array( $lat,$lng, $load));
+        $q->execute(array( $lat,$lng, $id));
 
         // create success respond 
         $res = array(
