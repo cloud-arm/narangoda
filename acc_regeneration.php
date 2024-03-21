@@ -135,12 +135,11 @@ include("connect.php");
                                         <th>Trans: Type</th>
                                         <th>CD: Name</th>
                                         <th>CD: Type</th>
-                                        <th>CD: Balance</th>
                                         <th>DB: Name</th>
                                         <th>DB: Type</th>
-                                        <th>DB: Balance</th>
                                         <th>Date</th>
                                         <th>Amount (Rs.)</th>
+                                        <th>ACC: Balance</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -155,12 +154,22 @@ include("connect.php");
                                             <td><?php echo $row['transaction_type']; ?></td>
                                             <td><?php echo $row['credit_acc_name']; ?></td>
                                             <td><?php echo $row['credit_acc_type']; ?></td>
-                                            <td><?php echo $row['credit_acc_balance']; ?></td>
                                             <td><?php echo $row['debit_acc_name']; ?></td>
                                             <td><?php echo $row['debit_acc_type']; ?></td>
-                                            <td><?php echo $row['debit_acc_balance']; ?></td>
                                             <td><?php echo $row['date']; ?></td>
-                                            <td><?php echo $row['amount']; ?></td>
+                                            <td>
+                                                <?php echo number_format($row['amount'], 2); ?><br>
+                                                <?php if ($row['type'] == 'Credit') { ?>
+                                                    <span class="badge bg-blue"><?php echo $row['type']; ?></span>
+                                                <?php } else { ?>
+                                                    <span class="badge bg-red"><?php echo $row['type']; ?></span>
+                                                <?php } ?>
+                                            </td>
+                                            <?php if ($row['type'] == 'Credit') { ?>
+                                                <td><?php echo number_format($row['credit_acc_balance'], 2); ?></td>
+                                            <?php } else { ?>
+                                                <td><?php echo number_format($row['debit_acc_balance'], 2); ?></td>
+                                            <?php } ?>
                                             <?php $total += $row['amount']; ?>
                                         </tr>
                                     <?php
