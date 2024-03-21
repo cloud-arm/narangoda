@@ -59,16 +59,15 @@ function bank_transfer($from, $to, $tr_type, $re_no, $amount, $cr_type, $de_type
 
     $sql = "UPDATE  bank_balance SET amount=? WHERE id=?";
     $ql = $db->prepare($sql);
-    $ql->execute(array($cr_blc, $from));
-
-    $sql = "UPDATE  bank_balance SET amount=? WHERE id=?";
-    $ql = $db->prepare($sql);
     $ql->execute(array($de_blc, $to));
 
     $sql = "INSERT INTO bank_record (transaction_type,type,record_no,amount,action,credit_acc_no,credit_acc_type,credit_acc_name,credit_acc_balance,debit_acc_type,debit_acc_name,debit_acc_id,debit_acc_balance,date,time,user_id,user_name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $ql = $db->prepare($sql);
     $ql->execute(array($tr_type, 'Debit', $re_no, $amount, 0, $from, $cr_type, $cr_name, $cr_blc, $de_type, $de_name, $to, $de_blc, $date, $time, $user_id, $user_name));
 
+    $sql = "UPDATE  bank_balance SET amount=? WHERE id=?";
+    $ql = $db->prepare($sql);
+    $ql->execute(array($cr_blc, $from));
 
     $sql = "INSERT INTO bank_record (transaction_type,type,record_no,amount,action,credit_acc_no,credit_acc_type,credit_acc_name,credit_acc_balance,debit_acc_type,debit_acc_name,debit_acc_id,debit_acc_balance,date,time,user_id,user_name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $ql = $db->prepare($sql);
@@ -110,15 +109,15 @@ function account_transfer($from, $to, $tr_type, $re_no, $amount, $cr_type, $de_t
 
     $sql = "UPDATE  cash SET amount=? WHERE id=?";
     $ql = $db->prepare($sql);
-    $ql->execute(array($cr_blc, $from));
-
-    $sql = "UPDATE  cash SET amount=? WHERE id=?";
-    $ql = $db->prepare($sql);
     $ql->execute(array($de_blc, $to));
 
     $sql = "INSERT INTO transaction_record (transaction_type,type,record_no,amount,action,credit_acc_no,credit_acc_type,credit_acc_name,credit_acc_balance,debit_acc_type,debit_acc_name,debit_acc_id,debit_acc_balance,date,time,user_id,user_name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $ql = $db->prepare($sql);
     $ql->execute(array($tr_type, 'Debit', $re_no, $amount, 0, $from, $cr_type, $cr_name, $cr_blc, $de_type, $de_name, $to, $de_blc, $date, $time, $user_id, $user_name));
+
+    $sql = "UPDATE  cash SET amount=? WHERE id=?";
+    $ql = $db->prepare($sql);
+    $ql->execute(array($cr_blc, $from));
 
     $sql = "INSERT INTO transaction_record (transaction_type,type,record_no,amount,action,credit_acc_no,credit_acc_type,credit_acc_name,credit_acc_balance,debit_acc_type,debit_acc_name,debit_acc_id,debit_acc_balance,date,time,user_id,user_name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $ql = $db->prepare($sql);

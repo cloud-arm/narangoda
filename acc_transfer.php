@@ -104,7 +104,7 @@ include("connect.php");
                                                         <div class="col-md-5 abc" style="margin-top: 30px;">
                                                             <div class="form-group ">
                                                                 <label>Transfer Amount</label>
-                                                                <input class="form-control" type="number" name="amount" id="pay_txt" onkeyup="checking()" autocomplete="off">
+                                                                <input class="form-control" step=".01" type="number" name="amount" id="pay_txt" onkeyup="checking()" autocomplete="off">
                                                             </div>
                                                         </div>
 
