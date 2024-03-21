@@ -6,11 +6,6 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 
-// get json data
-$json_data = file_get_contents('php://input');
-
-// get values
-$unloading = json_decode($json_data, true);
 
 // respond init
 $result_array = array();
@@ -24,7 +19,7 @@ $result_array = array();
     try {
 
         // unloading
-        $sql = "UPDATE loading SET   lat = ?, lng = ? WHERE transaction_id = ? ";
+        $sql = "UPDATE user SET   lat = ?, lng = ? WHERE EmployeeId = ? ";
         $q = $db->prepare($sql);
         $q->execute(array( $lat,$lng, $load));
 
