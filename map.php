@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <?php
 include("head.php");
 include("connect.php");
 ?>
 
-<body class="hold-transition skin-yellow sidebar-mini">
+<body class="hold-transition skin-yellow sidebar-mini sidebar-collapse">
   <?php
   include_once("auth.php");
   $r = $_SESSION['SESS_LAST_NAME'];
@@ -29,12 +29,12 @@ include("connect.php");
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    
+
 
     <!-- Main content -->
     <section class="content">
 
-    <div id="map" style="height: 800px;"></div>
+      <div class="map" id="map" style="height: 800px;"></div>
 
     </section>
     <!-- /.content -->
@@ -76,65 +76,70 @@ include("connect.php");
   <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
   <!-- Page script -->
   <script>
+    // Initialize Leaflet map with Sri Lanka coordinates and an appropriate zoom level
+    var map = L.map('map').setView([6.228372, 80.412602], 11); // Centered on Sri Lanka, zoom level 7
 
-// Initialize Leaflet map with Sri Lanka coordinates and an appropriate zoom level
-var map = L.map('map').setView([6.228372, 80.412602], 11); // Centered on Sri Lanka, zoom level 7
+    // Define bounds for cropping the map (example bounds)
+    var southWest = L.latLng(5.723733, 79.538727); // Bottom-left corner of Sri Lanka
+    var northEast = L.latLng(9.8354, 81.8862); // Top-right corner of Sri Lanka
+    var bounds = L.latLngBounds(southWest, northEast);
 
-// Define bounds for cropping the map (example bounds)
-var southWest = L.latLng(5.723733, 79.538727); // Bottom-left corner of Sri Lanka
-var northEast = L.latLng(9.8354, 81.8862);   // Top-right corner of Sri Lanka
-var bounds = L.latLngBounds(southWest, northEast);
+    // Add OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      minZoom: 7, // Minimum zoom level appropriate for Sri Lanka
+      maxZoom: 18 // Maximum zoom level
+    }).addTo(map);
 
-// Add OpenStreetMap tile layer
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    minZoom: 7, // Minimum zoom level appropriate for Sri Lanka
-    maxZoom: 18 // Maximum zoom level
-}).addTo(map);
+    // Set bounds to restrict the visible area of the map to Sri Lanka
+    map.setMaxBounds(bounds);
+    map.on('drag', function() {
+      map.panInsideBounds(bounds, {
+        animate: false
+      });
+    });
+    map.on('dragend', function() {
+      map.panInsideBounds(bounds, {
+        animate: false
+      });
+    });
 
-// Set bounds to restrict the visible area of the map to Sri Lanka
-map.setMaxBounds(bounds);
-map.on('drag', function () {
-    map.panInsideBounds(bounds, { animate: false });
-});
-map.on('dragend', function () {
-    map.panInsideBounds(bounds, { animate: false });
-});
-
-// Function to fetch GPS data from PHP
-function fetchGPSData() {
-    // Make an AJAX request to your PHP file
-    // Replace 'your-php-script.php' with the actual path to your PHP script
-    // Modify this according to your data retrieval mechanism (e.g., AJAX, WebSocket, etc.)
-    var customIcon = L.icon({
+    // Function to fetch GPS data from PHP
+    function fetchGPSData() {
+      // Make an AJAX request to your PHP file
+      // Replace 'your-php-script.php' with the actual path to your PHP script
+      // Modify this according to your data retrieval mechanism (e.g., AJAX, WebSocket, etc.)
+      var customIcon = L.icon({
         iconUrl: 'user_pic/lorry.png', // URL to the custom marker icon image
         iconSize: [65, 40], // Size of the icon
         iconAnchor: [20, 40], // Point of the icon which will correspond to marker's location
         popupAnchor: [0, -40], // Point from which the popup should open relative to the iconAnchor
         className: 'custom-marker' // Class name for styling the marker
-    });
-    fetch('map_data.php')
+      });
+      fetch('map_data.php')
         .then(response => response.json())
         .then(data => {
-            // Process the GPS data and add markers to the map
-            // Remove existing markers from the map
-            map.eachLayer(function (layer) {
-                if (layer instanceof L.Marker) {
-                    map.removeLayer(layer);
-                }
-            });
-            data.forEach(entry => {
-                var marker = L.marker([entry.lat, entry.lng], { icon: customIcon }).addTo(map);
-                // You can customize the marker popup or icon here
-                marker.bindPopup('<h3>'+entry.lorry_no+'<br>'+entry.rep+'</h3>');
-            });
+          // Process the GPS data and add markers to the map
+          // Remove existing markers from the map
+          map.eachLayer(function(layer) {
+            if (layer instanceof L.Marker) {
+              map.removeLayer(layer);
+            }
+          });
+          data.forEach(entry => {
+            var marker = L.marker([entry.lat, entry.lng], {
+              icon: customIcon
+            }).addTo(map);
+            // You can customize the marker popup or icon here
+            marker.bindPopup('<h3>' + entry.lorry_no + '<br>' + entry.rep + '</h3>');
+          });
         })
         .catch(error => console.error('Error fetching GPS data:', error));
-}
+    }
 
-// Call the function to fetch and display GPS data
-fetchGPSData();
-setInterval(fetchGPSData, 20000); 
+    // Call the function to fetch and display GPS data
+    fetchGPSData();
+    setInterval(fetchGPSData, 20000);
 
 
 
