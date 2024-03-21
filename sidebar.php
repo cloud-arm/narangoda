@@ -151,7 +151,7 @@
                         echo 'active';
                       } ?>">
             <a href="map.php">
-              <i class="fa fa-dashboard"></i> <span>MAP</span>
+              <i class="fa fa-solid fa-map-location-dot"></i> <span>MAP</span>
             </a>
           </li>
 
