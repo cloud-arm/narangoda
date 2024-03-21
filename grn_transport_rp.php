@@ -215,40 +215,42 @@ date_default_timezone_set("Asia/Colombo");
             <tbody>
 
               <?php $total_exp = 0;
-              $result = $db->prepare($sql2);
-              $result->bindParam(':userid', $date);
-              $result->execute();
-              for ($i = 0; $row = $result->fetch(); $i++) {
-                $dll = $row['dll'];
-                $type = $row['type_id'];
-                if ($dll == 1) {
-                  $style = 'opacity: 0.5;cursor: default;';
-                } else {
-                  $style = '';
-                }
+              if (isset($_GET['lorry'])) {
+                $result = $db->prepare($sql2);
+                $result->bindParam(':userid', $date);
+                $result->execute();
+                for ($i = 0; $row = $result->fetch(); $i++) {
+                  $dll = $row['dll'];
+                  $type = $row['type_id'];
+                  if ($dll == 1) {
+                    $style = 'opacity: 0.5;cursor: default;';
+                  } else {
+                    $style = '';
+                  }
               ?>
 
-                <tr class="record" style="<?php echo $style; ?>">
-                  <td><?php echo $row['id'];   ?> </td>
-                  <td><?php echo $row['date'];   ?> </td>
-                  <td>
-                    <?php echo $row['type']; ?>
-                    <br> <span class="badge bg-green"><?php echo $row['lorry_no']; ?> </span>
-                  </td>
-                  <td><?php echo $row['comment'];   ?></td>
-                  <td><?php echo $row['pay_type'];   ?></td>
-                  <td>
-                    NO: <span class="badge bg-blue"><?php echo $row['chq_no']; ?> </span> <br>
-                    Date: <span class="badge bg-green"><?php echo $row['chq_date']; ?> </span> <br>
-                  </td>
-                  <td>Rs.<?php echo $row['amount'];
-                          $total_exp += $row['amount'];  ?>
-                  </td>
-                  <td> <?php if ($dll == 0) { ?> <a href="#" id="<?php echo $row['id']; ?>" class="delbutton btn btn-danger btn-sm" title="Click to Delete">
-                        <i class="icon-trash">x</i></a><?php } ?>
-                  </td>
-                </tr>
-              <?php }   ?>
+                  <tr class="record" style="<?php echo $style; ?>">
+                    <td><?php echo $row['id'];   ?> </td>
+                    <td><?php echo $row['date'];   ?> </td>
+                    <td>
+                      <?php echo $row['type']; ?>
+                      <br> <span class="badge bg-green"><?php echo $row['lorry_no']; ?> </span>
+                    </td>
+                    <td><?php echo $row['comment'];   ?></td>
+                    <td><?php echo $row['pay_type'];   ?></td>
+                    <td>
+                      NO: <span class="badge bg-blue"><?php echo $row['chq_no']; ?> </span> <br>
+                      Date: <span class="badge bg-green"><?php echo $row['chq_date']; ?> </span> <br>
+                    </td>
+                    <td>Rs.<?php echo $row['amount'];
+                            $total_exp += $row['amount'];  ?>
+                    </td>
+                    <td> <?php if ($dll == 0) { ?> <a href="#" id="<?php echo $row['id']; ?>" class="delbutton btn btn-danger btn-sm" title="Click to Delete">
+                          <i class="icon-trash">x</i></a><?php } ?>
+                    </td>
+                  </tr>
+              <?php }
+              } ?>
             </tbody>
           </table>
           <div style="padding-left: 25px;margin-top: 20px;">
