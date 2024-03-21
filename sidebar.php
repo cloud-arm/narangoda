@@ -136,7 +136,7 @@
         <li class="header">MAIN NAVIGATION</li>
 
 
-        
+
         <!-- <span class="pull-right-container">
           <i class="fa fa-spinner fa-spin pull-right"></i>
         </span> -->
@@ -453,7 +453,7 @@
           <?php $co = '';
           $co0 = '';
           $dis = 'none';
-          if ($f == 'grn' || $f == 'grn_supply' || $f == 'grn_payment' || $f == 'grn_return' || $f == 'grn_order' || $f == 'grn_rp' || $f == 'grn_payment_rp' || $f == 'grn_transport_rp' || $f == 'grn_order_rp') {
+          if ($f == 'grn' || $f == 'grn_credit_note' || $f == 'grn_supply' || $f == 'grn_payment' || $f == 'grn_return' || $f == 'grn_order' || $f == 'grn_rp' || $f == 'grn_payment_rp' || $f == 'grn_transport_rp' || $f == 'grn_order_rp') {
             $co = 'active';
             $co0 = 'menu-open';
             $dis = 'block';
