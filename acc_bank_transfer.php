@@ -161,7 +161,7 @@ include("connect.php");
                                             <tbody>
                                                 <?php $total = 0;
                                                 $style = "";
-                                                $result = $db->prepare("SELECT * FROM payment WHERE chq_action=0 AND pay_type='Chq' ");
+                                                $result = $db->prepare("SELECT * FROM payment WHERE chq_action=0 AND pay_type='Chq' AND paycose = 'invoice_payment' ");
                                                 $result->bindParam(':userid', $res);
                                                 $result->execute();
                                                 for ($i = 0; $row = $result->fetch(); $i++) {

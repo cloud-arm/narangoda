@@ -19,7 +19,6 @@ if ($type != 'Order') {
 $pay_type = '';
 $acc_no = '';
 $bank = 0;
-$bank = 0;
 $bank_name = '';
 $acc = 0;
 $chq_no = '';
@@ -124,38 +123,23 @@ if ($invo != '') {
 
         if ($amount > $pay_amount) {
 
+            $credit = $amount - $pay_amount;
+
             $sql = 'INSERT INTO supply_payment (amount,pay_amount,pay_type,date,invoice_no,supply_id,supply_name,supplier_invoice,type,credit_balance) VALUES (?,?,?,?,?,?,?,?,?,?)';
             $q = $db->prepare($sql);
-            $q->execute(array($amount, '0', 'Credit', $date, $invo, $sup, $sup_name, $sup_invo, $type, $amount));
+            $q->execute(array($amount, '0', 'Credit', $date, $invo, $sup, $sup_name, $sup_invo, $type, $credit));
         }
 
         if ($pay_amount > 0) {
 
             if ($pay_type == 'Chq') {
-                $sql = 'INSERT INTO supply_payment (amount,pay_amount,pay_type,date,invoice_no,supply_id,supply_name,supplier_invoice,type,chq_no,chq_bank,chq_date,bank_name,acc_no,action) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                $sql = 'INSERT INTO supply_payment (amount,pay_amount,pay_type,date,invoice_no,supply_id,supply_name,supplier_invoice,type,chq_no,chq_bank,chq_date,bank_id,bank_name,acc_no,action) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
                 $q = $db->prepare($sql);
-                $q->execute(array($pay_amount, $pay_amount, $pay_type, $date, $invo, $sup, $sup_name, $sup_invo, $type, $chq_no, $chq_bank, $chq_date, $bank_name, $acc_no, 1));
+                $q->execute(array($pay_amount, $pay_amount, $pay_type, $date, $invo, $sup, $sup_name, $sup_invo, $type, $chq_no, $chq_bank, $chq_date, $bank, $bank_name, $acc_no, 1));
             } else {
-                $sql = 'INSERT INTO supply_payment (amount,pay_amount,pay_type,date,invoice_no,supply_id,supply_name,supplier_invoice,type,bank_name,acc_no) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
+                $sql = 'INSERT INTO supply_payment (amount,pay_amount,pay_type,date,invoice_no,supply_id,supply_name,supplier_invoice,type,bank_id,bank_name,acc_no) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
                 $q = $db->prepare($sql);
-                $q->execute(array($pay_amount, $pay_amount, $pay_type, $date, $invo, $sup, $sup_name, $sup_invo, $type, $bank_name, $acc_no));
-            }
-
-            if ($amount > $pay_amount) {
-                $c_b = 0;
-                $a_b = 0;
-                $result0 = $db->prepare("SELECT * FROM supply_payment WHERE pay_type='Credit' AND invoice_no = :id ");
-                $result0->bindParam(':id', $invo);
-                $result0->execute();
-                for ($k = 0; $row0 = $result0->fetch(); $k++) {
-                    $a_b = $row0['credit_balance'];
-                }
-
-                $c_b = $a_b - $pay_amount;
-
-                $sql = "UPDATE  supply_payment SET credit_balance=? WHERE pay_type='Credit' AND invoice_no=?";
-                $ql = $db->prepare($sql);
-                $ql->execute(array($c_b, $invo));
+                $q->execute(array($pay_amount, $pay_amount, $pay_type, $date, $invo, $sup, $sup_name, $sup_invo, $type, $bank, $bank_name, $acc_no));
             }
         }
 
