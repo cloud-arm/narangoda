@@ -55,7 +55,7 @@ include("connect.php");
                                                             <label>Bank Accounts</label>
                                                         </div>
 
-                                                        <select class="form-control " name="bank" id="b_sel" onchange="bank_select()" style="width: 100%;" tabindex="1" autofocus>
+                                                        <select class="form-control select2 hidden-search" name="bank" id="b_sel" onchange="bank_select()" style="width: 100%;" tabindex="1" autofocus>
 
                                                             <?php
                                                             $result = $db->prepare("SELECT * FROM bank_balance ");
@@ -100,13 +100,14 @@ include("connect.php");
                                             <div class="row">
 
                                                 <div class="col-md-10">
-                                                    <?php $style = '';
+                                                    <?php
                                                     $result = $db->prepare("SELECT * FROM cash ");
                                                     $result->bindParam(':id', $res);
                                                     $result->execute();
                                                     for ($i = 0; $row = $result->fetch(); $i++) {
                                                         $id = $row['id'];
-                                                        if ($id != 1) {
+                                                        $style = '';
+                                                        if ($id != 2) {
                                                             $style = 'style="display: none;"';
                                                         } ?>
                                                         <div class="form-group dep-cont" id="de_acc_<?php echo $id; ?>" <?php echo $style; ?>>
@@ -121,7 +122,7 @@ include("connect.php");
                                                 <div class="col-md-6">
                                                     <div class="form-group ">
                                                         <label>Transfer Amount</label>
-                                                        <input class="form-control" type="number" name="amount" id="dep_txt" onkeyup="check_deposit()" autocomplete="off">
+                                                        <input class="form-control" step=".01" type="number" name="amount" id="dep_txt" onkeyup="check_deposit()" autocomplete="off">
                                                     </div>
                                                 </div>
 
@@ -160,7 +161,7 @@ include("connect.php");
                                             <tbody>
                                                 <?php $total = 0;
                                                 $style = "";
-                                                $result = $db->prepare("SELECT * FROM payment WHERE action=0 AND pay_type='Chq' ");
+                                                $result = $db->prepare("SELECT * FROM payment WHERE chq_action=0 AND pay_type='Chq' ");
                                                 $result->bindParam(':userid', $res);
                                                 $result->execute();
                                                 for ($i = 0; $row = $result->fetch(); $i++) {
@@ -212,7 +213,7 @@ include("connect.php");
                                                                 <label>Bank Accounts</label>
                                                             </div>
 
-                                                            <select class="form-control " name="bank" id="bank_sel1" onchange="bank_withdraw()" style="width: 100%;" tabindex="1" autofocus>
+                                                            <select class="form-control select2 hidden-search" name="bank" id="bank_sel1" onchange="bank_withdraw()" style="width: 100%;" tabindex="1" autofocus>
 
                                                                 <?php
                                                                 $result = $db->prepare("SELECT * FROM bank_balance ");
@@ -251,7 +252,7 @@ include("connect.php");
                                                 <div class="col-md-6">
                                                     <div class="form-group ">
                                                         <label>Transfer Amount</label>
-                                                        <input class="form-control" type="number" name="amount" id="with_txt" onkeyup="check_withdraw()" autocomplete="off">
+                                                        <input class="form-control" step=".01" type="number" name="amount" id="with_txt" onkeyup="check_withdraw()" autocomplete="off">
                                                     </div>
                                                 </div>
 
@@ -287,7 +288,7 @@ include("connect.php");
                                                                 <label>Bank Accounts</label>
                                                             </div>
 
-                                                            <select class="form-control " name="bank" id="bank_sel2" onchange="bank_charge()" style="width: 100%;" tabindex="1" autofocus>
+                                                            <select class="form-control select2 hidden-search" name="bank" id="bank_sel2" onchange="bank_charge()" style="width: 100%;" tabindex="1" autofocus>
 
                                                                 <?php
                                                                 $result = $db->prepare("SELECT * FROM bank_balance ");
@@ -407,7 +408,7 @@ include("connect.php");
         function check_charge() {
             let txt = $("#char_txt").val();
             let bank = $("#bank_sel2").val();
-            let blc = parseInt($("#blc_1" + bank).val());
+            let blc = parseFloat($("#blc_1" + bank).val());
 
             if (0 >= txt || blc < txt) {
                 $('#btn_ch').attr("disabled", "");
@@ -426,9 +427,9 @@ include("connect.php");
         function check_withdraw() {
             let txt = $("#with_txt").val();
             let bank = $("#bank_sel1").val();
-            let blc = parseInt($("#blc_" + bank).val());
+            let blc = parseFloat($("#blc_" + bank).val());
 
-            if (0 >= txt || blc < txt) {
+            if (0 >= txt) {
                 $('#btn_wi').attr("disabled", "");
             } else {
                 $('#btn_wi').removeAttr('disabled');
@@ -458,8 +459,7 @@ include("connect.php");
             let txt = $("#dep_txt").val();
             let bank = $("#b_sel").val();
             let dep = $("#dep_" + bank).val();
-            let blc = parseInt($("#de_blc_" + dep).val());
-            console.log(blc);
+            let blc = parseFloat($("#de_blc_" + dep).val());
 
             if (0 >= txt || blc < txt) {
                 $('#btn_de').attr("disabled", "");
@@ -520,6 +520,9 @@ include("connect.php");
         $(function() {
             //Initialize Select2 Elements
             $(".select2").select2();
+            $('.select2.hidden-search').select2({
+                minimumResultsForSearch: -1
+            });
 
             //Date range picker
             $('#reservation').daterangepicker();
