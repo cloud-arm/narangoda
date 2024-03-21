@@ -136,6 +136,12 @@
         <li class="header">MAIN NAVIGATION</li>
 
 
+        
+        <!-- <span class="pull-right-container">
+          <i class="fa fa-spinner fa-spin pull-right"></i>
+        </span> -->
+
+
         <!-- -------------------- Logistic Section ----------------------- -->
         <?php if ($dep == 'logistic') { ?>
 
@@ -465,13 +471,9 @@
                             echo 'active';
                           } ?>"><a href="grn.php?id=<?php echo date("ymdhis"); ?>"><i class="fa fa-circle-o text-aqua"></i> GRN</a></li>
 
-              <li class="<?php if ($f == 'credit_note') {
+              <li class="<?php if ($f == 'grn_credit_note') {
                             echo 'active';
-                          } ?>"><a href="#credit_note.php"><i class="fa fa-circle-o text-aqua"></i> Credit Note
-                  <span class="pull-right-container">
-                    <i class="fa fa-spinner fa-spin pull-right"></i>
-                  </span>
-                </a></li>
+                          } ?>"><a href="grn_credit_note.php"><i class="fa fa-circle-o text-aqua"></i> Credit Note</a></li>
 
               <li class="<?php if ($f == 'grn_supply') {
                             echo 'active';
