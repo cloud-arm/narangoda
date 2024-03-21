@@ -127,7 +127,7 @@ include("connect.php");
                         ?>
 
                         <div class="box-body d-block">
-                            <table id="example2" class="table table-bordered table-hover" style="border-radius: 0;">
+                            <table id="example1" class="table table-bordered table-hover" style="border-radius: 0;">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -250,7 +250,7 @@ include("connect.php");
                         }
 
                         $chq_in = 0;
-                        $result = $db->prepare("SELECT sum(amount) FROM payment WHERE chq_action=0 AND pay_type='Chq' ");
+                        $result = $db->prepare("SELECT sum(amount) FROM payment WHERE chq_action=0 AND pay_type='Chq' AND paycose = 'invoice_payment' ");
                         $result->bindParam(':userid', $res);
                         $result->execute();
                         for ($i = 0; $row = $result->fetch(); $i++) {
@@ -312,7 +312,7 @@ include("connect.php");
                         </div>
                         <div class="form-group">
                             <div class="box-body d-block">
-                                <table id="example2" class="table table-bordered table-hover" style="border-radius: 0;">
+                                <table id="example3" class="table table-bordered table-hover" style="border-radius: 0;">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -324,7 +324,7 @@ include("connect.php");
                                     </thead>
                                     <tbody>
                                         <?php $chq_in = 0;
-                                        $result = $db->prepare("SELECT * FROM payment WHERE chq_action=0 AND pay_type='Chq' ");
+                                        $result = $db->prepare("SELECT * FROM payment WHERE chq_action=0 AND pay_type='Chq' AND paycose = 'invoice_payment'  ");
                                         $result->bindParam(':userid', $res);
                                         $result->execute();
                                         for ($i = 0; $row = $result->fetch(); $i++) {
@@ -392,7 +392,9 @@ include("connect.php");
     <script type="text/javascript">
         $(function() {
             $("#example1").DataTable();
-            $('#example2').DataTable({
+            $("#example2").DataTable();
+            $("#example3").DataTable();
+            $('#example4').DataTable({
                 "paging": false,
                 "lengthChange": false,
                 "searching": false,

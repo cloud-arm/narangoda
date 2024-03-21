@@ -128,7 +128,7 @@ include("connect.php");
                         ?>
 
                         <div class="box-body d-block">
-                            <table id="example2" class="table table-bordered table-hover" style="border-radius: 0;">
+                            <table id="example1" class="table table-bordered table-hover" style="border-radius: 0;">
                                 <thead>
                                     <tr>
                                         <th>No</th>
