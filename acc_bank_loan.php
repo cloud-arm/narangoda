@@ -37,78 +37,10 @@ date_default_timezone_set("Asia/Colombo");
 
     <!-- Main content -->
     <section class="content">
-
-      <div class="row" id="loan_add" style="display: none;">
-        <div class="col-md-12">
-          <div class="box box-primary">
-            <div class="box-header with-border">
-              <h3 class="box-title" style="width: 100%;">New Bank Loan
-                <span class="btn p-0 me-2  pull-right "> <i onclick="loan_cl()" class="fa-solid fa-xmark" style="font-size: 25px;"></i> </span>
-              </h3>
-            </div>
-
-            <div class="box-body">
-
-              <form method="POST" action="acc_bank_loan_save.php">
-
-                <div class="row">
-
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <label>Bank Name</label>
-                      <input type="text" name="bank_name" value="" class="form-control" autocomplete="off">
-                    </div>
-                  </div>
-
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <label>Capital</label>
-                      <input type="number" name="capital" value="" class="form-control" autocomplete="off">
-                    </div>
-                  </div>
-
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <label>Interest</label>
-                      <input type="number" name="interest" value="" class="form-control" autocomplete="off">
-                    </div>
-                  </div>
-
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <label>Term</label>
-                      <input type="number" name="term" value="" class="form-control" autocomplete="off">
-                    </div>
-                  </div>
-
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <label>Term Amount</label>
-                      <input type="number" step=".01" name="term_amount" value="" class="form-control" autocomplete="off">
-                    </div>
-                  </div>
-
-                  <div class="col-md-2" style="height: 75px; display: flex; align-items: end; justify-content: center;">
-                    <div class="form-group">
-                      <input type="hidden" name="unit" value="2">
-                      <input type="submit" value="Save" class="btn btn-info">
-                    </div>
-                  </div>
-                </div>
-
-              </form>
-
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SELECT2 EXAMPLE -->
       <div class="box box-info">
         <div class="box-header with-border">
-          <h3 class="box-title">Loan Payment
-            <span class="btn btn-success" id="loan_btn" onclick="loan_btn()" style="margin: 10px 20px;">Add new loan </span>
-          </h3>
+          <h3 class="box-title">Loan Payment</h3>
+          <small class="btn btn-success btn-sm mx-2" style="padding: 5px 10px;" title="Add new loan" onclick="click_open(1)">Add new loan</small>
         </div>
 
         <!-- /.box-header -->
@@ -118,8 +50,8 @@ date_default_timezone_set("Asia/Colombo");
               <div class="col-md-3">
                 <div class="form-group">
                   <label>Select Loan</label>
-                  <select class="form-control" name="loan" style="width: 100%;" id="loan_sel" onchange="select_loan(this.options[this.selectedIndex].getAttribute('term'))" autofocus tabindex="1">
-                    <option value="0" selected disabled></option>
+                  <select class="form-control select2 hidden-search" name="loan" style="width: 100%;" onchange="select_loan(this.options[this.selectedIndex].getAttribute('term'))" autofocus tabindex="1">
+                    <option value="0" selected disabled>Select Loan</option>
                     <?php
                     $result = $db->prepare("SELECT * FROM bank_loan ");
                     $result->execute();
@@ -131,10 +63,10 @@ date_default_timezone_set("Asia/Colombo");
                 </div>
               </div>
 
-              <div class="col-md-3 loan" id="loan_term">
+              <div class="col-md-3 loan">
                 <div class="form-group">
                   <label>Pay Type</label>
-                  <select class="form-control" name="pay_type" style="width: 100%;" onchange="select_type(this.options[this.selectedIndex].value)" autofocus tabindex="1">
+                  <select class="form-control select2 hidden-search" name="pay_type" style="width: 100%;" onchange="select_type(this.options[this.selectedIndex].value)" autofocus tabindex="1">
                     <option>Bank</option>
                     <option>Chq</option>
                   </select>
@@ -155,14 +87,14 @@ date_default_timezone_set("Asia/Colombo");
                 </div>
               </div>
 
-              <div class="col-md-3 loan" id="loan_term">
+              <div class="col-md-3 loan">
                 <div class="form-group">
                   <label>Pay Amount</label>
                   <input type="number" name="term" step=".01" id="term_txt" class="form-control" tabindex="2" autocomplete="off">
                 </div>
               </div>
 
-              <div class="col-md-3 loan" id="loan_date">
+              <div class="col-md-3 loan">
                 <div class="form-group">
                   <label>Pay Date</label>
                   <input type="text" id="datepick" name="pay_date" value="<?php echo date("Y-m-d"); ?>" class="form-control" tabindex="3" autocomplete="off">
@@ -172,7 +104,7 @@ date_default_timezone_set("Asia/Colombo");
               <div class="col-md-3 loan">
                 <div class="form-group">
                   <label>Bank Account</label>
-                  <select class="form-control " name="bank" style="width: 100%;" autofocus tabindex="4">
+                  <select class="form-control  select2 hidden-search" name="bank" style="width: 100%;" autofocus tabindex="4">
 
                     <?php
                     $result = $db->prepare("SELECT * FROM bank_balance ");
@@ -260,11 +192,77 @@ date_default_timezone_set("Asia/Colombo");
   <!-- /.content-wrapper -->
   <?php include("dounbr.php"); ?>
 
+  <div class="container-up d-none" id="container_up">
+    <div class="container-close" onclick="click_close()"></div>
+    <div class="row">
+      <div class="col-md-6 with-scroll">
+
+        <div class="box box-success popup d-none" id="popup_1">
+          <div class="box-header with-border">
+            <h3 class="box-title w-100">
+              New Bank Loan
+              <i onclick="click_close()" class="btn me-2 pull-right fa fa-remove" style="font-size: 25px"></i>
+            </h3>
+          </div>
+
+          <div class="box-body d-block">
+            <form method="POST" action="acc_bank_loan_save.php">
+
+              <div class="row" style="display: block;">
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Bank Name</label>
+                    <input type="text" name="bank_name" value="" class="form-control" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Capital</label>
+                    <input type="number" name="capital" value="" class="form-control" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Interest</label>
+                    <input type="number" name="interest" value="" class="form-control" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Term</label>
+                    <input type="number" name="term" value="" class="form-control" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Term Amount</label>
+                    <input type="number" step=".01" name="term_amount" value="" class="form-control" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <input type="hidden" name="unit" value="2">
+                    <input type="submit" style="margin-top: 23px;width: 100px;" value="Save" class="btn btn-info">
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
   <div class="control-sidebar-bg"></div>
   </div>
-
-  <script src="js/jquery.js"></script>
 
   <!-- jQuery 2.2.3 -->
   <script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
@@ -290,20 +288,21 @@ date_default_timezone_set("Asia/Colombo");
   <script src="../../dist/js/app.min.js"></script>
   <!-- AdminLTE for demo purposes -->
   <script src="../../dist/js/demo.js"></script>
-    <!-- Dark Theme Btn-->
-    <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
+  <!-- Dark Theme Btn-->
+  <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
 
+  <script>
+    function click_open(i) {
+      $("#popup_" + i).removeClass("d-none");
+      $("#container_up").removeClass("d-none");
+    }
+
+    function click_close() {
+      $(".popup").addClass("d-none");
+      $("#container_up").addClass("d-none");
+    }
+  </script>
   <script type="text/javascript">
-    function loan_btn() {
-      $('#loan_btn').css('display', 'none');
-      $('#loan_add').css('display', 'block');
-    }
-
-    function loan_cl() {
-      $('#loan_add').css('display', 'none');
-      $('#loan_btn').css('display', 'inline-block');
-    }
-
     function select_loan(val) {
       $('#term_txt').val(val);
       $('#btn_sub').removeAttr('disabled');
@@ -374,6 +373,9 @@ date_default_timezone_set("Asia/Colombo");
     $(function() {
       //Initialize Select2 Elements
       $(".select2").select2();
+      $('.select2.hidden-search').select2({
+        minimumResultsForSearch: -1
+      });
 
       //Date range picker
       $('#reservation').daterangepicker();
