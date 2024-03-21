@@ -55,6 +55,8 @@ include("connect.php");
       $cash = $_SESSION['SESS_FIRST_NAME'];
 
       $date = date("Y-m-d");
+      $d1 = date('Y-m') . '-01';
+      $d2 = date('Y-m') . '-31';
       ?>
 
       <div class="row hidden">
@@ -145,6 +147,16 @@ include("connect.php");
         for ($i = 0; $row = $result->fetch(); $i++) {
           $cl1 = 'bg-gray';
           $id = $row['id'];
+
+          $count = 0;
+          $res = $db->prepare("SELECT COUNT(*) FROM attendance WHERE emp_id=:id AND date BETWEEN '$d1' AND '$d2' ");
+          $res->bindParam(':id', $id);
+          $res->execute();
+          for ($i = 0; $ro = $res->fetch(); $i++) {
+            $count = $ro['COUNT(*)'];
+          }
+          $pra = $count / 30 * 100;
+
           $res = $db->prepare("SELECT  * FROM attendance WHERE emp_id=:id AND date = '$date' ");
           $res->bindParam(':id', $id);
           $res->execute();
@@ -181,7 +193,7 @@ include("connect.php");
                 <span class="info-box-number" style="font-size: 20px;"><?php echo ucfirst($row['username']); ?></span>
 
                 <div class="progress">
-                  <div class="progress-bar" style="width: 0"></div>
+                  <div class="progress-bar" style="width: <?php echo $pra; ?>%"></div>
                 </div>
                 <span class="progress-description">
                   <?php echo $row['phone_no']; ?>
