@@ -10,7 +10,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 // respond init
 $result_array = array();
 
-    $load = $_POST['loading_id'];
+    $id = $_POST['user_id'];
     $lat = $_POST['lat'];
     $lng= $_POST['lng'];
 
