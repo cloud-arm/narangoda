@@ -131,7 +131,7 @@ include("connect.php");
               icon: customIcon
             }).addTo(map);
             // You can customize the marker popup or icon here
-            marker.bindPopup('<h3>' + entry.lorry_no + '<br>' + entry.rep + '</h3>');
+            marker.bindPopup('<h3>' + entry.name + '</h3>');
           });
         })
         .catch(error => console.error('Error fetching GPS data:', error));
