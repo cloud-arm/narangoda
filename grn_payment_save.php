@@ -12,6 +12,7 @@ $pay_amount = $_POST['amount'];
 $credit_invo = $_POST['credit_note'];
 $note = $_POST['note'];
 
+$bank = 0;
 $acc_no = '';
 $bank_name = '';
 $chq_no = '';
@@ -54,13 +55,9 @@ for ($i = 0; $row = $result->fetch(); $i++) {
 
 if ($pay_amount > 0) {
 
-    $sql = 'INSERT INTO supply_payment(amount,pay_amount,pay_type,date,invoice_no,supply_id,supply_name,supplier_invoice,type,chq_no,chq_bank,chq_date,bank_id,bank_name,acc_no,action) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
-    $q = $db->prepare($sql);
-    $q->execute(array($pay_amount, $pay_amount, $pay_type, $date, $invo, $sup_id, $sup_name, $sup_invo, 'Credit_payment', $chq_no, $chq_bank, $chq_date, $bank, $bank_name, $acc_no, 1));
-
-    $c_b = 0;
+    $cr_blc = 0;
     $blc = 0;
-    $result0 = $db->prepare("SELECT * FROM supply_payment WHERE pay_type='Credit' AND supplier_invoice = '$sup_invo' ");
+    $result0 = $db->prepare("SELECT * FROM supply_payment WHERE pay_type='Credit' AND supplier_invoice = '$sup_invo' AND invoice_no = '$invo' ");
     $result0->bindParam(':id', $sup_invo);
     $result0->execute();
     for ($k = 0; $row0 = $result0->fetch(); $k++) {
@@ -68,28 +65,21 @@ if ($pay_amount > 0) {
         $id = $row0['id'];
     }
 
-    $c_b = $blc - $pay_amount;
+    $sql = 'INSERT INTO supply_payment(amount,pay_amount,pay_type,date,pay_date,invoice_no,supply_id,supply_name,supplier_invoice,type,chq_no,chq_bank,chq_date,bank_id,bank_name,acc_no,action,credit_id,credit_note_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+    $q = $db->prepare($sql);
+    $q->execute(array($pay_amount, $pay_amount, $pay_type, $date, $date, $invo, $sup_id, $sup_name, $sup_invo, 'credit_payment', $chq_no, $chq_bank, $chq_date, $bank, $bank_name, $acc_no, 1, $id, $credit_invo));
+
+    $cr_blc = $blc - $pay_amount;
 
     $sql = "UPDATE  supply_payment SET credit_balance=? WHERE id=?";
     $ql = $db->prepare($sql);
-    $ql->execute(array($c_b, $id));
+    $ql->execute(array($cr_blc, $id));
 
     if ($pay_type == 'Credit_Note') {
 
-        $a_b = 0;
-        $c_b = 0;
-        $result0 = $db->prepare("SELECT * FROM supply_payment WHERE id = :id ");
-        $result0->bindParam(':id', $credit_invo);
-        $result0->execute();
-        for ($k = 0; $row0 = $result0->fetch(); $k++) {
-            $c_b = $row0['credit_balance'];
-        }
-
-        $a_b = $c_b - $pay_amount;
-
-        $sql = "UPDATE  supply_payment SET credit_balance=? WHERE id=?";
+        $sql = "UPDATE  supply_payment SET credit_balance=credit_balance-? WHERE id=?";
         $ql = $db->prepare($sql);
-        $ql->execute(array($a_b, $credit_invo));
+        $ql->execute(array($pay_amount, $credit_invo));
     }
 
     if ($pay_type == 'Cash') {
@@ -107,13 +97,6 @@ if ($pay_amount > 0) {
         }
 
         $de_blc = $blc - $pay_amount;
-
-        $re = $db->prepare("SELECT * FROM supply_payment WHERE invoice_no = :id ");
-        $re->bindParam(':id', $invo);
-        $re->execute();
-        for ($k = 0; $r = $re->fetch(); $k++) {
-            $p = $r['id'];
-        }
 
         $cr_type = 'grn_payment';
 

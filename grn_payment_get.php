@@ -79,7 +79,7 @@ if ($type == 'cred_get') {
     $result->execute(); ?>
     <option value="0" selected> </option>
     <?php for ($i = 0; $row = $result->fetch(); $i++) { ?>
-        <option value="<?php echo $row['id']; ?>"> <?php echo $row['invoice_no']; ?> -> <small>Rs. </small> <?php echo $row['credit_balance']; ?> </option>
+        <option value="<?php echo $row['id']; ?>"> <?php echo $row['invoice_no']; ?> Rs. <?php echo $row['credit_balance']; ?> </option>
 <?php }
 } else
 

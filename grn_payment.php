@@ -112,10 +112,10 @@ date_default_timezone_set("Asia/Colombo");
                                             </div>
                                         </div>
 
-                                        <div class="col-md-4" id="slt-credit" style="display:none;">
+                                        <div class="col-md-3" id="slt-credit" style="display:none;">
                                             <div class="form-group">
                                                 <label>Credit Invoice</label>
-                                                <select class="form-control" name="credit_note" id="credit_note">
+                                                <select class="form-control select2 hidden-search" style="width: 100%;" name="credit_note" id="credit_note">
                                                     <option value="0" selected></option>
                                                 </select>
                                             </div>
@@ -135,7 +135,7 @@ date_default_timezone_set("Asia/Colombo");
                                                 $result = $db->prepare("SELECT * FROM bank_balance ");
                                                 $result->bindParam(':id', $res);
                                                 $result->execute(); ?>
-                                                <select class="form-control select2 hidden-search" name="chq_bank"  style="width: 100%;" tabindex="1">
+                                                <select class="form-control select2 hidden-search" name="chq_bank" style="width: 100%;" tabindex="1">
                                                     <option value="0" selected disabled> Select Bank </option>
                                                     <?php for ($i = 0; $row = $result->fetch(); $i++) {  ?>
                                                         <option value="<?php echo $row['id']; ?>"> <?php echo $row['name']; ?> </option>
@@ -154,7 +154,7 @@ date_default_timezone_set("Asia/Colombo");
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label>Pay Amount</label>
-                                                <input class="form-control" type="number" name="amount" id="pay_txt" onkeyup="checking()" autocomplete="off">
+                                                <input class="form-control" step=".01" type="number" name="amount" id="pay_txt" onkeyup="checking()" autocomplete="off">
                                             </div>
                                         </div>
 
