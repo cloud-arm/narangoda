@@ -112,10 +112,20 @@ date_default_timezone_set("Asia/Colombo");
                                                             <?php
                                                             $result = $db->prepare("SELECT * FROM supply_payment WHERE supply_id=:id AND pay_type='Credit'  AND credit_balance>0 GROUP BY supplier_invoice DESC");
                                                             $result->bindParam(':id', $sup_id);
-                                                            $result->execute(); ?>
-                                                            <?php for ($i = 0; $row = $result->fetch(); $i++) { ?>
-                                                                <option value="<?php echo $row['invoice_no']; ?>"> <?php echo $row['supplier_invoice']; ?> </option>
-                                                            <?php }  ?>
+                                                            $result->execute();
+                                                            for ($i = 0; $row = $result->fetch(); $i++) {
+                                                                $grn = $row['invoice_no'];
+                                                                $con = 0;
+                                                                $res = $db->prepare("SELECT * FROM bulk_payment WHERE invoice_no=:id AND grn_invoice_no='$grn' ");
+                                                                $res->bindParam(':id', $invo);
+                                                                $res->execute();
+                                                                for ($i = 0; $ro = $res->fetch(); $i++) {
+                                                                    $con = $ro['id'];
+                                                                }
+                                                                if ($con == 0) { ?>
+                                                                    <option value="<?php echo $row['invoice_no']; ?>"> <?php echo $row['supplier_invoice']; ?> </option>
+                                                            <?php }
+                                                            } ?>
                                                         </select>
                                                     </div>
                                                 </div>
