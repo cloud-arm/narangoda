@@ -71,9 +71,9 @@ if ($pay_amount > 0) {
 
     $cr_blc = $blc - $pay_amount;
 
-    $sql = "UPDATE  supply_payment SET credit_balance=? WHERE id=?";
+    $sql = "UPDATE  supply_payment SET credit_balance = credit_balance - ?, pay_amount = pay_amount + ?  WHERE id=?";
     $ql = $db->prepare($sql);
-    $ql->execute(array($cr_blc, $id));
+    $ql->execute(array($pay_amount, $pay_amount, $id));
 
     if ($pay_type == 'Credit_Note') {
 

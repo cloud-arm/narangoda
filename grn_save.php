@@ -125,22 +125,26 @@ if ($invo != '') {
 
             $credit = $amount - $pay_amount;
 
-            $sql = 'INSERT INTO supply_payment (amount,pay_amount,pay_type,date,invoice_no,supply_id,supply_name,supplier_invoice,type,credit_balance) VALUES (?,?,?,?,?,?,?,?,?,?)';
+            $sql = 'INSERT INTO supply_payment (amount,pay_amount,pay_type,date,invoice_date,invoice_no,supply_id,supply_name,supplier_invoice,type,credit_balance) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
             $q = $db->prepare($sql);
-            $q->execute(array($amount, '0', 'Credit', $date, $invo, $sup, $sup_name, $sup_invo, $type, $credit));
+            $q->execute(array($amount, '0', 'Credit', $date, $date, $invo, $sup, $sup_name, $sup_invo, $type, $amount));
         }
 
         if ($pay_amount > 0) {
 
             if ($pay_type == 'Chq') {
-                $sql = 'INSERT INTO supply_payment (amount,pay_amount,pay_type,date,invoice_no,supply_id,supply_name,supplier_invoice,type,chq_no,chq_bank,chq_date,bank_id,bank_name,acc_no,action) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                $sql = 'INSERT INTO supply_payment (amount,pay_amount,pay_type,date,invoice_date,invoice_no,supply_id,supply_name,supplier_invoice,type,chq_no,chq_bank,chq_date,bank_id,bank_name,acc_no,action) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
                 $q = $db->prepare($sql);
-                $q->execute(array($pay_amount, $pay_amount, $pay_type, $date, $invo, $sup, $sup_name, $sup_invo, $type, $chq_no, $chq_bank, $chq_date, $bank, $bank_name, $acc_no, 1));
+                $q->execute(array($pay_amount, $pay_amount, $pay_type, $date, $date, $invo, $sup, $sup_name, $sup_invo, $type, $chq_no, $chq_bank, $chq_date, $bank, $bank_name, $acc_no, 1));
             } else {
-                $sql = 'INSERT INTO supply_payment (amount,pay_amount,pay_type,date,invoice_no,supply_id,supply_name,supplier_invoice,type,bank_id,bank_name,acc_no) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)';
+                $sql = 'INSERT INTO supply_payment (amount,pay_amount,pay_type,date,invoice_date,invoice_no,supply_id,supply_name,supplier_invoice,type,bank_id,bank_name,acc_no) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)';
                 $q = $db->prepare($sql);
-                $q->execute(array($pay_amount, $pay_amount, $pay_type, $date, $invo, $sup, $sup_name, $sup_invo, $type, $bank, $bank_name, $acc_no));
+                $q->execute(array($pay_amount, $pay_amount, $pay_type, $date, $date, $invo, $sup, $sup_name, $sup_invo, $type, $bank, $bank_name, $acc_no));
             }
+
+            $sql = "UPDATE  supply_payment SET credit_balance = credit_balance - ?, pay_amount = pay_amount + ?  WHERE invoice_no = ? AND pay_type = 'Credit' ";
+            $ql = $db->prepare($sql);
+            $ql->execute(array($pay_amount, $pay_amount, $invo));
         }
 
         $result = $db->prepare("SELECT * FROM purchases_item WHERE invoice = '$invo' ");
@@ -305,7 +309,13 @@ $y = date("Y");
 $m = date("m");
 if ($type == 'GRN') {
 
-    header("location: grn_rp.php?year=$y&month=$m");
+    $dep = $_SESSION['SESS_DEPARTMENT'];
+
+    if ($dep == 'logistic') {
+        header("location: index.php");
+    } else {
+        header("location: grn_rp.php?year=$y&month=$m");
+    }
 }
 
 if ($type == 'Return') {
