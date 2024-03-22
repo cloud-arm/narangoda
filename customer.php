@@ -41,7 +41,7 @@ include("connect.php");
       <div class="box box-success">
         <div class="box-header">
           <h3 class="box-title">Customer Data</h3>
-          <small class="btn btn-success mx-2" style="padding: 5px 10px;" title="Add Customer" onclick="click_open(1)">Add Customer</small>
+          <small class="btn btn-success btn-sm mx-2" style="padding: 5px 10px;" title="Add Customer" onclick="click_open(1)">Add Customer</small>
         </div>
         <!-- /.box-header -->
 
