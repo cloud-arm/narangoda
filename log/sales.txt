@@ -1,2 +1,5 @@
 cloud_id: 0, app_id: 16, invoice: 215, status: failed, message: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'cashier' cannot be null, Date: 2024-03-11, Time: 16:06:57
 cloud_id: 0, app_id: 17, invoice: 216, status: failed, message: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'cashier' cannot be null, Date: 2024-03-11, Time: 16:06:57
+cloud_id: 0, app_id: 16, invoice: 217, status: failed, message: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'laugfs.vat_account' doesn't exist, Date: 2024-03-21, Time: 06:58:42
+cloud_id: 0, app_id: 17, invoice: 218, status: failed, message: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'laugfs.vat_account' doesn't exist, Date: 2024-03-21, Time: 06:58:42
+cloud_id: 0, app_id: 16, invoice: 217, status: failed, message: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'cashier' cannot be null, Date: 2024-03-21, Time: 07:42:02
