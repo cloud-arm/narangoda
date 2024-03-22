@@ -12,12 +12,12 @@ if (!file_exists($directory)) {
 
 $filename = $directory . 'customer.png';
 
-if (isset($_GET["id"])) {
+if (isset($customer_id)) {
 
-	$codeString = $_GET["id"];
+	$codeString = $customer_id;
 
 	QRcode::png($codeString, $filename);
 
 }
 
-	header("location: customer_qrcode_print.php?file=$filename");
+	header("location: customer_qrcode_print.php?file=$customer_id");

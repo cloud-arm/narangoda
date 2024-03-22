@@ -1,50 +1,85 @@
 <!DOCTYPE html>
 <html>
+<?php include("connect.php"); ?>
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>CLOUD ARM | Invoice</title>
+    <title>CLOUD ARM | QRCODE</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
     <link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 
     <style>
         @media print {
             body img {
-                width: 350px;
+                width: 100px;
+                border-radius: 10px;
             }
 
+
             body .div {
-                padding: 10px;
+                padding: 2px;
                 border-radius: 10px;
                 border: 1px solid;
-                width: max-content;
+                width: 25%;
+                display: flex;
+            }
+
+            body .div .span {
+                margin-top: 10px;
+                display: flex;
+                width: 100%;
+                flex-direction: column;
+                gap: 5px;
+                margin-left: 5px;
+                position: relative;
             }
 
             body .content {
                 width: 100%;
-                height: 100vh;
                 display: flex;
-                align-items: center;
-                justify-content: space-around;
-                flex-direction: column;
+                gap: 20px;
+                position: relative;
             }
 
             body h1 {
-                font-size: 25px;
-                text-align: center;
-                margin-bottom: 0;
+                font-size: 11px;
+                margin: 0;
+            }
+
+            body h2 {
+                font-size: 10px;
+                margin: 0;
+                width: 95%;
+                /* white-space: nowrap; */
+                overflow: hidden;
+                text-overflow: ellipsis;
+                /* position: relative;  */
+            }
+
+            body h3 {
+                font-size: 8px;
+                margin: 0;
+                width: 100%;
             }
         }
     </style>
 
-
+    <?php
+    $id = $_GET['file'];
+    $rq = $db->prepare("SELECT * FROM customer WHERE customer_id=:id ");
+    $rq->bindParam(':id', $id);
+    $rq->execute();
+    for ($k = 0; $r = $rq->fetch(); $k++) {;
+        $name = $r['customer_name'];
+    }
+    ?>
 </head>
 
 <body onload="window.print() ">
@@ -56,12 +91,24 @@
         <!-- Main content -->
         <section class="content">
             <div class="div">
-                <h1>NARANGODA GROUP</h1>
-                <img src="<?php echo $_GET['file']; ?>">
+                <span class="img">
+                    <img src="qrcode/customer.png">
+                </span>
+                <span class="span">
+                    <h1><b>Narangoda Group</b></h1>
+                    <h2><?php echo $name; ?></h2>
+                    <!-- <h2> <i class="fa-solid fa-cloud"></i> CLOUD arm</h2> -->
+                </span>
             </div>
             <div class="div">
-                <h1>Narangoda Group</h1>
-                <img src="<?php echo $_GET['file']; ?>">
+                <span class="img">
+                    <img src="qrcode/customer.png">
+                </span>
+                <span class="span">
+                    <h1><b>Narangoda Group</b></h1>
+                    <h2><?php echo $name; ?></h2>
+                    <!-- <h2> <i class="fa-solid fa-cloud"></i> CLOUD arm</h2> -->
+                </span>
             </div>
         </section>
     </div>
