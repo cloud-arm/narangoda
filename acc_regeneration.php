@@ -33,26 +33,42 @@ include("connect.php");
         <!-- Main content -->
         <section class="content">
             <!-- SELECT2 EXAMPLE -->
-            <div class="row d-flex">
-                <?php
-                $result = $db->prepare("SELECT * FROM cash LIMIT 4");
+            <div class="row" style="display: flex;justify-content:center;">
+                <?php $pra = 0;
+                $result = $db->prepare("SELECT sum(amount) FROM cash ");
                 $result->bindParam(':userid', $res);
                 $result->execute();
                 for ($i = 0; $row = $result->fetch(); $i++) {
-                ?>
-                    <div class="col-lg-3 col-xs-6">
-                        <div class="small-box" style="border: 1px solid;padding: 15px 0; ">
-                            <div class="inner">
-                                <h3 style="font-size: 23px;position: relative;"><?php echo $row['amount']; ?></h3>
+                    $sum = $row['sum(amount)'];
+                }
 
-                                <p><?php echo $row['name']; ?></p>
-                            </div>
-                            <div class="icon" style="color: rgba(var(--bg-content-light),0.2);">
-                                <i class="fa fa-dollar"></i>
+                $result = $db->prepare("SELECT * FROM cash ");
+                $result->bindParam(':userid', $res);
+                $result->execute();
+                for ($i = 0; $row = $result->fetch(); $i++) {
+
+                    $pra = $row['amount'] / $sum * 100;
+                ?>
+                    <div class="col-lg-3 col-xs-6" style="margin: 10px 0;">
+                        <div class="info-box bg-gray">
+                            <span class="info-box-icon">
+                                <i class="fa fa-dollar" style="color:rgb(var(--bg-light-100));font-size: 50px;"></i>
+                            </span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text" style="font-size: 13px; text-align: end; padding-right: 10px;"><?php echo ucfirst($row['name']) ?></span>
+                                <span class="info-box-number" style="font-size: 25px;margin: 5px 0;"><?php echo $row['amount']; ?></span>
+
+                                <div class="progress">
+                                    <div class="progress-bar" style="width: <?php echo $pra; ?>%"></div>
+                                </div>
+                                <span class="progress-description">
+                                </span>
                             </div>
                         </div>
                     </div>
-                <?php    } ?>
+
+                <?php  } ?>
             </div>
 
             <div class="row">
