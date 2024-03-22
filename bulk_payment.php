@@ -162,7 +162,7 @@ date_default_timezone_set("Asia/Colombo");
                       <h4 class="pull-left"><?php echo $row['chq_bank']; ?></h4>
                       <h4 class="pull-right"><?php echo $row['chq_date']; ?></h4>
                       <br><br>
-                      <h4>Narangoda Enterprises (Pvt.) Ltd </h4>
+                      <h4>Narangoda Group </h4>
                       <hr style="margin-bottom: 10px;">
                       <button type="button" class="btn btn-default btn-lg pull-right">Rs. <?php echo $row['amount']; ?></button>
                       <br><br>
@@ -485,7 +485,6 @@ date_default_timezone_set("Asia/Colombo");
         </div>
       </div>
     </div>
-  </div>
   </div>
 
 
