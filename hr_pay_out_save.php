@@ -8,6 +8,8 @@ $un = $_SESSION['SESS_FIRST_NAME'];
 
 $date = date('Y-m-d');
 $time = date('H:i:s');
+$year = date('Y');
+$month = date('m');
 
 $invo = "etf" . date("ymdhis");
 
@@ -16,11 +18,40 @@ $type = $_POST['type'];
 if ($type == 'salary') {
 
     $id = $_POST['id'];
-    $payment = $_POST['payment'];
+    $amount = $_POST['payment'];
+    $month = $_POST['month'];
 
-    $sql = 'UPDATE  hr_payroll SET payment =? WHERE id =? ';
+    $sql = 'UPDATE  hr_payroll SET payment = payment + ?, pay_date = ? WHERE id =? ';
     $ql = $db->prepare($sql);
-    $ql->execute(array($payment, $id));
+    $ql->execute(array($amount, $date, $id));
+
+    $re = $db->prepare("SELECT * FROM hr_payroll WHERE id = :id");
+    $re->bindParam(':id', $id);
+    $re->execute();
+    for ($k = 0; $r = $re->fetch(); $k++) {
+        $emp = $r['emp_id'];
+    }
+
+    $acc = 2;
+    $cr_blc = 0;
+    $blc = 0;
+    $re = $db->prepare("SELECT * FROM cash WHERE id = :id");
+    $re->bindParam(':id', $acc);
+    $re->execute();
+    for ($k = 0; $r = $re->fetch(); $k++) {
+        $blc = $r['amount'];
+        $acc_name = $r['name'];
+    }
+
+    $cr_blc = $blc - $amount;
+
+    $sql = "UPDATE  cash SET amount=? WHERE id=?";
+    $ql = $db->prepare($sql);
+    $ql->execute(array($cr_blc, $acc));
+
+    $sql = "INSERT INTO transaction_record (transaction_type,type,record_no,amount,action,credit_acc_no,credit_acc_type,credit_acc_name,credit_acc_balance,debit_acc_type,debit_acc_name,debit_acc_id,debit_acc_balance,date,time,user_id,user_name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    $ql = $db->prepare($sql);
+    $ql->execute(array('hr_payment', 'Debit', $emp, $amount, 0, 0, 'salary', 'Emp Salary', 0,'salary_payment', $acc_name, $acc, $cr_blc, $date, $time, $ui, $un));
 }
 
 if ($type == 'etf') {
@@ -49,7 +80,7 @@ if ($type == 'etf') {
         $tot_hr_blc = $row['sum(' . $hr_type . ')'];
     }
 
-    $acc = 1;
+    $acc = 2;
     $cr_blc = 0;
     $blc = 0;
     $re = $db->prepare("SELECT * FROM cash WHERE id = :id");
@@ -61,7 +92,7 @@ if ($type == 'etf') {
     }
 
     if ($pay_type == 'Chq') {
-        $re = $db->prepare("SELECT * FROM bank WHERE dep_id = :id");
+        $re = $db->prepare("SELECT * FROM bank_balance WHERE dep_id = :id");
         $re->bindParam(':id', $acc);
         $re->execute();
         for ($k = 0; $r = $re->fetch(); $k++) {
@@ -85,7 +116,7 @@ if ($type == 'etf') {
 
         $sql = "INSERT INTO transaction_record (transaction_type,type,record_no,amount,action,credit_acc_no,credit_acc_type,credit_acc_name,credit_acc_balance,debit_acc_type,debit_acc_name,debit_acc_id,debit_acc_balance,date,time,user_id,user_name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $ql = $db->prepare($sql);
-        $ql->execute(array('hr_payment', 'Debit', $month, $amount, 0, $acc, 'cash', $acc_name, $cr_blc, 'cash_payment', $type . '_payment', 0, $de_blc, $date, $time, $ui, $un));
+        $ql->execute(array('hr_payment', 'Debit', $month, $amount, 0, 0, 'cash_payment', $hr_type . ' payment', 0, $hr_type . '_payment', $acc_name, $acc, $cr_blc, $date, $time, $ui, $un));
     }
 
     if ($pay_type == 'Chq') {
@@ -93,9 +124,9 @@ if ($type == 'etf') {
         $chq_no = $_POST['chq_no'];
         $chq_date = $_POST['chq_date'];
 
-        $sql = 'INSERT INTO payment (amount,pay_amount,pay_type,date,invoice_no,job_id,cus_id,vehicle_id,customer_name,chq_no,chq_bank,bank_id,chq_date,bank_name,type,action,memo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+        $sql = 'INSERT INTO payment (amount,pay_amount,pay_type,date,invoice_no,job_id,cus_id,vehicle_id,customer_name,chq_no,chq_bank,bank_id,chq_date,bank_name,type,action,paycose) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
         $q = $db->prepare($sql);
-        $q->execute(array($amount, $amount, $pay_type, $date, $invo, 0, 0, 0, '', $chq_no, $bank_name, $bank, $chq_date, '', 3, 1, 'epf_payment'));
+        $q->execute(array($amount, $amount, $pay_type, $date, $invo, 0, 0, 0, '', $chq_no, $bank_name, $bank, $chq_date, '', 3, 1, 'hr_payment'));
     }
 
     $sql = "INSERT INTO hr_etf_record (type,amount,froward_balance,month,acc,acc_name,date,time,chq_no,chq_bank,bank_id,chq_date,invoice_no,pay_type) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -107,5 +138,4 @@ if ($type == 'etf') {
     $ql->execute(array(1, $month));
 }
 
-$date = date('Y-m');
-header("location: hr_pay_out.php?date=$date");
+header("location: hr_pay_out.php?year=$year&month=$month");
