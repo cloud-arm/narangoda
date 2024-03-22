@@ -23,7 +23,6 @@ date_default_timezone_set("Asia/Colombo");
 
     <!-- /.sidebar -->
     </aside>
-
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -41,11 +40,14 @@ date_default_timezone_set("Asia/Colombo");
             <div class="row">
                 <div class="col-md-12">
 
-                    <div class="box box-info">
+                    <div class="box box-info payment-type" id="normal">
                         <div class="box-header with-border">
                             <div class="row">
-                                <div class="col-md-3">
-                                    <h3 class="box-title">Payment</h3>
+                                <div class="col-md-2">
+                                    <h3 class="box-title">Normal Payment</h3>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-danger btn-sm" onclick="pay_type('bulk')">Bulk Payment</button>
                                 </div>
                                 <div class="col-md-5">
                                     <div class="input-group">
@@ -56,7 +58,7 @@ date_default_timezone_set("Asia/Colombo");
                                         $result = $db->prepare("SELECT * FROM supplier ");
                                         $result->bindParam(':id', $res);
                                         $result->execute(); ?>
-                                        <select class="form-control select2" id="supply" onchange="invo_get()" style="width: 100%;" tabindex="1">
+                                        <select class="form-control select2" id="supply" onchange="invo_get('supply')" style="width: 100%;" tabindex="1">
                                             <option value="0" selected disabled> Select Supplier </option>
                                             <?php for ($i = 0; $row = $result->fetch(); $i++) {  ?>
                                                 <option value="<?php echo $row['supplier_id']; ?>"> <?php echo $row['supplier_name']; ?> </option>
@@ -168,8 +170,83 @@ date_default_timezone_set("Asia/Colombo");
                                         <div class="col-md-1 ps-0" style="height: 70px; display: flex; align-items: end;">
                                             <div class="form-group">
                                                 <input type="hidden" name="id" id="invo_no">
-                                                <input type="hidden" name="sup_id" id="sup_id">
+                                                <input type="hidden" name="sup_id" id="sup_id_supply">
                                                 <input class="btn btn-success" type="submit" id="submit" value="Submit" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="box box-warning payment-type" id="bulk" style="display: none; background-color: rgba(var(--bg-dark-50),0.2);">
+                        <div class="box-header with-border">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <h3 class="box-title">Bulk Payment</h3>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-info btn-sm" onclick="pay_type('normal')">Normal Payment</button>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <label>Supplier</label>
+                                        </div>
+                                        <?php
+                                        $result = $db->prepare("SELECT * FROM supplier ");
+                                        $result->bindParam(':id', $res);
+                                        $result->execute(); ?>
+                                        <select class="form-control select2" id="bulk_supply" onchange="invo_get('bulk_supply')" style="width: 100%;" tabindex="1">
+                                            <option value="0" selected disabled> Select Supplier </option>
+                                            <?php for ($i = 0; $row = $result->fetch(); $i++) {  ?>
+                                                <option value="<?php echo $row['supplier_id']; ?>"> <?php echo $row['supplier_name']; ?> </option>
+                                            <?php  } ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="box-body d-block">
+                                <form method="POST" action="grn_bulk_chq_save.php">
+                                    <div class="row" style="display: flex;">
+
+                                        <div class="col-md-3 slt-chq">
+                                            <div class="form-group">
+                                                <label>Chq Number</label>
+                                                <input class="form-control" type="text" name="chq_no" autocomplete="off">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3 slt-chq">
+                                            <div class="form-group">
+                                                <label>Chq Date</label>
+                                                <input class="form-control" id="datepicker1" type="text" name="chq_date" autocomplete="off">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Chq Amount</label>
+                                                <input class="form-control" step=".01" type="number" name="amount" autocomplete="off">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label>Note</label>
+                                                <input class="form-control" type="text" name="note" autocomplete="off">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-1 ps-0" style="height: 70px; display: flex; align-items: end;">
+                                            <div class="form-group">
+                                                <input type="hidden" name="sup_id" id="sup_id_bulk_supply">
+                                                <input type="hidden" name="pay_type" value="Chq">
+                                                <input class="btn btn-success" id="btn_bulk" disabled type="submit" value="Submit">
                                             </div>
                                         </div>
                                     </div>
@@ -249,8 +326,12 @@ date_default_timezone_set("Asia/Colombo");
     <!-- Dark Theme Btn-->
     <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
 
-
     <script type="text/javascript">
+        function pay_type(type) {
+            $('.payment-type').css('display', 'none');
+            $('#' + type).css('display', 'block');
+        }
+
         function checking() {
 
             let val = $("#credit_note").val();
@@ -290,20 +371,27 @@ date_default_timezone_set("Asia/Colombo");
             }
         }
 
-        function invo_get() {
-            let val = $("#supply").val();
-            var info = 'type=inv_get&id=' + val;
-            $.ajax({
-                type: "GET",
-                url: "grn_payment_get.php",
-                data: info,
-                success: function(res) {
-                    $("#invo").empty();
-                    $("#invo").append(res);
-                }
-            });
+        function invo_get(id) {
+            let val = $("#" + id).val();
+            if (id == 'supply') {
+                var info = 'type=inv_get&id=' + val;
+                $.ajax({
+                    type: "GET",
+                    url: "grn_payment_get.php",
+                    data: info,
+                    success: function(res) {
+                        $("#invo").empty();
+                        $("#invo").append(res);
+                    }
+                });
+            }
 
-            $("#sup_id").val(val);
+            $("#sup_id_" + id).val(val);
+            if (id == 'bulk_supply') {
+                $("#btn_bulk").removeAttr('disabled');
+            } else {
+                $("#btn_bulk").attr('disabled', '');
+            }
         }
 
         function tbl_get() {
@@ -381,7 +469,8 @@ date_default_timezone_set("Asia/Colombo");
                         invo_get();
                     }
                 });
-
+                tbl_get();
+                invo_get();
             }
             return false;
         }
@@ -404,7 +493,6 @@ date_default_timezone_set("Asia/Colombo");
     <script>
         $(function() {
             //Initialize Select2 Elements
-            //Initialize Select2 Elements
             $(".select2").select2();
             $('.select2.hidden-search').select2({
                 minimumResultsForSearch: -1
@@ -423,8 +511,11 @@ date_default_timezone_set("Asia/Colombo");
                 datepicker: true,
                 format: 'yyyy-mm-dd '
             });
-            $('#datepicker').datepicker({
-                autoclose: true
+
+            $('#datepicker1').datepicker({
+                autoclose: true,
+                datepicker: true,
+                format: 'yyyy-mm-dd '
             });
 
 

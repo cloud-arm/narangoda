@@ -77,10 +77,20 @@ date_default_timezone_set("Asia/Colombo");
                                     <input class="form-control" step=".01" type="number" name="amount" id="pay_txt" onkeyup="checking()" autocomplete="off">
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1"></div>
 
-                            <div class="col-md-1">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Note</label>
+                                    <input class="form-control" type="text" name="note" autocomplete="off">
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
                                 <div class="form-group" style="margin-top: 23px;">
-                                    <input class="btn btn-warning" type="submit" id="submit" value="Submit" disabled>
+                                    <input class="btn btn-warning" type="submit" style="width: 100%;" id="submit" value="Submit" disabled>
                                 </div>
                             </div>
                         </div>
