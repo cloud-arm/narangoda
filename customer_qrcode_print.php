@@ -27,7 +27,7 @@
                 padding: 2px;
                 border-radius: 10px;
                 border: 1px solid;
-                width: 25%;
+                width: 24%;
                 display: flex;
             }
 
