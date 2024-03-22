@@ -240,22 +240,22 @@
 
           <li class="<?php if ($f == 'hr_employee') {
                         echo 'active';
-                      } ?>"><a href="hr_employee.php"><i class="fa fa-user"></i>Employee</a></li>
+                      } ?>"><a href="hr_employee.php"><i class="fa fa-user"></i> <span>Employee</span> </a></li>
           <li class="<?php if ($f == 'hr_attendance') {
                         echo 'active';
-                      } ?>"><a href="hr_attendance.php"><i class="fa  fa-500px"></i>Attendance</a></li>
+                      } ?>"><a href="hr_attendance.php"><i class="fa  fa-500px"></i> <span>Attendance</span> </a></li>
           <!-- <li class="<?php if ($f == 'hr_allowances') {
                             echo 'active';
                           } ?>"><a href="hr_allowances.php"><i class="fa fa-star-o"></i>Allowances</a></li> -->
           <li class="<?php if ($f == 'hr_salary_advance') {
                         echo 'active';
-                      } ?>"><a href="hr_salary_advance.php"><i class="fa fa-money"></i>Advance</a></li>
+                      } ?>"><a href="hr_salary_advance.php"><i class="fa fa-money"></i> <span>Advance</span> </a></li>
           <li class="<?php if ($f == 'hr_payroll') {
                         echo 'active';
-                      } ?>"><a href="hr_payroll.php"><i class="fa fa-list-alt "></i>Payroll </a></li>
+                      } ?>"><a href="hr_payroll.php"><i class="fa fa-list-alt "></i> <span>Payroll</span>  </a></li>
           <!-- <li class="<?php if ($f == 'hr_pay_out') {
                             echo 'active';
-                          } ?>"><a href="hr_pay_out.php?date=<?php echo date('Y-m'); ?>"><i class="fa fa-list-alt"></i>Pay Out </a></li> -->
+                          } ?>"><a href="hr_pay_out.php?date=<?php echo date('Y-m'); ?>"><i class="fa fa-list-alt"></i> <span>Pay Out</span>  </a></li> -->
 
           <?php $co = '';
           if ($f == 'hr_salary_rp' || $f == 'hr_epf_rp' || $f == 'hr_etf_rp') {
@@ -321,19 +321,19 @@
 
           <li class="<?php if ($f == 'acc_transfer') {
                         echo 'active';
-                      } ?>"><a href="acc_transfer.php"><i class="fa fa-exchange"></i> Account Transfer</a></li>
+                      } ?>"><a href="acc_transfer.php"><i class="fa fa-exchange"></i> <span> Account Transfer</span> </a></li>
 
           <li class="<?php if ($f == 'acc_bank_transfer') {
                         echo 'active';
-                      } ?>"><a href="acc_bank_transfer.php"><i class="fa fa-bank"></i> Bank Transfer</a></li>
+                      } ?>"><a href="acc_bank_transfer.php"><i class="fa fa-bank"></i> <span> Bank Transfer</span> </a></li>
 
           <li class="<?php if ($f == 'acc_bank_loan') {
                         echo 'active';
-                      } ?>"><a href="acc_bank_loan.php"><i class="fa fa-money"></i> Bank Loan</a></li>
+                      } ?>"><a href="acc_bank_loan.php"><i class="fa fa-money"></i>  <span>Bank Loan</span> </a></li>
 
           <li class="<?php if ($f == 'acc_chq_realizing') {
                         echo 'active';
-                      } ?>"><a href="acc_chq_realizing.php"><i class="fa fa-random"></i> Chq Realizing</a></li>
+                      } ?>"><a href="acc_chq_realizing.php"><i class="fa fa-random"></i> <span>Chq Realizing</span>  </a></li>
 
           <?php $co = '';
           if ($f == 'acc_regeneration' || $f == 'acc_bank_regeneration') {
