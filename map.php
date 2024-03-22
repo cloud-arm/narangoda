@@ -34,7 +34,7 @@ include("connect.php");
     <!-- Main content -->
     <section class="content">
 
-      <div class="map" id="map" style="height: 800px;"></div>
+      <div class="map" id="map" style="height: 800px;width: 100%;"></div>
 
     </section>
     <!-- /.content -->
