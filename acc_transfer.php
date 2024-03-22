@@ -55,7 +55,7 @@ include("connect.php");
                                                         <div class="col-md-5">
                                                             <div class="form-group ">
                                                                 <label for="">Select Account</label>
-                                                                <select class="form-control" name="acc_from" id="from" onchange="check()" style="width: 100%;" tabindex="1" autofocus>
+                                                                <select class="form-control select2 hidden-search" name="acc_from" id="from" onchange="check()" style="width: 100%;" tabindex="1" autofocus>
 
                                                                     <?php
                                                                     $result = $db->prepare("SELECT * FROM cash ");
@@ -80,7 +80,7 @@ include("connect.php");
                                                         <div class="col-md-5">
                                                             <div class="form-group ">
                                                                 <label for="">Select Account</label>
-                                                                <select class="form-control" name="acc_to" id="to" onchange="check()" style="width: 100%;" tabindex="1" autofocus>
+                                                                <select class="form-control select2 hidden-search" name="acc_to" id="to" onchange="check()" style="width: 100%;" tabindex="1" autofocus>
 
                                                                     <?php
                                                                     $result = $db->prepare("SELECT * FROM cash ");
@@ -121,25 +121,42 @@ include("connect.php");
 
                                         <div class="col-md-4">
                                             <div class="row">
-                                                <?php
+                                                <?php $pra = 0;
+                                                $result = $db->prepare("SELECT sum(amount) FROM cash ");
+                                                $result->bindParam(':userid', $res);
+                                                $result->execute();
+                                                for ($i = 0; $row = $result->fetch(); $i++) {
+                                                    $sum = $row['sum(amount)'];
+                                                }
+
                                                 $result = $db->prepare("SELECT * FROM cash ");
                                                 $result->bindParam(':userid', $res);
                                                 $result->execute();
                                                 for ($i = 0; $row = $result->fetch(); $i++) {
-                                                ?>
 
-                                                    <div class="col-md-10" style="margin-left: 30px;">
-                                                        <div class="small-box" style="border: 1px solid;padding: 15px 0; ">
-                                                            <div class="inner">
-                                                                <h3 style="font-size: 23px;position: relative;"><?php echo $row['amount']; ?></h3>
-                                                                <input type="hidden" id="acc_<?php echo $id; ?>" value="<?php echo $row['amount']; ?>">
-                                                                <p><?php echo $row['name']; ?></p>
+                                                    $pra = $row['amount'] / $sum * 100;
+                                                ?>
+                                                    <div class="col-md-10 " style="margin-left: 30px;">
+                                                        <div class="info-box bg-gray">
+                                                            <span class="info-box-icon">
+                                                                <i class="fa fa-dollar" style="color:rgb(var(--bg-light-100))"></i>
+                                                            </span>
+
+                                                            <div class="info-box-content">
+                                                                <span class="info-box-text" style="font-size: 13px; text-align: end; padding-right: 10px;"><?php echo ucfirst($row['name']) ?></span>
+                                                                <span class="info-box-number" style="font-size: 25px;margin: 5px 0;"><?php echo $row['amount']; ?></span>
+                                                                <input type="hidden" id="acc_<?php echo $row['id']; ?>" value="<?php echo $row['amount']; ?>">
+
+                                                                <div class="progress">
+                                                                    <div class="progress-bar" style="width: <?php echo $pra; ?>%"></div>
+                                                                </div>
+                                                                <span class="progress-description">
+                                                                </span>
                                                             </div>
-                                                            <div class="icon" style="color: rgba(var(--bg-content-light),0.2);"><i class="fa fa-dollar"></i></div>
                                                         </div>
                                                     </div>
 
-                                                <?php    } ?>
+                                                <?php  } ?>
                                             </div>
                                         </div>
                                     </div>
@@ -203,9 +220,9 @@ include("connect.php");
 
         function checking() {
             let f = $("#from").val();
-            let blc = parseInt($("#acc_" + f).val());
+            let blc = parseFloat($("#acc_" + f).val());
             let txt = $("#pay_txt").val();
-
+            console.log(blc);
             if (0 >= txt || txt > blc) {
                 $('#btn_tr').attr("disabled", "");
             } else {
@@ -232,6 +249,9 @@ include("connect.php");
         $(function() {
             //Initialize Select2 Elements
             $(".select2").select2();
+            $('.select2.hidden-search').select2({
+                minimumResultsForSearch: -1
+            });
 
             //Date range picker
             $('#reservation').daterangepicker();
