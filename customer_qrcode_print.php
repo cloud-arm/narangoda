@@ -36,6 +36,7 @@
                 display: flex;
                 width: 100%;
                 flex-direction: column;
+                justify-content: space-between;
                 gap: 5px;
                 margin-left: 5px;
                 position: relative;
@@ -54,19 +55,22 @@
             }
 
             body h2 {
-                font-size: 10px;
+                font-size: 9px;
                 margin: 0;
                 width: 95%;
-                /* white-space: nowrap; */
                 overflow: hidden;
                 text-overflow: ellipsis;
-                /* position: relative;  */
             }
 
             body h3 {
-                font-size: 8px;
-                margin: 0;
-                width: 100%;
+                font-size: 7px;
+                margin: 0 0 10px 0;
+                width: 80%;
+                text-align: end;
+            }
+
+            body h3>i.fa-cloud {
+                opacity: 0.7;
             }
         }
     </style>
@@ -96,8 +100,8 @@
                 </span>
                 <span class="span">
                     <h1><b>Narangoda Group</b></h1>
-                    <h2><?php echo $name; ?></h2>
-                    <!-- <h2> <i class="fa-solid fa-cloud"></i> CLOUD arm</h2> -->
+                    <h2><?php echo substr($name, 0, 15); ?>...</h2>
+                    <h3> <i class="fa-solid fa-cloud"></i> CLOUD arm</h3>
                 </span>
             </div>
             <div class="div">
@@ -106,8 +110,8 @@
                 </span>
                 <span class="span">
                     <h1><b>Narangoda Group</b></h1>
-                    <h2><?php echo $name; ?></h2>
-                    <!-- <h2> <i class="fa-solid fa-cloud"></i> CLOUD arm</h2> -->
+                    <h2><?php echo substr($name, 0, 15); ?>...</h2>
+                    <h3> <i class="fa-solid fa-cloud"></i> CLOUD arm</h3>
                 </span>
             </div>
         </section>
