@@ -139,7 +139,7 @@ include("connect.php");
                                                     <div class="col-md-10 " style="margin-left: 30px;">
                                                         <div class="info-box bg-gray">
                                                             <span class="info-box-icon">
-                                                                <i class="fa fa-dollar" style="color:rgb(var(--bg-light-100))"></i>
+                                                                <i class="fa fa-dollar" style="color:rgb(var(--bg-light-100));font-size: 50px;"></i>
                                                             </span>
 
                                                             <div class="info-box-content">
