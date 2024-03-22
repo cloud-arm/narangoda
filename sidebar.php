@@ -252,7 +252,7 @@
                       } ?>"><a href="hr_salary_advance.php"><i class="fa fa-money"></i> <span>Advance</span> </a></li>
           <li class="<?php if ($f == 'hr_payroll') {
                         echo 'active';
-                      } ?>"><a href="hr_payroll.php"><i class="fa fa-list-alt "></i> <span>Payroll</span>  </a></li>
+                      } ?>"><a href="hr_payroll.php"><i class="fa fa-list-alt "></i> <span>Payroll</span> </a></li>
           <!-- <li class="<?php if ($f == 'hr_pay_out') {
                             echo 'active';
                           } ?>"><a href="hr_pay_out.php?date=<?php echo date('Y-m'); ?>"><i class="fa fa-list-alt"></i> <span>Pay Out</span>  </a></li> -->
@@ -273,13 +273,22 @@
 
               <li class="<?php if ($f == 'hr_salary_rp') {
                             echo 'active';
-                          } ?>"><a href="hr_salary_rp.php?date=<?php echo date('Y-m') ?>"><i class="fa fa-circle-o  text-aqua"></i> Salary Summery</a></li>
-              <li class="<?php if ($f == 'hr_epf_rp') {
+                          } ?>"><a href="#hr_salary_rp.php?date=<?php echo date('Y-m') ?>"><i class="fa fa-circle-o  text-aqua"></i> Salary Summery
+                  <span class="pull-right-container">
+                    <i class="fa fa-spinner fa-spin pull-right"></i>
+                  </span></a></li>
+              <li class="<?php if ($f == '#hr_epf_rp') {
                             echo 'active';
-                          } ?>"><a href="hr_epf_rp.php"><i class="fa fa-circle-o text-aqua"></i> EPF</a></li>
-              <li class="<?php if ($f == 'hr_etf_rp') {
+                          } ?>"><a href="hr_epf_rp.php"><i class="fa fa-circle-o text-aqua"></i> EPF
+                  <span class="pull-right-container">
+                    <i class="fa fa-spinner fa-spin pull-right"></i>
+                  </span></a></li>
+              <li class="<?php if ($f == '#hr_etf_rp') {
                             echo 'active';
-                          } ?>"><a href="hr_etf_rp.php"><i class="fa fa-circle-o text-aqua"></i> ETF</a></li>
+                          } ?>"><a href="hr_etf_rp.php"><i class="fa fa-circle-o text-aqua"></i> ETF
+                  <span class="pull-right-container">
+                    <i class="fa fa-spinner fa-spin pull-right"></i>
+                  </span></a></li>
               <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Welfare</a></li> -->
 
             </ul>
@@ -329,11 +338,11 @@
 
           <li class="<?php if ($f == 'acc_bank_loan') {
                         echo 'active';
-                      } ?>"><a href="acc_bank_loan.php"><i class="fa fa-money"></i>  <span>Bank Loan</span> </a></li>
+                      } ?>"><a href="acc_bank_loan.php"><i class="fa fa-money"></i> <span>Bank Loan</span> </a></li>
 
           <li class="<?php if ($f == 'acc_chq_realizing') {
                         echo 'active';
-                      } ?>"><a href="acc_chq_realizing.php"><i class="fa fa-random"></i> <span>Chq Realizing</span>  </a></li>
+                      } ?>"><a href="acc_chq_realizing.php"><i class="fa fa-random"></i> <span>Chq Realizing</span> </a></li>
 
           <?php $co = '';
           if ($f == 'acc_regeneration' || $f == 'acc_bank_regeneration') {
@@ -436,13 +445,22 @@
 
                   <li class="<?php if ($f == 'hr_salary_rp') {
                                 echo 'active';
-                              } ?>"><a href="hr_salary_rp.php?date=<?php echo date('Y-m') ?>"><i class="fa fa-circle-o"></i> Salary Summery</a></li>
+                              } ?>"><a href="#hr_salary_rp.php?date=<?php echo date('Y-m') ?>"><i class="fa fa-circle-o"></i> Salary Summery
+                      <span class="pull-right-container">
+                        <i class="fa fa-spinner fa-spin pull-right"></i>
+                      </span></a></li>
                   <li class="<?php if ($f == 'hr_epf_rp') {
                                 echo 'active';
-                              } ?>"><a href="hr_epf_rp.php"><i class="fa fa-circle-o"></i> EPF</a></li>
+                              } ?>"><a href="#hr_epf_rp.php"><i class="fa fa-circle-o"></i> EPF
+                      <span class="pull-right-container">
+                        <i class="fa fa-spinner fa-spin pull-right"></i>
+                      </span></a></li>
                   <li class="<?php if ($f == 'hr_etf_rp') {
                                 echo 'active';
-                              } ?>"><a href="hr_etf_rp.php"><i class="fa fa-circle-o"></i> ETF</a></li>
+                              } ?>"><a href="#hr_etf_rp.php"><i class="fa fa-circle-o"></i> ETF
+                      <span class="pull-right-container">
+                        <i class="fa fa-spinner fa-spin pull-right"></i>
+                      </span></a></li>
                   <!-- <li><a href="#"><i class="fa fa-circle-o"></i> Welfare</a></li> -->
 
                 </ul>
