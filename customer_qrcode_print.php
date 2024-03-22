@@ -66,11 +66,10 @@
                 font-size: 7px;
                 margin: 0 0 10px 0;
                 width: 80%;
-                text-align: end;
             }
 
-            body h3>i.fa-cloud {
-                opacity: 0.7;
+            body h3>.icon {
+                width: 11px;
             }
         }
     </style>
@@ -101,7 +100,7 @@
                 <span class="span">
                     <h1><b>Narangoda Group</b></h1>
                     <h2><?php echo substr($name, 0, 16); ?>...</h2>
-                    <h3> <i class="fa-solid fa-cloud"></i> CLOUD ARM</h3>
+                    <h3> <img src="icon/r.png" class="icon"> CLOUD ARM</h3>
                 </span>
             </div>
             <div class="div">
@@ -111,7 +110,7 @@
                 <span class="span">
                     <h1><b>Narangoda Group</b></h1>
                     <h2><?php echo substr($name, 0, 16); ?>...</h2>
-                    <h3> <i class="fa-solid fa-cloud"></i> CLOUD ARM</h3>
+                    <h3> <img src="icon/r.png" class="icon"> CLOUD ARM</h3>
                 </span>
             </div>
         </section>
