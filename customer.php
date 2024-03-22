@@ -57,7 +57,6 @@ include("connect.php");
                 <th>Credit Period</th>
                 <th>VAT No.</th>
                 <th>Group</th>
-
                 <th>#</th>
               </tr>
 
@@ -99,7 +98,8 @@ include("connect.php");
 
                   <td style="display: flex; gap:5px;">
                     <a href="#" onclick="customer_dll('<?php echo $row['customer_id']; ?>')" title="Click to Delete" class="btn btn-danger btn-sm btn_dll"><i class="fa fa-trash"></i></a>
-                    <a href="customer.php?id=<?php echo $row['customer_id']; ?>" class="btn btn-primary btn-sm"><i class="fa fa-pencil"></i></a>
+                    <a href="customer.php?id=<?php echo $row['customer_id']; ?>" class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i></a>
+                    <a href="customer_qrcode.php?id=<?php echo $row['customer_id']; ?>" class="btn btn-primary btn-sm"><i class="fa fa-print"></i></a>
                   </td>
 
                 <?php
