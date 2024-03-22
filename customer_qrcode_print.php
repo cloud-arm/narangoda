@@ -100,8 +100,8 @@
                 </span>
                 <span class="span">
                     <h1><b>Narangoda Group</b></h1>
-                    <h2><?php echo substr($name, 0, 15); ?>...</h2>
-                    <h3> <i class="fa-solid fa-cloud"></i> CLOUD arm</h3>
+                    <h2><?php echo substr($name, 0, 16); ?>...</h2>
+                    <h3> <i class="fa-solid fa-cloud"></i> CLOUD ARM</h3>
                 </span>
             </div>
             <div class="div">
@@ -110,8 +110,8 @@
                 </span>
                 <span class="span">
                     <h1><b>Narangoda Group</b></h1>
-                    <h2><?php echo substr($name, 0, 15); ?>...</h2>
-                    <h3> <i class="fa-solid fa-cloud"></i> CLOUD arm</h3>
+                    <h2><?php echo substr($name, 0, 16); ?>...</h2>
+                    <h3> <i class="fa-solid fa-cloud"></i> CLOUD ARM</h3>
                 </span>
             </div>
         </section>
