@@ -55,7 +55,7 @@
             }
 
             body h2 {
-                font-size: 9px;
+                font-size: 7px;
                 margin: 0;
                 width: 95%;
                 overflow: hidden;
@@ -99,7 +99,7 @@
                 </span>
                 <span class="span">
                     <h1><b>Narangoda Group</b></h1>
-                    <h2><?php echo substr($name, 0, 16); ?>...</h2>
+                    <h2><?php echo substr($name, 0, 22); ?>...</h2>
                     <h3> <img src="icon/r.png" class="icon"> CLOUD ARM</h3>
                 </span>
             </div>
@@ -109,7 +109,7 @@
                 </span>
                 <span class="span">
                     <h1><b>Narangoda Group</b></h1>
-                    <h2><?php echo substr($name, 0, 16); ?>...</h2>
+                    <h2><?php echo substr($name, 0, 22); ?>...</h2>
                     <h3> <img src="icon/r.png" class="icon"> CLOUD ARM</h3>
                 </span>
             </div>
