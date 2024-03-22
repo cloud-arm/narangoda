@@ -47,7 +47,7 @@ include("connect.php");
                         <div class="box-body">
                             <form method="get" action="">
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-12">
                                         <div class="form-group">
                                             <select class="form-control select2" name="id" style="width: 100%;" tabindex="1" autofocus>
                                                 <option value="0"></option>
@@ -64,17 +64,17 @@ include("connect.php");
 
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="form-group">
-                                            <select class="form-control select2" name="year" style="width: 100%;" tabindex="1" autofocus>
+                                            <select class="form-control select2 hidden-search" name="year" style="width: 100%;" tabindex="1" autofocus>
                                                 <option> <?php echo date('Y') - 1 ?> </option>
                                                 <option selected> <?php echo date('Y') ?> </option>
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="form-group">
-                                            <select class="form-control select2" name="month" style="width: 100%;" tabindex="1" autofocus>
+                                            <select class="form-control select2 hidden-search" name="month" style="width: 100%;" tabindex="1" autofocus>
                                                 <?php for ($x = 1; $x <= 12; $x++) { ?>
                                                     <option> <?php echo sprintf("%02d", $x); ?> </option>
                                                 <?php  } ?>
@@ -82,7 +82,7 @@ include("connect.php");
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <input class="btn btn-info" type="submit" value="Submit">
                                         </div>
@@ -684,6 +684,8 @@ include("connect.php");
     <script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
     <!-- Bootstrap 3.3.6 -->
     <script src="../../bootstrap/js/bootstrap.min.js"></script>
+    <!-- Select2 -->
+    <script src="../../plugins/select2/select2.full.min.js"></script>
     <!-- DataTables -->
     <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="../../plugins/datatables/dataTables.bootstrap.min.js"></script>
@@ -700,7 +702,10 @@ include("connect.php");
     <!-- page script -->
     <script>
         $(function() {
-
+            $(".select2").select2();
+            $('.select2.hidden-search').select2({
+                minimumResultsForSearch: -1
+            });
 
             $("#example1").DataTable();
             $('#example2').DataTable({
