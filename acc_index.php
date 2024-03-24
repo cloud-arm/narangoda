@@ -183,7 +183,6 @@ include("connect.php");
 
             </div> <!-- /.box -->
 
-
             <div class="row">
                 <div class="col-md-6">
                     <!-- LINE CHART -->
@@ -233,6 +232,51 @@ include("connect.php");
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-md-6">
+                    <!-- BAR CHART -->
+                    <div class="box box-success">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Issue Chq Summary</h3>
+
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="chart">
+                                <canvas id="lineChart3" style="height: 250px"></canvas>
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <div class="col-md-6">
+                    <!-- BAR CHART -->
+                    <div class="box box-success">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Deposit Chq Summary</h3>
+
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="chart">
+                                <canvas id="lineChart4" style="height: 250px"></canvas>
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+            </div>
+
         </section>
     </div>
     <!-- /.content -->
@@ -253,9 +297,6 @@ include("connect.php");
     <script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
     <!-- Bootstrap 3.3.6 -->
     <script src="../../bootstrap/js/bootstrap.min.js"></script>
-    <!-- Morris.js charts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-    <script src="../../plugins/morris/morris.min.js"></script>
     <!-- ChartJS -->
     <script src="../../plugins/chartjs/Chart.min.js"></script>
     <!-- FastClick -->
@@ -302,17 +343,114 @@ include("connect.php");
 
             return $value;
         }
+        function getIssue($month, $para)
+        {
+            include('connect.php');
+            date_default_timezone_set("Asia/Colombo");
+
+            $d1 = date('Y-') . $month . '-01';
+            $d2 = date('Y-') . $month . '-31';
+
+            if ($para == 1) {
+                $action1 = ' ';
+                $action2 = ' ';
+            } else {
+                $action1 = 'payment.chq_action = ' . $para . ' AND';
+                $action2 = 'supply_payment.action = ' . $para . ' AND';
+            }
+
+            $value = 0;
+            $result = $db->prepare("SELECT payment.amount AS pay FROM payment JOIN bank_balance ON payment.bank_id = bank_balance.id WHERE $action1 payment.paycose = 'expenses_issue' AND payment.pay_type='chq'  AND `date` BETWEEN '$d1' AND '$d2' ORDER BY payment.chq_date ASC ");
+            $result->execute();
+            for ($i = 0; $row = $result->fetch(); $i++) {
+                $value += $row['pay'];
+            }
+            $result = $db->prepare("SELECT supply_payment.amount AS pay FROM supply_payment JOIN bank_balance ON supply_payment.bank_id = bank_balance.id WHERE $action2 supply_payment.pay_type='Chq'  AND `date` BETWEEN '$d1' AND '$d2' ORDER BY supply_payment.chq_date ASC ");
+            $result->execute();
+            for ($i = 0; $row = $result->fetch(); $i++) {
+                $value += $row['pay'];
+            }
+
+            return $value;
+        }
+        function getDeposit($month, $para)
+        {
+            include('connect.php');
+            date_default_timezone_set("Asia/Colombo");
+
+            $d1 = date('Y-') . $month . '-01';
+            $d2 = date('Y-') . $month . '-31';
+
+            if ($para == 1) {
+                $action = ' ';
+            } else {
+                $action = 'payment.chq_action = ' . $para . ' AND';
+            }
+
+            $value = 0;
+            $result = $db->prepare("SELECT *, payment.amount AS pay FROM payment JOIN bank_balance ON payment.bank_id = bank_balance.id WHERE $action payment.paycose = 'invoice_payment' AND payment.pay_type='chq' ORDER BY payment.chq_date ASC ");
+            $result->execute();
+            for ($i = 0; $row = $result->fetch(); $i++) {
+                $value += $row['pay'];
+            }
+
+            return $value;
+        }
         ?>
+
+        function getMonth(month) {
+            if (month == 1) {
+                return "Jan";
+            } else
+            if (month == 2) {
+                return "Feb";
+            } else
+            if (month == 3) {
+                return "Mar";
+            } else
+            if (month == 4) {
+                return "Apr";
+            } else
+            if (month == 5) {
+                return "May";
+            } else
+            if (month == 6) {
+                return "Jun";
+            } else
+            if (month == 7) {
+                return "Jul";
+            } else
+            if (month == 8) {
+                return "Aug";
+            } else
+            if (month == 9) {
+                return "Sep";
+            } else
+            if (month == 10) {
+                return "Oct";
+            } else
+            if (month == 11) {
+                return "Nov";
+            } else
+            if (month == 12) {
+                return "Dec";
+            }
+        }
         $(function() {
             var lineChartData1 = {
                 labels: [
-                    "January",
-                    "February",
-                    "March",
-                    "April",
+                    "Jan",
+                    "Feb",
+                    "Mar",
+                    "Apr",
                     "May",
-                    "June",
-                    "July",
+                    "Jun",
+                    "Jul",
+                    "Aug",
+                    "Sep",
+                    "Oct",
+                    "Nov",
+                    "Dec",
                 ],
                 datasets: [{
                         label: "Credit",
@@ -364,13 +502,18 @@ include("connect.php");
             };
             var lineChartData2 = {
                 labels: [
-                    "January",
-                    "February",
-                    "March",
-                    "April",
+                    "Jan",
+                    "Feb",
+                    "Mar",
+                    "Apr",
                     "May",
-                    "June",
-                    "July",
+                    "Jun",
+                    "Jul",
+                    "Aug",
+                    "Sep",
+                    "Oct",
+                    "Nov",
+                    "Dec",
                 ],
                 datasets: [{
                         label: "Credit",
@@ -416,6 +559,162 @@ include("connect.php");
                             <?php echo getPayment('10', 'payment') ?>,
                             <?php echo getPayment('11', 'payment') ?>,
                             <?php echo getPayment('12', 'payment') ?>
+                        ],
+                    },
+                ],
+            };
+            var lineChartData3 = {
+                labels: [
+                    getMonth(<?php echo date('m') - 1 ?>),
+                    getMonth(<?php echo date('m') ?>),
+                    getMonth(<?php echo date('m') + 1 ?>),
+                    getMonth(<?php echo date('m') + 2 ?>),
+                    getMonth(<?php echo date('m') + 3 ?>),
+                    getMonth(<?php echo date('m') + 4 ?>),
+                    getMonth(<?php echo date('m') + 5 ?>),
+                    getMonth(<?php echo date('m') + 6 ?>),
+                    getMonth(<?php echo date('m') + 7 ?>),
+                    getMonth(<?php echo date('m') + 8 ?>),
+                ],
+                datasets: [{
+                        label: "Return",
+                        fillColor: "rgba(204, 0, 0, 1)",
+                        strokeColor: "rgba(204, 0, 0, 1)",
+                        pointColor: "rgba(204, 0, 0, 1)",
+                        pointStrokeColor: "rgba(204, 0, 0, 1)",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(204, 0, 0, 1)",
+                        data: [
+                            <?php echo getIssue(date('m') - 1, 3) ?>,
+                            <?php echo getIssue(date('m'), 3) ?>,
+                            <?php echo getIssue(date('m') + 1, 3) ?>,
+                            <?php echo getIssue(date('m') + 2, 3) ?>,
+                            <?php echo getIssue(date('m') + 3, 3) ?>,
+                            <?php echo getIssue(date('m') + 4, 3) ?>,
+                            <?php echo getIssue(date('m') + 5, 3) ?>,
+                            <?php echo getIssue(date('m') + 6, 3) ?>,
+                            <?php echo getIssue(date('m') + 7, 3) ?>,
+                            <?php echo getIssue(date('m') + 8, 3) ?>
+                        ],
+                    },
+                    {
+                        label: "Issue",
+                        fillColor: "rgba(255,153,0,1)",
+                        strokeColor: "rgba(255,153,0,1)",
+                        pointColor: "rgba(255,153,0,1)",
+                        pointStrokeColor: "rgba(255,153,0,1)",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(255,153,0,1)",
+                        data: [
+                            <?php echo getIssue(date('m') - 1, 1) ?>,
+                            <?php echo getIssue(date('m'), 1) ?>,
+                            <?php echo getIssue(date('m') + 1, 1) ?>,
+                            <?php echo getIssue(date('m') + 2, 1) ?>,
+                            <?php echo getIssue(date('m') + 3, 1) ?>,
+                            <?php echo getIssue(date('m') + 4, 1) ?>,
+                            <?php echo getIssue(date('m') + 5, 1) ?>,
+                            <?php echo getIssue(date('m') + 6, 1) ?>,
+                            <?php echo getIssue(date('m') + 7, 1) ?>,
+                            <?php echo getIssue(date('m') + 8, 1) ?>
+                        ],
+                    },
+                    {
+                        label: "Realize",
+                        fillColor: "rgba(0,166,90,1)",
+                        strokeColor: "rgba(0,166,90,1)",
+                        pointColor: "rgba(0,166,90,1)",
+                        pointStrokeColor: "rgba(0,166,90,1)",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(0,166,90,1)",
+                        data: [
+                            <?php echo getIssue(date('m') - 1, 2) ?>,
+                            <?php echo getIssue(date('m'), 2) ?>,
+                            <?php echo getIssue(date('m') + 1, 2) ?>,
+                            <?php echo getIssue(date('m') + 2, 2) ?>,
+                            <?php echo getIssue(date('m') + 3, 2) ?>,
+                            <?php echo getIssue(date('m') + 4, 2) ?>,
+                            <?php echo getIssue(date('m') + 5, 2) ?>,
+                            <?php echo getIssue(date('m') + 6, 2) ?>,
+                            <?php echo getIssue(date('m') + 7, 2) ?>,
+                            <?php echo getIssue(date('m') + 8, 2) ?>
+                        ],
+                    },
+                ],
+            };
+            var lineChartData4 = {
+                labels: [
+                    getMonth(<?php echo date('m') - 1 ?>),
+                    getMonth(<?php echo date('m') ?>),
+                    getMonth(<?php echo date('m') + 1 ?>),
+                    getMonth(<?php echo date('m') + 2 ?>),
+                    getMonth(<?php echo date('m') + 3 ?>),
+                    getMonth(<?php echo date('m') + 4 ?>),
+                    getMonth(<?php echo date('m') + 5 ?>),
+                    getMonth(<?php echo date('m') + 6 ?>),
+                    getMonth(<?php echo date('m') + 7 ?>),
+                    getMonth(<?php echo date('m') + 8 ?>),
+                ],
+                datasets: [{
+                        label: "Return",
+                        fillColor: "rgba(204, 0, 0, 1)",
+                        strokeColor: "rgba(204, 0, 0, 1)",
+                        pointColor: "rgba(204, 0, 0, 1)",
+                        pointStrokeColor: "rgba(204, 0, 0, 1)",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(204, 0, 0, 1)",
+                        data: [
+                            <?php echo getDeposit(date('m') - 1, 3) ?>,
+                            <?php echo getDeposit(date('m'), 3) ?>,
+                            <?php echo getDeposit(date('m') + 1, 3) ?>,
+                            <?php echo getDeposit(date('m') + 2, 3) ?>,
+                            <?php echo getDeposit(date('m') + 3, 3) ?>,
+                            <?php echo getDeposit(date('m') + 4, 3) ?>,
+                            <?php echo getDeposit(date('m') + 5, 3) ?>,
+                            <?php echo getDeposit(date('m') + 6, 3) ?>,
+                            <?php echo getDeposit(date('m') + 7, 3) ?>,
+                            <?php echo getDeposit(date('m') + 8, 3) ?>
+                        ],
+                    },
+                    {
+                        label: "Issue",
+                        fillColor: "rgba(255,153,0,1)",
+                        strokeColor: "rgba(255,153,0,1)",
+                        pointColor: "rgba(255,153,0,1)",
+                        pointStrokeColor: "rgba(255,153,0,1)",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(255,153,0,1)",
+                        data: [
+                            <?php echo getDeposit(date('m') - 1, 1) ?>,
+                            <?php echo getDeposit(date('m'), 1) ?>,
+                            <?php echo getDeposit(date('m') + 1, 1) ?>,
+                            <?php echo getDeposit(date('m') + 2, 1) ?>,
+                            <?php echo getDeposit(date('m') + 3, 1) ?>,
+                            <?php echo getDeposit(date('m') + 4, 1) ?>,
+                            <?php echo getDeposit(date('m') + 5, 1) ?>,
+                            <?php echo getDeposit(date('m') + 6, 1) ?>,
+                            <?php echo getDeposit(date('m') + 7, 1) ?>,
+                            <?php echo getDeposit(date('m') + 8, 1) ?>
+                        ],
+                    },
+                    {
+                        label: "Realize",
+                        fillColor: "rgba(0,166,90,1)",
+                        strokeColor: "rgba(0,166,90,1)",
+                        pointColor: "rgba(0,166,90,1)",
+                        pointStrokeColor: "rgba(0,166,90,1)",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(0,166,90,1)",
+                        data: [
+                            <?php echo getDeposit(date('m') - 1, 2) ?>,
+                            <?php echo getDeposit(date('m'), 2) ?>,
+                            <?php echo getDeposit(date('m') + 1, 2) ?>,
+                            <?php echo getDeposit(date('m') + 2, 2) ?>,
+                            <?php echo getDeposit(date('m') + 3, 2) ?>,
+                            <?php echo getDeposit(date('m') + 4, 2) ?>,
+                            <?php echo getDeposit(date('m') + 5, 2) ?>,
+                            <?php echo getDeposit(date('m') + 6, 2) ?>,
+                            <?php echo getDeposit(date('m') + 7, 2) ?>,
+                            <?php echo getDeposit(date('m') + 8, 2) ?>
                         ],
                     },
                 ],
@@ -468,6 +767,12 @@ include("connect.php");
 
             var lineChart2 = new Chart($("#lineChart2").get(0).getContext("2d"));
             lineChart2.Line(lineChartData2, lineChartOptions);
+
+            var lineChart3 = new Chart($("#lineChart3").get(0).getContext("2d"));
+            lineChart3.Line(lineChartData3, lineChartOptions);
+
+            var lineChart4 = new Chart($("#lineChart4").get(0).getContext("2d"));
+            lineChart4.Line(lineChartData4, lineChartOptions);
         });
     </script>
 </body>
