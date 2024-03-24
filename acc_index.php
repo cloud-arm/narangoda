@@ -58,18 +58,23 @@ include("connect.php");
                 <div class="col-md-3">
                     <!-- Info Boxes Style 2 -->
                     <div class="info-box bg-yellow">
-                        <span class="info-box-icon"><i class="glyphicon glyphicon-signal"></i></span>
+                        <span class="info-box-icon"><i class="fa-solid fa-dollar"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Sales Value</span>
-                            <span class="info-box-number">24,587<?php // echo $date; 
-                                                                ?></span>
+                            <span class="info-box-text">Payment</span>
+                            <?php $date = date('Y-m-d');
+                            $result = $db->prepare("SELECT SUM(amount) FROM `payment` WHERE `date` = '$date' ");
+                            $result->execute();
+                            for ($i = 0; $row = $result->fetch(); $i++) {
+                                $payment = $row['SUM(amount)'];
+                            } ?>
+                            <span class="info-box-number"><?php echo $payment; ?></span>
 
                             <div class="progress">
-                                <div class="progress-bar" style="width: 50%"></div>
+                                <div class="progress-bar" style="width: 0%"></div>
                             </div>
                             <span class="progress-description">
-                                50% Increase in 30 Days
+                                Today All Payment
                             </span>
                         </div>
                     </div>
@@ -78,17 +83,65 @@ include("connect.php");
                 <div class="col-md-3">
                     <!-- /.info-box -->
                     <div class="info-box bg-green">
-                        <span class="info-box-icon"><i class="glyphicon glyphicon-user"></i></span>
+                        <span class="info-box-icon"><i class="fa-solid fa-money-check-dollar"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">New Customer</span>
-                            <span class="info-box-number">12</span>
+                            <span class="info-box-text">Credit CHQ</span>
+                            <?php $credit = 0;
+                            $result = $db->prepare("SELECT *, payment.amount AS pay FROM payment JOIN bank_balance ON payment.bank_id = bank_balance.id WHERE payment.chq_action = 1 AND payment.paycose = 'invoice_payment' AND payment.pay_type='chq' ORDER BY payment.chq_date ASC ");
+                            $result->execute();
+                            for ($i = 0; $row = $result->fetch(); $i++) {
+                                $credit = $row['pay'];
+                            } ?>
+                            <span class="info-box-number"><?php echo $credit; ?></span>
 
                             <div class="progress">
-                                <div class="progress-bar" style="width: 20%"></div>
+                                <div class="progress-bar" style="width: 0%"></div>
                             </div>
                             <span class="progress-description">
-                                20% Increase in 30 Days
+                                Un Realize Deposit Chq
+                            </span>
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <!-- /.info-box -->
+                    <div class="info-box bg-blue">
+                        <span class="info-box-icon"><i class="fa-solid fa-money-check"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Debit CHQ</span>
+                            <?php $debit = 0;
+                            $result = $db->prepare("SELECT *, payment.amount AS pay FROM payment JOIN bank_balance ON payment.bank_id = bank_balance.id WHERE  payment.chq_action = 1 AND payment.paycose = 'expenses_issue' AND payment.pay_type='chq'  ORDER BY payment.chq_date ASC ");
+                            $result->execute();
+                            for ($i = 0; $row = $result->fetch(); $i++) {
+                                $date1 = date_create(date('Y-m-d'));
+                                $date2 = date_create($row['chq_date']);
+                                $date_diff = date_diff($date1, $date2);
+                                $date_diff = $date_diff->format("%R%a");
+                                if ($date_diff <= 0) {
+                                    $debit += $row['pay'];
+                                }
+                            }
+                            $result = $db->prepare("SELECT *,supply_payment.amount AS pay FROM supply_payment JOIN bank_balance ON supply_payment.bank_id = bank_balance.id WHERE  supply_payment.action = 1 AND supply_payment.pay_type='Chq'  ORDER BY supply_payment.chq_date ASC ");
+                            $result->execute();
+                            for ($i = 0; $row = $result->fetch(); $i++) {
+                                $date1 = date_create(date('Y-m-d'));
+                                $date2 = date_create($row['chq_date']);
+                                $date_diff = date_diff($date1, $date2);
+                                $date_diff = $date_diff->format("%R%a");
+                                if ($date_diff <= 0) {
+                                    $debit += $row['pay'];
+                                }
+                            } ?>
+                            <span class="info-box-number"><?php echo $debit; ?></span>
+
+                            <div class="progress">
+                                <div class="progress-bar" style="width: 0%"></div>
+                            </div>
+                            <span class="progress-description">
+                                Un Realize Issue Chq
                             </span>
                         </div>
                         <!-- /.info-box-content -->
@@ -97,36 +150,30 @@ include("connect.php");
                 <div class="col-md-3">
                     <!-- /.info-box -->
                     <div class="info-box bg-red">
-                        <span class="info-box-icon"><i class="glyphicon glyphicon-resize-small"></i></span>
+                        <span class="info-box-icon"><i class="fa-solid fa-money-check"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Credit Recovery</span>
-                            <span class="info-box-number">114,381</span>
-
-                            <div class="progress">
-                                <div class="progress-bar" style="width: 70%"></div>
-                            </div>
-                            <span class="progress-description">
-                                70% Increase in 30 Days
+                            <span class="info-box-text">May Be return chq</span>
+                            <?php $return = 0;
+                            $result = $db->prepare("SELECT SUM(amount) FROM `bank` ");
+                            $result->execute();
+                            for ($i = 0; $row = $result->fetch(); $i++) {
+                                $bank = $row['SUM(amount)'];
+                            }
+                            $return = $debit - ($credit + $bank); ?>
+                            <span class="info-box-number">
+                                <?php if ($return > 0) {
+                                    echo $return;
+                                } else {
+                                    echo 0;
+                                }; ?>
                             </span>
-                        </div>
-                        <!-- /.info-box-content -->
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <!-- /.info-box -->
-                    <div class="info-box bg-aqua">
-                        <span class="info-box-icon"><i class="glyphicon glyphicon-signal"></i></span>
-
-                        <div class="info-box-content">
-                            <span class="info-box-text">Day Average</span>
-                            <span class="info-box-number">163,921</span>
 
                             <div class="progress">
-                                <div class="progress-bar" style="width: 20%"></div>
+                                <div class="progress-bar" style="width: 0%"></div>
                             </div>
                             <span class="progress-description">
-                                40% Increase in 30 Days
+                                May Be Return Chq
                             </span>
                         </div>
                         <!-- /.info-box-content -->
