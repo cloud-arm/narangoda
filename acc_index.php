@@ -142,7 +142,7 @@ include("connect.php");
                     <!-- LINE CHART -->
                     <div class="box box-info">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Credit</h3>
+                            <h3 class="box-title">Credit Collection</h3>
 
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse">
@@ -165,7 +165,7 @@ include("connect.php");
                     <!-- LINE CHART -->
                     <div class="box box-info">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Line Chart</h3>
+                            <h3 class="box-title">Credit Payment</h3>
 
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse">
@@ -236,9 +236,10 @@ include("connect.php");
             } else 
             if ($para == 'credit_pay') {
                 $result = $db->prepare("SELECT SUM(pay_amount) FROM `payment` WHERE `pay_type` = 'credit' AND `paycose` = 'invoice_payment' AND `date` BETWEEN '$d1' AND '$d2' ");
+            } else 
+            if ($para == 'payment') {
+                $result = $db->prepare("SELECT SUM(amount) FROM `payment` WHERE `pay_type` = 'credit_payment' AND `paycose` = 'credit' AND `date` BETWEEN '$d1' AND '$d2' ");
             }
-            // $result = $db->prepare("SELECT SUM(amount) FROM `payment` WHERE `pay_type` = 'credit' AND `paycose` = 'invoice_payment' AND `$para` BETWEEN '$d1' AND '$d2' ");
-            $result->bindParam(':id', $cr_id);
             $result->execute();
             for ($i = 0; $row = $result->fetch(); $i++) {
                 if ($para == 'credit_pay') {
@@ -267,13 +268,13 @@ include("connect.php");
                     "July",
                 ],
                 datasets: [{
-                        label: "Electronics",
-                        fillColor: "rgba(255, 0, 0, 1)",
-                        strokeColor: "rgba(255, 0, 0, 1)",
-                        pointColor: "rgba(255, 0, 0, 1)",
-                        pointStrokeColor: "#c1c7d1",
+                        label: "Credit",
+                        fillColor: "rgba(204, 0, 0, 1)",
+                        strokeColor: "rgba(204, 0, 0, 1)",
+                        pointColor: "rgba(204, 0, 0, 1)",
+                        pointStrokeColor: "rgba(204, 0, 0, 1)",
                         pointHighlightFill: "#fff",
-                        pointHighlightStroke: "rgba(220,220,220,1)",
+                        pointHighlightStroke: "rgba(204, 0, 0, 1)",
                         data: [
                             <?php echo getPayment('01', 'credit') ?>,
                             <?php echo getPayment('02', 'credit') ?>,
@@ -290,13 +291,13 @@ include("connect.php");
                         ],
                     },
                     {
-                        label: "Digital Goods",
-                        fillColor: "rgba(0,0,255,1)",
-                        strokeColor: "rgba(0,0,255,1)",
-                        pointColor: "#3b8bba",
-                        pointStrokeColor: "rgba(0,0,255,1)",
+                        label: "Collection",
+                        fillColor: "rgba(255,153,0,1)",
+                        strokeColor: "rgba(255,153,0,1)",
+                        pointColor: "rgba(255,153,0,1)",
+                        pointStrokeColor: "rgba(255,153,0,1)",
                         pointHighlightFill: "#fff",
-                        pointHighlightStroke: "rgba(0,0,255,1)",
+                        pointHighlightStroke: "rgba(255,153,0,1)",
                         data: [
                             <?php echo getPayment('01', 'credit_pay') ?>,
                             <?php echo getPayment('02', 'credit_pay') ?>,
@@ -325,24 +326,50 @@ include("connect.php");
                     "July",
                 ],
                 datasets: [{
-                        label: "Electronics",
-                        fillColor: "rgba(255, 0, 0, 1)",
-                        strokeColor: "rgba(255, 0, 0, 1)",
-                        pointColor: "rgba(255, 0, 0, 1)",
-                        pointStrokeColor: "#c1c7d1",
+                        label: "Credit",
+                        fillColor: "rgba(204, 0, 0, 1)",
+                        strokeColor: "rgba(204, 0, 0, 1)",
+                        pointColor: "rgba(204, 0, 0, 1)",
+                        pointStrokeColor: "rgba(204, 0, 0, 1)",
                         pointHighlightFill: "#fff",
-                        pointHighlightStroke: "rgba(220,220,220,1)",
-                        data: [65, 59, 80, 81, 56, 55, 100],
+                        pointHighlightStroke: "rgba(204, 0, 0, 1)",
+                        data: [
+                            <?php echo getPayment('01', 'credit') ?>,
+                            <?php echo getPayment('02', 'credit') ?>,
+                            <?php echo getPayment('03', 'credit') ?>,
+                            <?php echo getPayment('04', 'credit') ?>,
+                            <?php echo getPayment('05', 'credit') ?>,
+                            <?php echo getPayment('06', 'credit') ?>,
+                            <?php echo getPayment('07', 'credit') ?>,
+                            <?php echo getPayment('08', 'credit') ?>,
+                            <?php echo getPayment('09', 'credit') ?>,
+                            <?php echo getPayment('10', 'credit') ?>,
+                            <?php echo getPayment('11', 'credit') ?>,
+                            <?php echo getPayment('12', 'credit') ?>
+                        ],
                     },
                     {
-                        label: "Digital Goods",
-                        fillColor: "rgba(0,0,255,1)",
-                        strokeColor: "rgba(0,0,255,1)",
-                        pointColor: "#3b8bba",
-                        pointStrokeColor: "rgba(0,0,255,1)",
+                        label: "Payment",
+                        fillColor: "rgba(0,102,255,1)",
+                        strokeColor: "rgba(0,102,255,1)",
+                        pointColor: "rgba(0,102,255,1)",
+                        pointStrokeColor: "rgba(0,102,255,1)",
                         pointHighlightFill: "#fff",
-                        pointHighlightStroke: "rgba(0,0,255,1)",
-                        data: [28, 48, 40, 19, 86, 27, 90],
+                        pointHighlightStroke: "rgba(0,102,255,1)",
+                        data: [
+                            <?php echo getPayment('01', 'payment') ?>,
+                            <?php echo getPayment('02', 'payment') ?>,
+                            <?php echo getPayment('03', 'payment') ?>,
+                            <?php echo getPayment('04', 'payment') ?>,
+                            <?php echo getPayment('05', 'payment') ?>,
+                            <?php echo getPayment('06', 'payment') ?>,
+                            <?php echo getPayment('07', 'payment') ?>,
+                            <?php echo getPayment('08', 'payment') ?>,
+                            <?php echo getPayment('09', 'payment') ?>,
+                            <?php echo getPayment('10', 'payment') ?>,
+                            <?php echo getPayment('11', 'payment') ?>,
+                            <?php echo getPayment('12', 'payment') ?>
+                        ],
                     },
                 ],
             };
