@@ -142,7 +142,7 @@ include("connect.php");
                     <!-- LINE CHART -->
                     <div class="box box-info">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Line Chart</h3>
+                            <h3 class="box-title">Credit</h3>
 
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse">
@@ -156,6 +156,29 @@ include("connect.php");
                         <div class="box-body">
                             <div class="chart">
                                 <canvas id="lineChart1" style="height: 250px"></canvas>
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <!-- LINE CHART -->
+                    <div class="box box-info">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Line Chart</h3>
+
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="chart">
+                                <canvas id="lineChart2" style="height: 250px"></canvas>
                             </div>
                         </div>
                         <!-- /.box-body -->
@@ -198,8 +221,100 @@ include("connect.php");
     <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
 
     <script>
+        <?php
+        function getPayment($month, $para)
+        {
+            include('connect.php');
+            date_default_timezone_set("Asia/Colombo");
+
+            $d1 = date('Y-') . $month . '-01';
+            $d2 = date('Y-') . $month . '-31';
+
+            $value = 0;
+            if ($para == 'credit') {
+                $result = $db->prepare("SELECT SUM(amount) FROM `payment` WHERE `pay_type` = 'credit' AND `paycose` = 'invoice_payment' AND `date` BETWEEN '$d1' AND '$d2' ");
+            } else 
+            if ($para == 'credit_pay') {
+                $result = $db->prepare("SELECT SUM(pay_amount) FROM `payment` WHERE `pay_type` = 'credit' AND `paycose` = 'invoice_payment' AND `date` BETWEEN '$d1' AND '$d2' ");
+            }
+            // $result = $db->prepare("SELECT SUM(amount) FROM `payment` WHERE `pay_type` = 'credit' AND `paycose` = 'invoice_payment' AND `$para` BETWEEN '$d1' AND '$d2' ");
+            $result->bindParam(':id', $cr_id);
+            $result->execute();
+            for ($i = 0; $row = $result->fetch(); $i++) {
+                if ($para == 'credit_pay') {
+                    $value = $row['SUM(pay_amount)'];
+                } else {
+                    $value = $row['SUM(amount)'];
+                }
+            }
+
+            if ($value == null) {
+                $value = 0;
+            }
+
+            return $value;
+        }
+        ?>
         $(function() {
-            var lineChartData = {
+            var lineChartData1 = {
+                labels: [
+                    "January",
+                    "February",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                ],
+                datasets: [{
+                        label: "Electronics",
+                        fillColor: "rgba(255, 0, 0, 1)",
+                        strokeColor: "rgba(255, 0, 0, 1)",
+                        pointColor: "rgba(255, 0, 0, 1)",
+                        pointStrokeColor: "#c1c7d1",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(220,220,220,1)",
+                        data: [
+                            <?php echo getPayment('01', 'credit') ?>,
+                            <?php echo getPayment('02', 'credit') ?>,
+                            <?php echo getPayment('03', 'credit') ?>,
+                            <?php echo getPayment('04', 'credit') ?>,
+                            <?php echo getPayment('05', 'credit') ?>,
+                            <?php echo getPayment('06', 'credit') ?>,
+                            <?php echo getPayment('07', 'credit') ?>,
+                            <?php echo getPayment('08', 'credit') ?>,
+                            <?php echo getPayment('09', 'credit') ?>,
+                            <?php echo getPayment('10', 'credit') ?>,
+                            <?php echo getPayment('11', 'credit') ?>,
+                            <?php echo getPayment('12', 'credit') ?>
+                        ],
+                    },
+                    {
+                        label: "Digital Goods",
+                        fillColor: "rgba(0,0,255,1)",
+                        strokeColor: "rgba(0,0,255,1)",
+                        pointColor: "#3b8bba",
+                        pointStrokeColor: "rgba(0,0,255,1)",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(0,0,255,1)",
+                        data: [
+                            <?php echo getPayment('01', 'credit_pay') ?>,
+                            <?php echo getPayment('02', 'credit_pay') ?>,
+                            <?php echo getPayment('03', 'credit_pay') ?>,
+                            <?php echo getPayment('04', 'credit_pay') ?>,
+                            <?php echo getPayment('05', 'credit_pay') ?>,
+                            <?php echo getPayment('06', 'credit_pay') ?>,
+                            <?php echo getPayment('07', 'credit_pay') ?>,
+                            <?php echo getPayment('08', 'credit_pay') ?>,
+                            <?php echo getPayment('09', 'credit_pay') ?>,
+                            <?php echo getPayment('10', 'credit_pay') ?>,
+                            <?php echo getPayment('11', 'credit_pay') ?>,
+                            <?php echo getPayment('12', 'credit_pay') ?>
+                        ],
+                    },
+                ],
+            };
+            var lineChartData2 = {
                 labels: [
                     "January",
                     "February",
@@ -262,7 +377,7 @@ include("connect.php");
                 //Number - Pixel width of dataset stroke
                 datasetStrokeWidth: 2,
                 //Boolean - Whether to fill the dataset with a color
-                datasetFill: true,
+                datasetFill: false,
                 //String - A legend template
                 legendTemplate: '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].lineColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
                 //Boolean - whether to maintain the starting aspect ratio or not when responsive, if set to false, will take up entire container
@@ -274,10 +389,11 @@ include("connect.php");
             //-------------
             //- LINE CHART -
             //--------------
-            var lineChartCanvas = $("#lineChart1").get(0).getContext("2d");
-            var lineChart = new Chart(lineChartCanvas);
-            lineChartOptions.datasetFill = false;
-            lineChart.Line(lineChartData, lineChartOptions);
+            var lineChart1 = new Chart($("#lineChart1").get(0).getContext("2d"));
+            lineChart1.Line(lineChartData1, lineChartOptions);
+
+            var lineChart2 = new Chart($("#lineChart2").get(0).getContext("2d"));
+            lineChart2.Line(lineChartData2, lineChartOptions);
         });
     </script>
 </body>
