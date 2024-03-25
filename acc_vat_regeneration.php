@@ -9,7 +9,7 @@ include("connect.php");
     <?php
     include_once("auth.php");
     $r = $_SESSION['SESS_LAST_NAME'];
-    $_SESSION['SESS_FORM'] = 'acc_regeneration';
+    $_SESSION['SESS_FORM'] = 'acc_vat_regeneration';
     if ($r == 'Cashier') {
         include_once("sidebar2.php");
     }
@@ -25,7 +25,7 @@ include("connect.php");
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                ACCOUNT REGENERATION
+                VAT REGENERATION
                 <small>Preview</small>
             </h1>
 
@@ -35,15 +35,15 @@ include("connect.php");
             <!-- SELECT2 EXAMPLE -->
             <div class="row" style="display: flex;justify-content:center;">
                 <?php $pra = 0;
-                $result = $db->prepare("SELECT sum(amount) FROM cash ");
-                $result->bindParam(':userid', $res);
+                $result = $db->prepare("SELECT sum(amount) FROM vat_account ");
+                $result->bindParam(':id', $date);
                 $result->execute();
                 for ($i = 0; $row = $result->fetch(); $i++) {
                     $sum = $row['sum(amount)'];
                 }
 
-                $result = $db->prepare("SELECT * FROM cash ");
-                $result->bindParam(':userid', $res);
+                $result = $db->prepare("SELECT * FROM vat_account ");
+                $result->bindParam(':id', $date);
                 $result->execute();
                 for ($i = 0; $row = $result->fetch(); $i++) {
 
@@ -56,7 +56,7 @@ include("connect.php");
                             </span>
 
                             <div class="info-box-content">
-                                <span class="info-box-text" style="font-size: 13px; text-align: end; padding-right: 10px;"><?php echo ucfirst($row['name']) ?></span>
+                                <span class="info-box-text" style="font-size: 13px; text-align: end; padding-right: 10px;"><?php echo ucfirst($row['vat_no']) ?></span>
                                 <span class="info-box-number" style="font-size: 25px;margin: 5px 0;"><?php echo $row['amount']; ?></span>
 
                                 <div class="progress">
@@ -91,12 +91,12 @@ include("connect.php");
                                                 <select class="form-control select2 hidden-search" name="account" style="width: 100%;" tabindex="1" autofocus>
 
                                                     <?php
-                                                    $result = $db->prepare("SELECT * FROM cash ");
+                                                    $result = $db->prepare("SELECT * FROM vat_account ");
                                                     $result->bindParam(':userid', $res);
                                                     $result->execute();
                                                     for ($i = 0; $row = $result->fetch(); $i++) { ?>
                                                         <option value="<?php echo $row['id']; ?>">
-                                                            <?php echo $row['name']; ?>
+                                                            <?php echo $row['vat_no']; ?>
                                                         </option>
                                                     <?php    } ?>
                                                 </select>
@@ -139,7 +139,7 @@ include("connect.php");
                         $to = date_format(date_create(explode("-", $dates)[1]), "Y-m-d");
 
 
-                        $sql = "SELECT * FROM transaction_record WHERE (credit_acc_no='$acc' OR debit_acc_id='$acc') AND date BETWEEN '$from' AND '$to'";
+                        $sql = "SELECT * FROM vat_record WHERE acc_id = '$acc' AND date BETWEEN '$from' AND '$to'";
 
                         ?>
 
@@ -149,17 +149,15 @@ include("connect.php");
                                     <tr>
                                         <th>No</th>
                                         <th>Trans: Type</th>
-                                        <th>CD: Name</th>
-                                        <th>CD: Type</th>
-                                        <th>DB: Name</th>
-                                        <th>DB: Type</th>
                                         <th>Date</th>
+                                        <th>Invoice</th>
+                                        <th>Vat (Rs.)</th>
                                         <th>Amount (Rs.)</th>
-                                        <th>ACC: Balance</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php $total = 0;
+                                    <?php $vat = 0;
+                                    $value = 0;
                                     $result = $db->prepare($sql);
                                     $result->bindParam(':userid', $res);
                                     $result->execute();
@@ -167,26 +165,25 @@ include("connect.php");
                                     ?>
                                         <tr>
                                             <td><?php echo $row['id']; ?></td>
-                                            <td><?php echo $row['transaction_type']; ?></td>
-                                            <td><?php echo $row['credit_acc_name']; ?></td>
-                                            <td><?php echo $row['credit_acc_type']; ?></td>
-                                            <td><?php echo $row['debit_acc_name']; ?></td>
-                                            <td><?php echo $row['debit_acc_type']; ?></td>
-                                            <td><?php echo $row['date']; ?></td>
                                             <td>
-                                                <?php echo number_format($row['amount'], 2); ?><br>
                                                 <?php if ($row['type'] == 'Credit') { ?>
                                                     <span class="badge bg-blue"><?php echo $row['type']; ?></span>
                                                 <?php } else { ?>
                                                     <span class="badge bg-red"><?php echo $row['type']; ?></span>
                                                 <?php } ?>
                                             </td>
-                                            <?php if ($row['type'] == 'Credit') { ?>
-                                                <td><?php echo number_format($row['credit_acc_balance'], 2); ?></td>
-                                            <?php } else { ?>
-                                                <td><?php echo number_format($row['debit_acc_balance'], 2); ?></td>
-                                            <?php } ?>
-                                            <?php $total += $row['amount']; ?>
+                                            <td><?php echo $row['date']; ?></td>
+                                            <td><?php echo $row['invoice_no']; ?></td>
+                                            <td>
+                                                <?php echo number_format($row['vat'], 2); ?>
+                                            </td>
+
+                                            <td>
+                                                <?php echo number_format($row['value'], 2); ?>
+                                            </td>
+
+                                            <?php $vat += $row['vat']; ?>
+                                            <?php $value += $row['value']; ?>
                                         </tr>
                                     <?php
                                     }
@@ -194,7 +191,8 @@ include("connect.php");
                                 </tbody>
 
                             </table>
-                            <h4>Total Amount <small> Rs. </small><b><?php echo number_format($total, 2); ?></h4>
+                            <h4>Total Vat <small> Rs. </small><b><?php echo number_format($vat, 2); ?></h4>
+                            <h4>Without Vat Amount <small> Rs. </small><b><?php echo number_format($value, 2); ?></h4>
 
                         </div>
                     </div>
