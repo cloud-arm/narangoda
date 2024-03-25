@@ -330,22 +330,36 @@
 
           <li class="<?php if ($f == 'acc_transfer') {
                         echo 'active';
-                      } ?>"><a href="acc_transfer.php"><i class="fa fa-exchange"></i> <span> Account Transfer</span> </a></li>
+                      } ?>">
+            <a href="acc_transfer.php">
+              <i class="fa fa-exchange"></i> <span> Account Transfer</span>
+            </a>
+          </li>
 
           <li class="<?php if ($f == 'acc_bank_transfer') {
                         echo 'active';
-                      } ?>"><a href="acc_bank_transfer.php"><i class="fa fa-bank"></i> <span> Bank Transfer</span> </a></li>
+                      } ?>">
+            <a href="acc_bank_transfer.php">
+              <i class="fa fa-bank"></i> <span> Bank Transfer</span>
+            </a>
+          </li>
 
           <li class="<?php if ($f == 'acc_bank_loan') {
                         echo 'active';
-                      } ?>"><a href="acc_bank_loan.php"><i class="fa fa-money"></i> <span>Bank Loan</span> </a></li>
+                      } ?>">
+            <a href="acc_bank_loan.php"><i class="fa fa-money"></i> <span>Bank Loan</span>
+            </a>
+          </li>
 
           <li class="<?php if ($f == 'acc_chq_realizing') {
                         echo 'active';
-                      } ?>"><a href="acc_chq_realizing.php"><i class="fa fa-random"></i> <span>Chq Realizing</span> </a></li>
+                      } ?>">
+            <a href="acc_chq_realizing.php"><i class="fa fa-random"></i> <span>Chq Realizing</span>
+            </a>
+          </li>
 
           <?php $co = '';
-          if ($f == 'acc_regeneration' || $f == 'acc_bank_regeneration') {
+          if ($f == 'acc_regeneration' || $f == 'acc_bank_regeneration' || $f == 'acc_vat_regeneration') {
             $co = 'active';
           } ?>
           <li class="treeview <?php echo $co; ?>">
@@ -364,6 +378,10 @@
               <li class="<?php if ($f == 'acc_bank_regeneration') {
                             echo 'active';
                           } ?>"><a href="acc_bank_regeneration.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>&bank=1"><i class="fa fa-circle-o text-red"></i> Bank Reconciliation</a></li>
+
+              <li class="<?php if ($f == 'acc_vat_regeneration') {
+                            echo 'active';
+                          } ?>"><a href="acc_vat_regeneration.php?dates=<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>-<?php echo date("Y") . '/' . date("m") . '/' . date("d"); ?>&account=1"><i class="fa fa-circle-o text-red"></i> Vat Reconciliation</a></li>
 
             </ul>
           </li>
