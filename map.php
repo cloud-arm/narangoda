@@ -76,70 +76,89 @@ include("connect.php");
   <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
   <!-- Page script -->
   <script>
-    // Initialize Leaflet map with Sri Lanka coordinates and an appropriate zoom level
-    var map = L.map('map').setView([6.228372, 80.412602], 11); // Centered on Sri Lanka, zoom level 7
+ // Initialize Leaflet map with Sri Lanka coordinates and an appropriate zoom level
+var map = L.map('map').setView([6.228372, 80.412602], 11); // Centered on Sri Lanka, zoom level 7
 
-    // Define bounds for cropping the map (example bounds)
-    var southWest = L.latLng(5.723733, 79.538727); // Bottom-left corner of Sri Lanka
-    var northEast = L.latLng(9.8354, 81.8862); // Top-right corner of Sri Lanka
-    var bounds = L.latLngBounds(southWest, northEast);
+// Define bounds for cropping the map (example bounds)
+var southWest = L.latLng(5.723733, 79.538727); // Bottom-left corner of Sri Lanka
+var northEast = L.latLng(9.8354, 81.8862); // Top-right corner of Sri Lanka
+var bounds = L.latLngBounds(southWest, northEast);
 
-    // Add OpenStreetMap tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      minZoom: 7, // Minimum zoom level appropriate for Sri Lanka
-      maxZoom: 18 // Maximum zoom level
-    }).addTo(map);
+// Add OpenStreetMap tile layer
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  minZoom: 7, // Minimum zoom level appropriate for Sri Lanka
+  maxZoom: 18 // Maximum zoom level
+}).addTo(map);
 
-    // Set bounds to restrict the visible area of the map to Sri Lanka
-    map.setMaxBounds(bounds);
-    map.on('drag', function() {
-      map.panInsideBounds(bounds, {
-        animate: false
+// Set bounds to restrict the visible area of the map to Sri Lanka
+map.setMaxBounds(bounds);
+map.on('drag', function() {
+  map.panInsideBounds(bounds, {
+    animate: false
+  });
+});
+map.on('dragend', function() {
+  map.panInsideBounds(bounds, {
+    animate: false
+  });
+});
+
+// Function to fetch GPS data from PHP
+function fetchGPSData() {
+  // Make an AJAX request to your PHP file
+  // Replace 'your-php-script.php' with the actual path to your PHP script
+  // Modify this according to your data retrieval mechanism (e.g., AJAX, WebSocket, etc.)
+  var customIcon = L.icon({
+    iconUrl: 'user_pic/lorry.png', // URL to the custom marker icon image
+    iconSize: [65, 40], // Size of the icon
+    iconAnchor: [20, 40], // Point of the icon which will correspond to marker's location
+    popupAnchor: [0, -40], // Point from which the popup should open relative to the iconAnchor
+    className: 'custom-marker' // Class name for styling the marker
+  });
+
+  var yIcon = L.icon({
+    iconUrl: 'icon/yard.png', // URL to the custom marker icon image
+    iconSize: [80, 80], // Size of the icon
+    iconAnchor: [20, 40], // Point of the icon which will correspond to marker's location
+    popupAnchor: [0, -40], // Point from which the popup should open relative to the iconAnchor
+    className: 'custom-marker' // Class name for styling the marker
+  });
+
+
+  // Process the GPS data and add markers with labels to the map
+  var marker2 = L.marker([6.0535, 80.2210], {
+    icon: customIcon
+  }).addTo(map);
+  marker2.bindPopup('Narangoda'); // Bind popup instead of label
+var Ico='';
+  fetch('map_data.php')
+    .then(response => response.json())
+    .then(data => {
+      // Process the GPS data and add markers to the map
+      // Remove existing markers from the map
+      map.eachLayer(function(layer) {
+        if (layer instanceof L.Marker) {
+          map.removeLayer(layer);
+        }
       });
-    });
-    map.on('dragend', function() {
-      map.panInsideBounds(bounds, {
-        animate: false
-      });
-    });
 
-    // Function to fetch GPS data from PHP
-    function fetchGPSData() {
-      // Make an AJAX request to your PHP file
-      // Replace 'your-php-script.php' with the actual path to your PHP script
-      // Modify this according to your data retrieval mechanism (e.g., AJAX, WebSocket, etc.)
-      var customIcon = L.icon({
-        iconUrl: 'user_pic/lorry.png', // URL to the custom marker icon image
-        iconSize: [65, 40], // Size of the icon
-        iconAnchor: [20, 40], // Point of the icon which will correspond to marker's location
-        popupAnchor: [0, -40], // Point from which the popup should open relative to the iconAnchor
-        className: 'custom-marker' // Class name for styling the marker
+      data.forEach(entry => {
+        if(entry.name=='Narangoda'){Ico=yIcon}else{Ico=customIcon}
+        var marker = L.marker([entry.lat, entry.lng], {
+          icon: Ico
+        }).addTo(map);
+        // You can customize the marker popup or icon here
+        marker.bindPopup('<h3>' + entry.name + '</h3>');
       });
-      fetch('map_data.php')
-        .then(response => response.json())
-        .then(data => {
-          // Process the GPS data and add markers to the map
-          // Remove existing markers from the map
-          map.eachLayer(function(layer) {
-            if (layer instanceof L.Marker) {
-              map.removeLayer(layer);
-            }
-          });
-          data.forEach(entry => {
-            var marker = L.marker([entry.lat, entry.lng], {
-              icon: customIcon
-            }).addTo(map);
-            // You can customize the marker popup or icon here
-            marker.bindPopup('<h3>' + entry.name + '</h3>');
-          });
-        })
-        .catch(error => console.error('Error fetching GPS data:', error));
-    }
+    })
+    .catch(error => console.error('Error fetching GPS data:', error));
+}
 
-    // Call the function to fetch and display GPS data
-    fetchGPSData();
-    setInterval(fetchGPSData, 20000);
+// Call the function to fetch and display GPS data
+fetchGPSData();
+setInterval(fetchGPSData, 20000); // Refresh every 20 seconds
+
 
 
 

@@ -1,17 +1,19 @@
 <?php
 include('connect.php');
 
-// Assuming you have a table named 'gps_data' with columns 'lat' and 'lng'
-// Fetch GPS data from the database
+// Fetch GPS data from the 'gps_data' table
+$gpsDataFromTable = array(
+    array('lat' => 6.043414, 'lng' => 80.245659, 'name' => 'Narangoda','icon' => '')
+);
 
-
-$result = $db->prepare("SELECT * FROM user   ");
-$result->bindParam(':id', $res);
+// Fetch GPS data from the 'user' table
+$result = $db->prepare("SELECT * FROM user");
 $result->execute();
-$gpsData = $result->fetchAll();
+$gpsDataFromUserTable = $result->fetchAll();
 
+// Merge both sets of GPS data
+$mergedGPSData = array_merge($gpsDataFromTable, $gpsDataFromUserTable);
 
-// Output GPS data as JSON
+// Output merged GPS data as JSON
 header('Content-Type: application/json');
-echo json_encode($gpsData);
-?>
+echo json_encode($mergedGPSData);
