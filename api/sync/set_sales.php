@@ -99,15 +99,25 @@ foreach ($sales as $list) {
                 $ql->execute(array($invoice, 'active', $date, $time, $discount, $discount, 'credit', $lorry, $lorry_id, $load, $cus, $cus_name));
             }
 
+            $vat_id = 1;
             //update vat amount
-            $sql = "UPDATE vat_account SET amount = amount + ? WHERE vat_no = ?";
+            $sql = "UPDATE vat_account SET amount = amount + ? WHERE id = ?";
             $ql = $db->prepare($sql);
-            $ql->execute(array($vat, $vat_no));
+            $ql->execute(array($vat, $vat_id));
+
+            $vat_acc = '';
+            //get vat acc
+            $result = $db->prepare("SELECT * FROM vat_account WHERE id = :id ");
+            $result->bindParam(':id', $vat_id);
+            $result->execute();
+            for ($i = 0; $row = $result->fetch(); $i++) {
+                $vat_acc = $row['vat_no'];
+            }
 
             // insert vat record
-            $sql = "INSERT INTO vat_record (invoice_no,type,date,time,record_type,vat,value,vat_no,user_name,user_id) VALUES (?,?,?,?,?,?,?,?,?,?)";
+            $sql = "INSERT INTO vat_record (invoice_no,type,date,time,record_type,acc_id,acc_no,vat,value,vat_no,user_name,user_id) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
             $ql = $db->prepare($sql);
-            $ql->execute(array($invoice, 'Credit', $date, $time, 'invoice', $vat, $value, $vat_no, $driver_name, $driver));
+            $ql->execute(array($invoice, 'Credit', $date, $time, 'invoice', $vat_id, $vat_acc, $vat, $value, $vat_no, $driver_name, $driver));
         }
 
         // get sales  data
