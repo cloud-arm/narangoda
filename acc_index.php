@@ -67,6 +67,9 @@ include("connect.php");
                             $result->execute();
                             for ($i = 0; $row = $result->fetch(); $i++) {
                                 $payment = $row['SUM(amount)'];
+                            }
+                            if ($payment == null) {
+                                $payment = 0;
                             } ?>
                             <span class="info-box-number"><?php echo $payment; ?></span>
 
@@ -155,10 +158,10 @@ include("connect.php");
                         <div class="info-box-content">
                             <span class="info-box-text">May Be return chq</span>
                             <?php $return = 0;
-                            $result = $db->prepare("SELECT SUM(amount) FROM `bank` ");
+                            $result = $db->prepare("SELECT SUM(amount) FROM `bank_balance` ");
                             $result->execute();
                             for ($i = 0; $row = $result->fetch(); $i++) {
-                                $bank = $row['SUM(amount)'];
+                               $bank = $row['SUM(amount)'];
                             }
                             $return = $debit - ($credit + $bank); ?>
                             <span class="info-box-number">

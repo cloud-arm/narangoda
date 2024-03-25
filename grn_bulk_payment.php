@@ -382,7 +382,7 @@ date_default_timezone_set("Asia/Colombo");
             let am = $("#pay_txt").val();
             let blc = <?php echo $balance; ?>;
 
-            if (0 >= am | blc == 0) {
+            if (0.01 >= am | blc == 0) {
                 $('#submit').attr("disabled", "");
             } else {
                 $('#submit').removeAttr("disabled");
