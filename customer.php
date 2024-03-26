@@ -193,7 +193,10 @@ include("connect.php");
                 <div class="col-md-6">
                   <div class="form-group">
                     <label> Area</label>
-                    <input type="text" name="area" class="form-control">
+                    <select class="form-control select2 hidden-search" name="area" style="width: 100%;">
+                      <option> Galle </option>
+                      <option> Mathara </option>
+                    </select>
                   </div>
                 </div>
 
@@ -319,7 +322,14 @@ include("connect.php");
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>Area</label>
-                    <input type="text" name="area" value="<?php echo $area ?>" class="form-control">
+                    <select class="form-control select2 hidden-search" name="area" style="width: 100%;">
+                      <option <?php if ($area == 'Galle') {
+                                echo 'selected';
+                              } ?>> Galle </option>
+                      <option <?php if ($area == 'Mathara') {
+                                echo 'selected';
+                              } ?>> Mathara </option>
+                    </select>
                   </div>
                 </div>
 
