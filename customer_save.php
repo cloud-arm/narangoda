@@ -47,10 +47,10 @@ if ($id == 0) {
 } else {
 
     $sql = "UPDATE customer
-        SET customer_name=?, address=?, contact=?, area=?, root=?, root_id=?, acc_name=?, acc_no=?, type=?, credit_period=?, category=?, price_12=?, price_5=?, price_37=?
+        SET customer_name=?, address=?, contact=?, area=?, root=?, root_id=?, acc_name=?, acc_no=?, type=?, credit_period=?, category=?, price_12=?, price_5=?, price_37=?, vat_no=?
 		WHERE customer_id=?";
     $q = $db->prepare($sql);
-    $q->execute(array($name, $address, $contact, $area, $root_name, $root, $acc_name, $acc_no, $type, $credit, $group, $g12, $g5, $g37, $id));
+    $q->execute(array($name, $address, $contact, $area, $root_name, $root, $acc_name, $acc_no, $type, $credit, $group, $g12, $g5, $g37, $vat_no, $id));
 }
 
 header("location: customer.php");
