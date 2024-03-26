@@ -74,15 +74,18 @@ include("connect.php");
                   <td><?php echo $row['customer_id']; ?></td>
                   <td><?php echo $row['customer_name']; ?><br>
                     <?php $type = $row['type'];
-                    if ($type == '1') { ?><span class="label label-warning">Channel</span><?php } ?>
-                    <?php if ($type == '2') { ?><span class="label label-info">Commercial</span><?php } ?>
-                    <?php if ($type == '3') { ?><span class="label label-primary">Apartment</span><?php } ?>
+                    if ($type == '1') { ?><span class="badge bg-yellow">Channel</span><?php } ?>
+                    <?php if ($type == '2') { ?><span class="badge bg-info">Commercial</span><?php } ?>
+                    <?php if ($type == '3') { ?><span class="badge bg-primary">Apartment</span><?php } ?>
                   </td>
-                  <td><?php echo $row['address']; ?></td>
+                  <td>
+                    <?php echo $row['address']; ?><br>
+                    <span class="badge bg-olive"><?php echo $row['area']; ?></span>
+                  </td>
                   <td><?php echo $row['contact']; ?></td>
                   <td><?php $pd = $row['credit_period'];
                       if ($pd > 0) {
-                        echo '<span style="font-size: 15px" class="label label-primary">' . $pd . ' Day</span>';
+                        echo '<span style="font-size: 15px" class="badge bg-primary">' . $pd . ' Day</span>';
                       }
                       ?></td>
                   <td> <?php echo $row['vat_no'];  ?>
@@ -92,7 +95,7 @@ include("connect.php");
                       $result222->bindParam(':userid', $d2);
                       $result222->execute();
                       for ($i = 0; $row222 = $result222->fetch(); $i++) { ?>
-                      <span style="font-size: 15px" class="label label-info"><?php echo $row222['name']; ?></span>
+                      <span style="font-size: 15px" class="badge bg-info"><?php echo $row222['name']; ?></span>
                     <?php } ?>
                   </td>
 
