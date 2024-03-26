@@ -136,7 +136,7 @@ include("connect.php");
     <div class="row">
       <div class="col-md-12">
 
-        <div class="box box-success popup d-none" id="popup_1">
+        <div class="box box-success popup d-none" id="popup_1" style="width: 600px;">
           <div class="box-header with-border">
             <h3 class="box-title w-100">
               New Customer
@@ -208,10 +208,10 @@ include("connect.php");
                   </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-12">
                   <div class="form-group">
                     <input type="hidden" name="id" value="0">
-                    <input type="submit" style="margin-top: 23px;" value="Save" class="btn btn-info">
+                    <input type="submit" style="margin-top: 23px;width: 100%;" value="Save" class="btn btn-info">
                   </div>
                 </div>
               </div>
