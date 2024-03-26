@@ -15,11 +15,13 @@ $unit = $_POST['unit'];
 if ($unit == 1) {
 
     $invo = "exp" . date("ymdhis");
+
+    $vendor = $_POST['vendor'];
+    $paycose = $_POST['paycose'];
     $type = $_POST['type'];
     $comment = $_POST['comment'];
-    $amount = $_POST['pay_amount'];
-    $pay_type = $_POST['pay_type'];
-    $date = $_POST['date'];
+    $amount = $_POST['amount'];
+
     $load_id = 0;
     $util_id = 0;
     $util_date = '';
@@ -30,18 +32,15 @@ if ($unit == 1) {
     $sub_name = '';
     $lorry = 0;
     $lorry_no = '';
+    $vendor_name = '';
 
-    $acc = 0;
-    $bank = 0;
 
-    if ($pay_type == 'cash') {
-        $acc = $_POST['acc'];
+    $re = $db->prepare("SELECT * FROM vendor WHERE id=:id ");
+    $re->bindParam(':id', $vendor);
+    $re->execute();
+    for ($i = 0; $r = $re->fetch(); $i++) {
+        $vendor_name = $r['name'];
     }
-
-    if ($pay_type == 'chq') {
-        $bank = $_POST['bank'];
-    }
-
 
     $re = $db->prepare("SELECT * FROM expenses_types WHERE sn=:id ");
     $re->bindParam(':id', $type);
@@ -54,7 +53,7 @@ if ($unit == 1) {
         $util_id = $_POST['util_id'];
         $util_date = $_POST['util_date'];
         $util_invo = $_POST['util_invo'];
-        $util_amount = $_POST['util_amount'];
+        $util_amount = $amount;
 
         $re = $db->prepare("SELECT * FROM utility_bill WHERE id=:id ");
         $re->bindParam(':id', $util_id);
@@ -103,6 +102,78 @@ if ($unit == 1) {
         }
     }
 
+    $util_fw_blc = 0;
+    if ($type == 1) {
+
+        $sql = "UPDATE  utility_bill SET credit=credit+? WHERE id=?";
+        $ql = $db->prepare($sql);
+        $ql->execute(array($amount, $util_id));
+
+        $re = $db->prepare("SELECT * FROM utility_bill WHERE id = :id");
+        $re->bindParam(':id', $util_id);
+        $re->execute();
+        for ($k = 0; $r = $re->fetch(); $k++) {
+            $util_fw_blc = $r['credit'];
+        }
+    }
+
+
+    $sql = "INSERT INTO expenses_records (date,type_id,type,invoice_no,comment,amount,user,loading_id,util_id,util_name,util_date,util_invoice,util_bill_amount,util_balance,util_forward_balance,pay_type,sub_type,sub_type_name,lorry_id,lorry_no,credit_balance,paycose,vendor_id,vendor_name,action) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    $q = $db->prepare($sql);
+    $q->execute(array($now, $type, $type_name, $invo, $comment, $amount, $ui, $load_id, $util_id, $util_name, $util_date, $util_invo, $util_amount, $amount, $util_fw_blc, 'credit', $sub_id, $sub_name, $lorry, $lorry_no, $amount, $paycose, $vendor, $vendor_name, 1));
+}
+
+if ($unit == 6) {
+
+    $invo = $_POST['invo'];
+    $amount = $_POST['pay_amount'];
+    $pay_type = $_POST['pay_type'];
+
+    $load_id = 0;
+    $util_id = 0;
+    $util_date = '';
+    $util_invo = '';
+    $util_amount = 0;
+    $util_name = '';
+    $sub_id = 0;
+    $sub_name = '';
+    $lorry = 0;
+    $lorry_no = '';
+
+    $acc = 0;
+    $bank = 0;
+
+    if ($pay_type == 'cash') {
+        $acc = $_POST['acc'];
+    }
+
+    if ($pay_type == 'chq') {
+        $bank = $_POST['bank'];
+    }
+
+
+    $result = $db->prepare("SELECT * FROM expenses_records WHERE invoice_no=:id AND action = 1 ");
+    $result->bindParam(':id', $invo);
+    $result->execute();
+    for ($i = 0; $row = $result->fetch(); $i++) {
+        $id = $row['id'];
+        $type = $row['type_id'];
+        $type_name = $row['type'];
+        $util_id = $row['util_id'];
+        $util_name = $row['util_name'];
+        $util_date = $row['util_date'];
+        $util_invo = $row['util_invoice'];
+        $util_amount = $row['util_bill_amount'];
+        $load_id = $row['loading_id'];
+        $sub_id = $row['sub_type'];
+        $sub_name = $row['sub_type_name'];
+        $lorry = $row['lorry_id'];
+        $lorry_no = $row['lorry_no'];
+        $vendor = $row['vendor_id'];
+        $vendor_name = $row['vendor_name'];
+        $credit = $row['credit_balance'];
+    }
+
     if ($pay_type == 'chq') {
         $bn_blc = 0;
         $blc = 0;
@@ -138,9 +209,18 @@ if ($unit == 1) {
     if ($type == 1) {
         $util_blc = $util_amount - $amount;
 
-        $sql = "UPDATE  utility_bill SET credit=credit+? WHERE id=?";
+        $sql = "UPDATE  utility_bill SET credit = credit - ? WHERE id=?";
         $ql = $db->prepare($sql);
-        $ql->execute(array($util_blc, $util_id));
+        $ql->execute(array($amount, $util_id));
+
+        $ut_am = $util_amount;
+        if ($util_amount >= $amount) {
+            $ut_am = $amount;
+        }
+
+        $sql = "UPDATE  expenses_records SET util_balance = util_balance - ? WHERE id=?";
+        $ql = $db->prepare($sql);
+        $ql->execute(array($ut_am, $id));
 
         $re = $db->prepare("SELECT * FROM utility_bill WHERE id = :id");
         $re->bindParam(':id', $util_id);
@@ -155,13 +235,13 @@ if ($unit == 1) {
         $chq_no = '';
         $chq_date = '';
 
-        $sql = "UPDATE  cash SET amount=? WHERE id=?";
+        $sql = "UPDATE  cash SET amount=amount-? WHERE id=?";
         $ql = $db->prepare($sql);
-        $ql->execute(array($cr_blc, $acc));
+        $ql->execute(array($amount, $acc));
 
         $sql = "INSERT INTO transaction_record (transaction_type,type,record_no,amount,action,credit_acc_no,credit_acc_type,credit_acc_name,credit_acc_balance,debit_acc_type,debit_acc_name,debit_acc_id,debit_acc_balance,date,time,user_id,user_name) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         $ql = $db->prepare($sql);
-        $ql->execute(array('expenses', 'Debit', $type, $amount, 0, 0, '', '', 0, 'cash_payment', $acc_name, $acc, $cr_blc, $now, $time, $ui, $un));
+        $ql->execute(array('expenses', 'Debit', $id, $amount, 0, 0, '', '', 0, 'expenses_payment', $acc_name, $acc, $cr_blc, $now, $time, $ui, $un));
     }
 
     if ($pay_type == 'chq') {
@@ -174,9 +254,20 @@ if ($unit == 1) {
         $q->execute(array($amount, $amount, $pay_type, $now, $invo, 0, $chq_no, $acc_name, $acc, $chq_date, '', $pay_type, 2, 1, 'expenses_issue'));
     }
 
-    $sql = "INSERT INTO expenses_records (date,type_id,type,invoice_no,acc_id,acc_name,comment,amount,user,loading_id,util_id,util_name,util_date,util_invoice,util_bill_amount,util_balance,util_forward_balance,pay_type,chq_no,chq_date,sub_type,sub_type_name,lorry_id,lorry_no) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    $credit = $credit - $amount;
+
+    $close_date = '';
+    if ($credit == 0) {
+        $close_date = $now;
+    }
+
+    $sql = "UPDATE  expenses_records SET pay_amount = pay_amount + ?, credit_balance = credit_balance - ? WHERE id=?";
+    $ql = $db->prepare($sql);
+    $ql->execute(array($amount, $amount, $id));
+
+    $sql = "INSERT INTO expenses_records (date,type_id,type,invoice_no,acc_id,acc_name,pay_amount,amount,user,loading_id,util_id,util_name,util_date,util_invoice,util_bill_amount,util_balance,util_forward_balance,pay_type,chq_no,chq_date,sub_type,sub_type_name,lorry_id,lorry_no,credit_id,paycose,vendor_id,vendor_name,credit_balance,close_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $q = $db->prepare($sql);
-    $q->execute(array($date, $type, $type_name, $invo, $acc, $acc_name, $comment, $amount, $ui, $load_id, $util_id, $util_name, $util_date, $util_invo, $util_amount, $util_blc, $util_fw_blc, $pay_type, $chq_no, $chq_date, $sub_id, $sub_name, $lorry, $lorry_no));
+    $q->execute(array($now, $type, $type_name, $invo, $acc, $acc_name, $amount, $amount, $ui, $load_id, $util_id, $util_name, $util_date, $util_invo, $util_amount, $util_blc, $util_fw_blc, $pay_type, $chq_no, $chq_date, $sub_id, $sub_name, $lorry, $lorry_no, $id, 'payment', $vendor, $vendor_name, $credit, $close_date));
 }
 
 if ($unit == 2) {
@@ -229,7 +320,6 @@ if ($unit == 4) {
     $sub_name = $_POST['name'];
     $typeid = $_POST['typeid'];
 
-    $date = date('Y-m-d');
     $name = trim($sub_name);
     $name = ucwords($name);
     $name = str_replace(" ", "_", $name);
@@ -256,6 +346,22 @@ if ($unit == 4) {
     }
 }
 
+if ($unit == 5) {
+
+    $name = $_POST['name'];
+    $address = $_POST['address'];
+    $contact = $_POST['contact'];
+    $note = $_POST['note'];
+
+    $sql = "INSERT INTO vendor (name,contact,address,date,note,action) VALUES (?,?,?,?,?,?) ";
+    $ql = $db->prepare($sql);
+    $ql->execute(array($name, $contact, $address, $now, $note, 1));
+}
+
 $Y = date("Y");
 $m = date("m");
-header("location: expenses.php?year=$Y&month=$m");
+if ($unit == 1) {
+    header("location: expenses.php?year=$Y&month=$m&id=$invo");
+} else {
+    header("location: expenses.php?year=$Y&month=$m");
+}

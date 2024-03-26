@@ -85,25 +85,47 @@ date_default_timezone_set("Asia/Colombo");
       <div class="box box-info">
         <div class="box-header with-border">
           <h3 class="box-title">Expenses</h3>
-          <small class="btn btn-success mx-2" style="padding: 5px 10px;" title="Add Expenses Type" onclick="click_open(1)">Add Expenses Type</small>
-          <small class="btn btn-success mx-2 util_sec" style="padding: 5px 10px;" title="Add Utility Bill" onclick="click_open(2)">Add Utility Bill</small>
-          <small class="btn btn-success mx-2 load_sec" style="display: none;padding: 5px 10px;" title="Add Root Expenses Sub Type" onclick="click_open(3)">Add Root Expenses</small>
-          <small class="btn btn-success mx-2 pur_sec" style="display: none;padding: 5px 10px;" title="Add Purchase Expenses Sub Type" onclick="click_open(4)">Add Purchase Expenses</small>
+          <small class="btn btn-success mx-2" style="padding: 5px 10px;" title="Add Vendor" onclick="click_open(5)">Add Vendor</small>
+          <small class="btn btn-warning mx-2" style="padding: 5px 10px;" title="Add Expenses Type" onclick="click_open(1)">Add Expenses Type</small>
+          <small class="btn btn-danger mx-2 util_sec" style="padding: 5px 10px;" title="Add Utility Bill" onclick="click_open(2)">Add Utility Bill</small>
+          <small class="btn btn-primary mx-2 load_sec" style="display: none;padding: 5px 10px;" title="Add Root Expenses Sub Type" onclick="click_open(3)">Add Root Expenses</small>
+          <small class="btn btn-primary mx-2 pur_sec" style="display: none;padding: 5px 10px;" title="Add Purchase Expenses Sub Type" onclick="click_open(4)">Add Purchase Expenses</small>
         </div>
 
         <!-- /.box-header -->
         <div class="box-body d-block">
           <form method="post" action="expenses_save.php">
             <div class="row">
+
               <div class="col-md-3">
                 <div class="form-group">
-                  <label>Date</label>
-                  <input type="text" id="datepicker_set" value="<?php echo date('Y-m-d') ?>" name="date" class="form-control" tabindex="9" autocomplete="off">
+                  <label>Vendor</label>
+                  <select class="form-control select2" name="vendor" style="width: 100%;" tabindex="8">
+                    <option value="0" disabled selected></option>
+                    <?php
+                    $result = $db->prepare("SELECT * FROM vendor WHERE  action=1  ");
+                    $result->bindParam(':id', $res);
+                    $result->execute();
+                    for ($i = 0; $row = $result->fetch(); $i++) { ?>
+                      <option value="<?php echo $row['id']; ?>"><?php echo $row['name']; ?> </option>
+                    <?php } ?>
+                  </select>
                 </div>
               </div>
+
               <div class="col-md-3">
                 <div class="form-group">
-                  <label>Expenses Type</label>
+                  <label>Paycose</label>
+                  <select class="form-control select2 hidden-search" name="paycose" style="width: 100%;" tabindex="8">
+                    <option value="asset">Asset</option>
+                    <option value="expenses">Expenses</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label>Type</label>
                   <select class="form-control select2" name="type" style="width: 100%;" id="ex_type" onchange="select_type()" tabindex="1">
 
                     <?php
@@ -121,69 +143,6 @@ date_default_timezone_set("Asia/Colombo");
                 </div>
               </div>
 
-              <div class="col-md-3">
-                <div class="form-group">
-                  <label>Pay Type</label>
-                  <select class="form-control select2 hidden-search" id="pay_type" name="pay_type" onchange="select_pay()" style="width: 100%;" tabindex="2">
-                    <option id="pay_cash" value="cash"> Cash </option>
-                    <option id="pay_chq" value="chq"> Chq </option>
-                    <option value="bank" disabled> Bank </option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="col-md-3" id="acc_sec">
-                <div class="form-group">
-                  <label>Account</label>
-                  <select class="form-control select2 hidden-search" name="acc" id="cash_acc" style="width: 100%;" tabindex="3">
-                    <?php
-                    $result = $db->prepare("SELECT * FROM cash ");
-                    $result->bindParam(':id', $ttr);
-                    $result->execute();
-                    for ($i = 0; $row = $result->fetch(); $i++) {
-                    ?>
-                      <option value="<?php echo $id = $row['id']; ?>" <?php if ($id == 1) { ?> selected <?php } ?>> <?php echo $row['name']; ?> </option>
-                    <?php
-                    }
-                    ?>
-                  </select>
-                </div>
-              </div>
-
-              <div class="col-md-3 bank_sec" style="display: none;">
-                <div class="form-group">
-                  <label>Account</label>
-                  <select class="form-control select2 hidden-search" name="bank" style="width: 100%;" tabindex="4">
-
-                    <?php
-                    $result = $db->prepare("SELECT * FROM bank_balance ");
-                    $result->bindParam(':id', $ttr);
-                    $result->execute();
-                    for ($i = 0; $row = $result->fetch(); $i++) {
-                    ?>
-                      <option value="<?php echo $id = $row['id']; ?>" <?php if ($id == 1) { ?> selected <?php } ?>> <?php echo $row['name'] . '__' . $row['dep_name']; ?> </option>
-                    <?php
-                    }
-                    ?>
-                  </select>
-
-                </div>
-              </div>
-
-              <div class="col-md-3 bank_sec" style="display: none;">
-                <div class="form-group">
-                  <label>Chq No:</label>
-                  <input type="text" name="chq_no" class="form-control" tabindex="5" autocomplete="off">
-                </div>
-              </div>
-
-              <div class="col-md-3 bank_sec" style="display: none;">
-                <div class="form-group">
-                  <label>Chq Date</label>
-                  <input type="text" name="chq_date" id="datepicker" class="form-control" tabindex="6" autocomplete="off">
-                </div>
-              </div>
-
               <div class="col-md-3 load_sec" style="display: none;">
                 <div class="form-group">
                   <label>Loading ID</label>
@@ -195,7 +154,7 @@ date_default_timezone_set("Asia/Colombo");
                     $result->execute();
                     for ($i = 0; $row = $result->fetch(); $i++) {
                     ?>
-                      <option value="<?php echo $row['transaction_id']; ?>"><?php echo $row['lorry_no']; ?> </option>
+                      <option value="<?php echo $row['transaction_id']; ?>"><?php echo $row['transaction_id'] . ' / ' . $row['lorry_no']; ?> </option>
                     <?php
                     }
                     ?>
@@ -298,17 +257,10 @@ date_default_timezone_set("Asia/Colombo");
                 </div>
               </div>
 
-              <div class="col-md-3 util_sec" style="display: block;">
-                <div class="form-group">
-                  <label>Bill Amount</label>
-                  <input type="text" name="util_amount" step=".01" class="form-control" tabindex="11" autocomplete="off">
-                </div>
-              </div>
-
               <div class="col-md-3">
                 <div class="form-group">
-                  <label>Pay Amount</label>
-                  <input type="text" name="pay_amount" step=".01" class="form-control" tabindex="12" autocomplete="off">
+                  <label>Bill Amount</label>
+                  <input type="number" name="amount" step=".01" class="form-control" tabindex="11" autocomplete="off">
                 </div>
               </div>
 
@@ -321,7 +273,7 @@ date_default_timezone_set("Asia/Colombo");
 
               <div class="col-md-1 pe-2 me-2" style="height: 70px;display: flex;align-items: end;" id="btn_sub">
                 <div class="form-group">
-                  <input class="btn btn-info" type="submit" value="Submit">
+                  <input class="btn btn-info" style="width: 100px;" type="submit" value="Save">
                   <input name="unit" type="hidden" value="1">
                 </div>
               </div>
@@ -383,8 +335,8 @@ date_default_timezone_set("Asia/Colombo");
         include("connect.php");
         date_default_timezone_set("Asia/Colombo");
 
-        $d1 = date('Y') . '-' . date('m') . '-01';
-        $d2 = date('Y') . '-' . date('m') . '-31';
+        $d1 = date('Y-m') . '-01';
+        $d2 = date('Y-m') . '-31';
 
         if (isset($_POST['year'])) {
 
@@ -392,9 +344,7 @@ date_default_timezone_set("Asia/Colombo");
           $d2 = $_POST['year'] . '-' . $_POST['month'] . '-31';
         }
 
-        $sql = " SELECT * FROM expenses_records  WHERE  date BETWEEN '$d1' AND '$d2' ";
-
-
+        $sql = " SELECT * FROM expenses_records  WHERE  date BETWEEN '$d1' AND '$d2' ORDER BY close_date  ";
         ?>
 
         <div class="box-body d-block">
@@ -406,7 +356,7 @@ date_default_timezone_set("Asia/Colombo");
                 <th>Type</th>
                 <th>Comment</th>
                 <th>Pay Type</th>
-                <th>Chq Details</th>
+                <th>Vendor</th>
                 <th>Amount (Rs.)</th>
                 <th>#</th>
               </tr>
@@ -420,16 +370,29 @@ date_default_timezone_set("Asia/Colombo");
               for ($i = 0; $row = $result->fetch(); $i++) {
                 $dll = $row['dll'];
                 $type = $row['type_id'];
+                $pay_type = $row['pay_type'];
                 if ($dll == 1) {
                   $style = 'opacity: 0.5;cursor: default;';
                 } else {
                   $style = '';
                 }
+                $dll = 1;
               ?>
 
                 <tr class="record" style="<?php echo $style; ?>">
-                  <td><?php echo $row['id'];   ?> </td>
-                  <td><?php echo $row['date'];   ?> </td>
+                  <td>
+                    <?php echo $row['id']; ?>.
+                    <span class="badge bg-default"> <?php echo ucfirst($row['paycose']); ?> </span>
+                  </td>
+                  <td>
+                    <?php echo $row['date']; ?> <br>
+                    <?php if ($pay_type == 'credit' && $row['close_date'] == '' && $row['credit_balance'] > 0) { ?>
+                      <span class="badge bg-red"> <i class="fa fa-ban"></i> Unpaid </span>
+                    <?php } else { ?>
+                      <span class="badge bg-gray"> <i class="fa fa-check"></i> Paid </span> <br>
+                      <?php echo $row['close_date']; ?>
+                    <?php } ?>
+                  </td>
                   <td>
                     <?php if ($row['util_id'] > 0) {
                       echo $row['util_name'];
@@ -439,26 +402,39 @@ date_default_timezone_set("Asia/Colombo");
                       echo $row['type'];
                     }  ?>
                     <?php if ($type == 2) { ?> <br> <span class="badge bg-blue">Loading ID: <?php echo $row['loading_id']; ?> </span> <br> <span class="badge bg-green"><?php echo $row['lorry_no']; ?> </span> <?php } ?>
-                    <?php if ($type == 3) { ?> <br> <span class="badge bg-green"><?php echo $row['lorry_no']; ?> </span> <?php } ?>
+                    <?php if ($type == 3) { ?> <br> <span class="badge bg-green"> <i class="fa fa-truck"></i> <?php echo $row['lorry_no']; ?> </span> <?php } ?>
                   </td>
                   <td>
-                    <?php if ($type == 1) { ?> <span class="badge bg-blue"> Utility </span> <br> <?php } else 
-                     if ($type == 2) { ?> <span class="badge bg-green"> Root </span> <br> <?php } else  
-                     if ($type == 3) { ?> <span class="badge bg-yellow"> Purchase </span> <br> <?php } else {  ?> <span class="badge bg-red"> Expenses </span> <br> <?php } ?>
+                    <?php if ($type == 1) { ?> <span class="badge bg-maroon"> Utility </span> <br> <?php } else 
+                     if ($type == 2) { ?> <span class="badge bg-olive"> Root </span> <br> <?php } else  
+                     if ($type == 3) { ?> <span class="badge bg-orange"> Purchase </span> <br> <?php } else {  ?> <span class="badge bg-red"> Expenses </span> <br> <?php } ?>
                     <?php echo $row['comment'];   ?>
                   </td>
-                  <td><?php echo $row['pay_type'];   ?></td>
                   <td>
-                    NO: <span class="badge bg-blue"><?php echo $row['chq_no']; ?> </span> <br>
-                    Date: <span class="badge bg-green"><?php echo $row['chq_date']; ?> </span> <br>
+                    <?php echo ucfirst($pay_type); ?> <br>
+                    <?php if ($pay_type == 'chq') { ?>
+                      NO: <span class="badge bg-blue"><?php echo $row['chq_no']; ?> </span> <br>
+                      Date: <span class="badge bg-green"><?php echo $row['chq_date']; ?> </span> <br>
+                    <?php } ?>
+                  </td>
+                  <td>
+                    <?php echo $row['vendor_name']; ?>
                   </td>
                   <td>Rs.<?php echo $row['amount'];
                           $tot += $row['amount'];  ?> <br>
-                    <?php if ($type == 1) { ?>Balance: <?php echo $row['util_balance']; ?> <br> <?php } ?>
+                    <?php if ($type == 1 || $pay_type == 'credit') { ?>Balance: <?php echo $row['credit_balance']; ?> <br> <?php } ?>
                   <?php if ($type == 1) { ?>Forward Balance: <?php echo $row['util_forward_balance']; ?> <?php } ?>
                   </td>
-                  <td> <?php if ($dll == 0) { ?> <a href="#" id="<?php echo $row['id']; ?>" class="delbutton btn btn-danger" title="Click to Delete">
-                        <i class="icon-trash">x</i></a><?php } ?>
+                  <td>
+                    <?php if ($pay_type == 'credit' && $dll == 0 && $row['pay_amount'] == 0) { ?>
+                      <a href="#" id="<?php echo $row['id']; ?>" class="btn_dll btn btn-sm btn-danger" title="Click to Delete">
+                        <i class="fa fa-trash"></i>
+                      </a>
+                    <?php } else if ($dll == 0 && $pay_type != 'credit') { ?>
+                      <a href="#" id="<?php echo $row['id']; ?>" class="btn_dll btn btn-sm btn-danger" title="Click to Delete">
+                        <i class="fa fa-trash"></i>
+                      </a>
+                    <?php } ?>
                   </td>
                 </tr>
               <?php }   ?>
@@ -475,8 +451,26 @@ date_default_timezone_set("Asia/Colombo");
   <!-- /.content-wrapper -->
   <?php include("dounbr.php"); ?>
 
-  <div class="container-up d-none" id="container_up">
-    <div class="container-close" onclick="click_close()"></div>
+  <?php
+  $co = 'd-none';
+  $closer = '<div id="closer" class="container-close" onclick="click_close()"></div>';
+  if (isset($_GET['id'])) {
+    $co = '';
+    $closer = '';
+
+    $re = $db->prepare("SELECT * FROM expenses_records WHERE invoice_no = :id AND action = 1 ");
+    $re->bindParam(':id', $_GET['id']);
+    $re->execute();
+    for ($k = 0; $r = $re->fetch(); $k++) {
+      $bill = $r['amount'];
+      $type = $r['type'];
+      $blc = $r['credit_balance'];
+    }
+  }
+  ?>
+
+  <div class="container-up <?php echo $co; ?>" id="container_up">
+    <?php echo $closer; ?>
     <div class="row">
       <div class="col-md-12">
 
@@ -606,8 +600,176 @@ date_default_timezone_set("Asia/Colombo");
           </div>
         </div>
 
+        <div class="box box-success popup d-none" id="popup_5" style="width: 600px;">
+          <div class="box-header with-border">
+            <h3 class="box-title w-100">
+              New Vendor
+              <i onclick="click_close()" class="btn p-0 me-2 pull-right fa fa-remove" style="font-size: 25px"></i>
+            </h3>
+          </div>
+
+          <div class="box-body d-block">
+            <form method="POST" action="expenses_save.php">
+
+              <div class="row" style="display: block;">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Vendor Name</label>
+                    <input type="text" name="name" value="" class="form-control" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" name="address" value="" class="form-control" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Contact</label>
+                    <input type="text" name="contact" value="" class="form-control" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Note</label>
+                    <input type="text" name="note" value="" class="form-control" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-12">
+                  <div class="form-group pull-right">
+                    <input type="hidden" name="unit" value="5">
+                    <input type="submit" style="margin-top: 23px;" value="Save" class="btn btn-info">
+                  </div>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <div class="box box-success popup <?php echo $co; ?>" id="popup_6" style="width: 600px;">
+          <div class="box-header with-border">
+            <h3 class="box-title w-100">
+              Payment
+              <i onclick="confirm_close(6)" class="btn p-0 me-2 pull-right fa fa-remove" style="font-size: 25px"></i>
+            </h3>
+          </div>
+
+          <div class="box-body d-block">
+            <form method="POST" action="expenses_save.php">
+
+              <div class="row" style="display: block;">
+
+                <div class="col-md-12">
+                  <div class="form-group" style="display: flex; justify-content: space-between;">
+                    <h5>Bill Amount: <small>Rs. </small> <?php echo $bill; ?> </h5>
+                    <h5>Type: <?php echo $type; ?> </h5>
+                    <h5>Balance: <small>Rs. </small> <?php echo $blc; ?> </h5>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Pay Type</label>
+                    <select class="form-control select2 hidden-search" id="pay_type" name="pay_type" onchange="select_pay()" style="width: 100%;" tabindex="2">
+                      <option id="pay_cash" value="cash"> Cash </option>
+                      <option id="pay_chq" value="chq"> Chq </option>
+                      <!-- <option value="bank" disabled> Bank </option> -->
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-6" id="acc_sec">
+                  <div class="form-group">
+                    <label>Account</label>
+                    <select class="form-control select2 hidden-search" name="acc" id="cash_acc" style="width: 100%;" tabindex="3">
+                      <?php
+                      $result = $db->prepare("SELECT * FROM cash ");
+                      $result->bindParam(':id', $ttr);
+                      $result->execute();
+                      for ($i = 0; $row = $result->fetch(); $i++) {
+                      ?>
+                        <option value="<?php echo $id = $row['id']; ?>" <?php if ($id == 1) { ?> selected <?php } ?>> <?php echo $row['name']; ?> </option>
+                      <?php
+                      }
+                      ?>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-6 bank_sec" style="display: none;">
+                  <div class="form-group">
+                    <label>Account</label>
+                    <select class="form-control select2 hidden-search" name="bank" style="width: 100%;" tabindex="4">
+
+                      <?php
+                      $result = $db->prepare("SELECT * FROM bank_balance ");
+                      $result->bindParam(':id', $ttr);
+                      $result->execute();
+                      for ($i = 0; $row = $result->fetch(); $i++) {
+                      ?>
+                        <option value="<?php echo $id = $row['id']; ?>" <?php if ($id == 1) { ?> selected <?php } ?>> <?php echo $row['name'] . '__' . $row['ac_no']; ?> </option>
+                      <?php
+                      }
+                      ?>
+                    </select>
+
+                  </div>
+                </div>
+
+                <div class="col-md-6 bank_sec" style="display: none;">
+                  <div class="form-group">
+                    <label>Chq No:</label>
+                    <input type="text" name="chq_no" class="form-control" tabindex="5" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-6 bank_sec" style="display: none;">
+                  <div class="form-group">
+                    <label>Chq Date</label>
+                    <input type="text" name="chq_date" id="datepicker" class="form-control" tabindex="6" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Pay Amount</label>
+                    <input type="text" name="pay_amount" step=".01" class="form-control" tabindex="12" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <input type="hidden" name="invo" value="<?php echo $_GET['id']; ?>">
+                    <input type="hidden" name="unit" value="6">
+                    <input type="submit" value="Save" style="margin-top: 23px; width: 100px;" class="btn btn-info">
+                  </div>
+                </div>
+
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <div class="box box-success popup d-none" id="confirm_close" style="width: 358px;display: flex;flex-direction: column;justify-content: space-between;">
+
+          <h4 class="form-control" style="font-weight: 600;">Sure you want to cancel this payment ? </h4>
+          <div style="display: flex;align-items:center;justify-content:space-around;margin:10px 0;">
+            <button onclick="check_process('no')" style="width: 100px;" class="btn btn-sm btn-primary">No</button>
+            <button onclick="check_process('yes')" style="width: 100px;" class="btn btn-sm btn-danger">Yes</button>
+          </div>
+          <input type="hidden" id="confirm_popup">
+        </div>
       </div>
+
     </div>
+  </div>
   </div>
 
   <div class="control-sidebar-bg"></div>
@@ -649,6 +811,26 @@ date_default_timezone_set("Asia/Colombo");
     function click_close() {
       $(".popup").addClass("d-none");
       $("#container_up").addClass("d-none");
+    }
+
+    function confirm_close(i) {
+      $("#popup_" + i).addClass("d-none");
+      $("#closer").addClass("d-none");
+      $("#confirm_close").removeClass("d-none");
+      $("#confirm_popup").val(i);
+    }
+
+    function check_process(type) {
+      let i = $("#confirm_popup").val();
+      if (type == 'yes') {
+        $(".popup").addClass("d-none");
+        $("#container_up").addClass("d-none");
+        $("#confirm_close").addClass("d-none");
+      } else {
+        $("#popup_" + i).removeClass("d-none");
+        $("#container_up").removeClass("d-none");
+        $("#confirm_close").addClass("d-none");
+      }
     }
   </script>
 
@@ -730,7 +912,7 @@ date_default_timezone_set("Asia/Colombo");
     $(function() {
 
 
-      $(".delbutton").click(function() {
+      $(".btn_dll").click(function() {
 
         //Save the link in a variable called element
         var element = $(this);
@@ -770,7 +952,7 @@ date_default_timezone_set("Asia/Colombo");
         "paging": true,
         "lengthChange": true,
         "searching": true,
-        "ordering": true,
+        "ordering": false,
         "info": false,
         "autoWidth": true
       });
