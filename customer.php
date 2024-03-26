@@ -192,6 +192,13 @@ include("connect.php");
 
                 <div class="col-md-6">
                   <div class="form-group">
+                    <label> Area</label>
+                    <input type="text" name="area" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
                     <label>Type</label>
                     <select class="form-control select2 hidden-search" name="type" style="width: 100%;">
                       <option value="1"> Channel </option>
@@ -236,6 +243,7 @@ include("connect.php");
               $acc_name = $row['acc_name'];
               $acc_no = $row['acc_no'];
               $root = $row['root_id'];
+              $area = $row['area'];
               $contact = $row['contact'];
               $credit = $row['credit_period'];
               $cat_id = $row['category'];
@@ -305,6 +313,13 @@ include("connect.php");
                       ?>
 
                     </select>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Area</label>
+                    <input type="text" name="area" value="<?php echo $area ?>" class="form-control">
                   </div>
                 </div>
 
@@ -402,10 +417,10 @@ include("connect.php");
                   </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-12">
                   <div class="form-group">
                     <input type="hidden" name="id" value="<?php echo $id; ?>">
-                    <input type="submit" style="margin-top: 23px;" value="Save" class="btn btn-info">
+                    <input type="submit" style="margin-top: 23px;width: 100%;" value="Save" class="btn btn-info">
                   </div>
                 </div>
               </div>
