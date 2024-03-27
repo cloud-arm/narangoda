@@ -283,7 +283,7 @@ date_default_timezone_set("Asia/Colombo");
 
           $sql1 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
           $sql2 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
-          $sql3 = " SELECT *  FROM sales WHERE (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
+          $sql3 = " SELECT *, sales.transaction_id AS tid  FROM sales WHERE (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
           $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
         }
 
@@ -292,7 +292,7 @@ date_default_timezone_set("Asia/Colombo");
 
           $sql1 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
           $sql2 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
-          $sql3 = " SELECT *  FROM sales WHERE (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus' AND sales.action='1' "; //main array creation
+          $sql3 = " SELECT *, sales.transaction_id AS tid  FROM sales WHERE (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus' AND sales.action='1' "; //main array creation
           $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
         }
 
@@ -301,7 +301,7 @@ date_default_timezone_set("Asia/Colombo");
 
           $sql1 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
           $sql2 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
-          $sql3 = " SELECT *  FROM sales WHERE (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
+          $sql3 = " SELECT *, sales.transaction_id AS tid  FROM sales WHERE (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
           $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
         }
 
@@ -310,7 +310,7 @@ date_default_timezone_set("Asia/Colombo");
 
           $sql1 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
           $sql2 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.cus_id = '$cus' AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
-          $sql3 = " SELECT *  FROM sales WHERE (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
+          $sql3 = " SELECT *, sales.transaction_id AS tid  FROM sales WHERE (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
           $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.cus_id = '$cus' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
         }
 
@@ -319,7 +319,7 @@ date_default_timezone_set("Asia/Colombo");
 
           $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
           $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.cus_id = '$cus' AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
-          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
+          $sql3 = " SELECT *, sales.transaction_id AS tid  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
           $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.cus_id = '$cus' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
         }
 
@@ -328,7 +328,7 @@ date_default_timezone_set("Asia/Colombo");
 
           $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
           $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
-          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
+          $sql3 = " SELECT *, sales.transaction_id AS tid  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
           $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
         }
 
@@ -337,7 +337,7 @@ date_default_timezone_set("Asia/Colombo");
 
           $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
           $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
-          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
+          $sql3 = " SELECT *, sales.transaction_id AS tid  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
           $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
         }
 
@@ -346,7 +346,7 @@ date_default_timezone_set("Asia/Colombo");
 
           $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
           $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
-          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
+          $sql3 = " SELECT *, sales.transaction_id AS tid  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
           $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
         }
 
@@ -355,7 +355,7 @@ date_default_timezone_set("Asia/Colombo");
 
           $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
           $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
-          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
+          $sql3 = " SELECT *, sales.transaction_id AS tid  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
           $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
         }
 
@@ -364,7 +364,7 @@ date_default_timezone_set("Asia/Colombo");
 
           $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
           $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.cus_id = '$cus' AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
-          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
+          $sql3 = " SELECT *, sales.transaction_id AS tid  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
           $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.cus_id = '$cus' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
         }
 
@@ -373,7 +373,7 @@ date_default_timezone_set("Asia/Colombo");
 
           $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
           $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.cus_id = '$cus' AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
-          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
+          $sql3 = " SELECT *, sales.transaction_id AS tid  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
           $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.cus_id = '$cus' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
         }
 
@@ -382,7 +382,7 @@ date_default_timezone_set("Asia/Colombo");
 
           $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
           $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
-          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
+          $sql3 = " SELECT *, sales.transaction_id AS tid  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
           $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
         }
 
@@ -391,7 +391,7 @@ date_default_timezone_set("Asia/Colombo");
 
           $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
           $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
-          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
+          $sql3 = " SELECT *, sales.transaction_id AS tid  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
           $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
         }
 
@@ -400,7 +400,7 @@ date_default_timezone_set("Asia/Colombo");
 
           $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
           $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
-          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
+          $sql3 = " SELECT *, sales.transaction_id AS tid  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
           $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
         }
 
@@ -409,7 +409,7 @@ date_default_timezone_set("Asia/Colombo");
 
           $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
           $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
-          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
+          $sql3 = " SELECT *, sales.transaction_id AS tid  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
           $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
         }
 
@@ -508,7 +508,7 @@ date_default_timezone_set("Asia/Colombo");
               for ($i = 0; $row = $result->fetch(); $i++) { //row
                 $invo = $row['invoice_number'];
                 $cus = $row['name'];
-                $sales_id = $row['transaction_id'];
+                $sales_id = $row['tid'];
                 $type = $row['type'];
                 $amount = $row['amount'];
                 $profit = $row['profit'];
