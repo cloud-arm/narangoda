@@ -719,7 +719,7 @@
             <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
               <li class="<?php if ($f == 'sales_rp') {
                                 echo 'active';
-                              } ?>"><a href="sales_rp.php?d1=<?php echo date("Y-m-d"); ?>&d2=<?php echo date("Y-m-d"); ?>&cus=all&lorry=all&filter=all&product=all"><i class="fa fa-circle-o text-aqua "></i> Sales Report</a></li>
+                              } ?>"><a href="sales_rp.php?d1=<?php echo date("Y-m-d"); ?>&d2=<?php echo date("Y-m-d"); ?>&cus=all&lorry=all&filter=all&product=all&root=all"><i class="fa fa-circle-o text-aqua "></i> Sales Report</a></li>
 
             </ul>
           </li>
