@@ -102,6 +102,7 @@ date_default_timezone_set("Asia/Colombo");
                   <label>Vendor</label>
                   <select class="form-control select2" name="vendor" style="width: 100%;" tabindex="8">
                     <option value="0" disabled selected></option>
+                    <option value="0">None</option>
                     <?php
                     $result = $db->prepare("SELECT * FROM vendor WHERE  action=1  ");
                     $result->bindParam(':id', $res);
@@ -116,10 +117,17 @@ date_default_timezone_set("Asia/Colombo");
               <div class="col-md-3">
                 <div class="form-group">
                   <label>Paycose</label>
-                  <select class="form-control select2 hidden-search" name="paycose" style="width: 100%;" tabindex="8">
+                  <select class="form-control select2 hidden-search" name="paycose" id="paycose" onchange="select_cose()" style="width: 100%;" tabindex="8">
                     <option value="asset">Asset</option>
                     <option value="expenses">Expenses</option>
                   </select>
+                </div>
+              </div>
+
+              <div class="col-md-3 ass_sec" style="display: block;">
+                <div class="form-group">
+                  <label>Duration Month</label>
+                  <input type="number" step=".01" name="due" class="form-control" tabindex="10" autocomplete="off">
                 </div>
               </div>
 
@@ -464,7 +472,14 @@ date_default_timezone_set("Asia/Colombo");
     for ($k = 0; $r = $re->fetch(); $k++) {
       $bill = $r['amount'];
       $type = $r['type'];
+      $paycose = $r['paycose'];
+      $term_amount = $r['term_amount'];
       $blc = $r['credit_balance'];
+    }
+    $pay = '';
+    if ($paycose == 'asset') {
+      $pay = $term_amount;
+      $co = 'd-none';
     }
   }
   ?>
@@ -739,7 +754,7 @@ date_default_timezone_set("Asia/Colombo");
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>Pay Amount</label>
-                    <input type="text" name="pay_amount" step=".01" class="form-control" tabindex="12" autocomplete="off">
+                    <input type="text" name="pay_amount" value="<?php echo $pay; ?>" step=".01" class="form-control" tabindex="12" autocomplete="off">
                   </div>
                 </div>
 
@@ -852,6 +867,16 @@ date_default_timezone_set("Asia/Colombo");
     function model_cl(i) {
       $('#model_add_' + i).css('display', 'none');
       $('#model_btn_' + i).css('display', 'inline-block');
+    }
+
+    function select_cose() {
+      let val = $('#paycose').val();
+
+      if (val == 'asset') {
+        $('.ass_sec').css('display', 'block');
+      } else {
+        $('.ass_sec').css('display', 'none');
+      }
     }
 
     function select_pay() {

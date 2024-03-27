@@ -22,11 +22,14 @@ if ($unit == 1) {
     $comment = $_POST['comment'];
     $amount = $_POST['amount'];
 
+    $due = 0;
+    $term_amount = 0;
     $load_id = 0;
     $util_id = 0;
     $util_date = '';
     $util_invo = '';
     $util_amount = 0;
+    $util_blc = 0;
     $util_name = '';
     $sub_id = 0;
     $sub_name = '';
@@ -54,6 +57,7 @@ if ($unit == 1) {
         $util_date = $_POST['util_date'];
         $util_invo = $_POST['util_invo'];
         $util_amount = $amount;
+        $util_blc = $amount;
 
         $re = $db->prepare("SELECT * FROM utility_bill WHERE id=:id ");
         $re->bindParam(':id', $util_id);
@@ -117,10 +121,15 @@ if ($unit == 1) {
         }
     }
 
+    if ($paycose == 'asset') {
+        $due = $_POST['due'];
+        $term_amount = $amount / $due;
+    }
 
-    $sql = "INSERT INTO expenses_records (date,type_id,type,invoice_no,comment,amount,user,loading_id,util_id,util_name,util_date,util_invoice,util_bill_amount,util_balance,util_forward_balance,pay_type,sub_type,sub_type_name,lorry_id,lorry_no,credit_balance,paycose,vendor_id,vendor_name,action) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+    $sql = "INSERT INTO expenses_records (term,term_due,term_amount,date,type_id,type,invoice_no,comment,amount,user,loading_id,util_id,util_name,util_date,util_invoice,util_bill_amount,util_balance,util_forward_balance,pay_type,sub_type,sub_type_name,lorry_id,lorry_no,credit_balance,paycose,vendor_id,vendor_name,action) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $q = $db->prepare($sql);
-    $q->execute(array($now, $type, $type_name, $invo, $comment, $amount, $ui, $load_id, $util_id, $util_name, $util_date, $util_invo, $util_amount, $amount, $util_fw_blc, 'credit', $sub_id, $sub_name, $lorry, $lorry_no, $amount, $paycose, $vendor, $vendor_name, 1));
+    $q->execute(array($due, $due, $term_amount, $now, $type, $type_name, $invo, $comment, $amount, $ui, $load_id, $util_id, $util_name, $util_date, $util_invo, $util_amount, $util_blc, $util_fw_blc, 'credit', $sub_id, $sub_name, $lorry, $lorry_no, $amount, $paycose, $vendor, $vendor_name, 1));
 }
 
 if ($unit == 6) {
