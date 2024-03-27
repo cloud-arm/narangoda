@@ -3,35 +3,24 @@
 <?php
 include("head.php");
 include("connect.php");
+date_default_timezone_set("Asia/Colombo");
 ?>
 
 <body class="hold-transition skin-yellow sidebar-mini sidebar-collapse">
   <?php
   include_once("auth.php");
   $r = $_SESSION['SESS_LAST_NAME'];
-  $_SESSION['SESS_DEPARTMENT'] = 'sales_rp';
+  $_SESSION['SESS_FORM'] = 'sales_rp';
 
   if ($r == 'Cashier') {
 
-    header("location:./../../../index.php");
+    include_once("sidebar2.php");
   }
   if ($r == 'admin') {
 
     include_once("sidebar.php");
   }
-  if ($r == 'com') {
-
-    include_once("sidebar.php");
-  }
   ?>
-
-
-
-  <link rel="stylesheet" href="datepicker.css" type="text/css" media="all" />
-  <script src="datepicker.js" type="text/javascript"></script>
-  <script src="datepicker.ui.min.js" type="text/javascript"></script>
-
-
 
   <style>
     th {
@@ -86,17 +75,16 @@ include("connect.php");
                 </div>
               </div>
 
-
               <div class="col-md-3">
                 <div class="form-group">
                   <div class="input-group">
                     <div class="input-group-addon">
                       <label>Filter</label>
                     </div>
-                    <select class="form-control select2" name="filter" class="form-control" id="p_type" onchange="view_payment_date(this.value);">
-                      <option value="all">ALL CUSTOMER</option>
-                      <option value="group">Customer Group</option>
-                      <option value="type">Customer Type</option>
+                    <select class="form-control select2 hidden-search" name="filter" class="form-control" id="p_type" onchange="view_payment_date(this.value);">
+                      <option value="all">All Customer</option>
+                      <option value="group" disabled>Customer Group</option>
+                      <option value="type" disabled>Customer Type</option>
                       <option value="cus">One Customer</option>
                     </select>
                   </div>
@@ -134,7 +122,7 @@ include("connect.php");
                     <div class="input-group-addon">
                       <label>Products</label>
                     </div>
-                    <select class="form-control select2" name="product" autofocus>
+                    <select class="form-control select2 hidden-search" name="product" autofocus>
                       <option value="all"> All Customer </option>
                       <option value="1"> Gas </option>
                       <option value="2"> Cylinder </option>
@@ -145,7 +133,31 @@ include("connect.php");
                 </div>
               </div>
 
-              <div class="col-md-3" id="cus_view" style="display:none;">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <div class="input-group">
+                    <div class="input-group-addon">
+                      <label>Root</label>
+                    </div>
+                    <select class="form-control select2" name="root" autofocus>
+                      <option value="all"> All Root </option>
+
+                      <?php
+                      $result = $db->prepare("SELECT * FROM root ORDER by root_name ASC ");
+                      $result->bindParam(':id', $res);
+                      $result->execute();
+                      for ($i = 0; $row = $result->fetch(); $i++) {
+                      ?>
+                        <option value="<?php echo $row['root_id']; ?>"><?php echo $row['root_name']; ?> </option>
+                      <?php
+                      }
+                      ?>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4" id="cus_view" style="display:none;">
                 <div class="form-group">
                   <div class="input-group">
                     <div class="input-group-addon">
@@ -197,7 +209,7 @@ include("connect.php");
                     <div class="input-group-addon">
                       <b>Customer Type</b>
                     </div>
-                    <select class="form-control select2" name="customer_type" style="width: 100%;">
+                    <select class="form-control select2 hidden-search" name="customer_type" style="width: 100%;">
                       <option value="1">Channel</option>
                       <option value="2">Commercial</option>
                       <option value="3">Apartment</option>
@@ -206,7 +218,7 @@ include("connect.php");
                 </div>
               </div>
 
-              <div class="col-md-3" style="float: right; width: max-content;margin-right: 20px;">
+              <div class="col-md-2" style="float: right; width: max-content;">
                 <div class="form-group">
                   <button class="btn btn-info" style="padding: 6px 50px;" type="submit">
                     <i class="fa fa-search"></i> Search
@@ -225,7 +237,7 @@ include("connect.php");
       <div class="box ">
         <div class="box-header">
           <h3 class="box-title">Sales Report</h3>
-          <a style="padding: 4px 10px;margin-left: 20px;" class="btn btn-danger" href="sales_rp_print.php?filter=<?php echo $_GET['filter'] ?>&d1=<?php echo $_GET['d1'] ?>&d2=<?php echo $_GET['d2'] ?>&cus=<?php echo $_GET['cus'] ?>&lorry=<?php echo $_GET['lorry'] ?>&product=<?php echo $_GET['product'] ?>&customer_type=<?php echo $_GET['customer_type'] ?>" title="Click to Print">
+          <a style="padding: 4px 10px;margin-left: 20px;" disabled class="btn btn-danger" href="#sales_rp_print.php?filter=<?php echo $_GET['filter'] ?>&d1=<?php echo $_GET['d1'] ?>&d2=<?php echo $_GET['d2'] ?>&cus=<?php echo $_GET['cus'] ?>&lorry=<?php echo $_GET['lorry'] ?>&product=<?php echo $_GET['product'] ?>&customer_type=<?php echo $_GET['customer_type'] ?>" title="Click to Print">
             <i class="fa fa-print"></i> Print
           </a>
         </div>
@@ -237,13 +249,14 @@ include("connect.php");
         $lorry = $_GET['lorry']; // lorry id
         $filter = $_GET['filter'];
         $product = $_GET['product'];
+        $root = $_GET['root'];
 
         if ($product == '1') { //product 0 - 5
           $pro1 = '0';
-          $pro2 = '5';
+          $pro2 = '4';
         }
         if ($product == '2') { //product 4 - 9
-          $pro1 = '4';
+          $pro1 = '5';
           $pro2 = '9';
         }
         if ($product == '3') { //product 9 - 50
@@ -263,8 +276,10 @@ include("connect.php");
           $cus = $_GET['cus']; // customer id
         }
 
+        // echo 'L=> ' . $lorry . ' F=> ' . $filter . ' P=> ' . $product . ' R=> ' . $root . '<br>';
+
         // 1 - get all for date range
-        if ($lorry == 'all' & $filter == 'all' & $product == 'all') {
+        if ($lorry == 'all' & $filter == 'all' & $product == 'all' & $root == 'all') {
 
           $sql1 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
           $sql2 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
@@ -273,7 +288,7 @@ include("connect.php");
         }
 
         // 2 - one customer and date range
-        if ($lorry == 'all' & $product == 'all' & $filter == 'cus') {
+        if ($lorry == 'all' & $product == 'all' & $filter == 'cus' & $root == 'all') {
 
           $sql1 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
           $sql2 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
@@ -281,8 +296,8 @@ include("connect.php");
           $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
         }
 
-        // 2 - product 1 and and date range
-        if ($lorry == 'all' & $product != 'all' & $filter == 'all') {
+        // 3 - product 1 and and date range
+        if ($lorry == 'all' & $product != 'all' & $filter == 'all' & $root == 'all') {
 
           $sql1 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
           $sql2 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
@@ -290,13 +305,112 @@ include("connect.php");
           $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
         }
 
-        // 2 - product 1 and one customer and date range
-        if ($lorry == 'all' & $product != 'all' & $filter == 'cus') {
+        // 4 - product 1 and one customer and date range
+        if ($lorry == 'all' & $product != 'all' & $filter == 'cus' & $root == 'all') {
 
-          $sql1 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > '$pro2' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
+          $sql1 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
           $sql2 = " SELECT *  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.cus_id = '$cus' AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
           $sql3 = " SELECT *  FROM sales WHERE (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
           $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list WHERE (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.cus_id = '$cus' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
+        }
+
+        // 5 - product 1 and one customer and one lorry and date range
+        if ($lorry != 'all' & $product != 'all' & $filter == 'cus' & $root == 'all') {
+
+          $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
+          $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.cus_id = '$cus' AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
+          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
+          $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.cus_id = '$cus' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
+        }
+
+        // 6 - product 1 and one lorry and date range
+        if ($lorry != 'all' & $product != 'all' & $filter == 'all' & $root == 'all') {
+
+          $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
+          $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
+          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
+          $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
+        }
+
+        // 7 - one lorry and date range
+        if ($lorry != 'all' & $filter == 'all' & $product == 'all' & $root == 'all') {
+
+          $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
+          $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
+          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
+          $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
+        }
+
+        // 8 - one lorry and root and date range
+        if ($lorry != 'all' & $filter == 'all' & $product == 'all' & $root != 'all') {
+
+          $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
+          $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
+          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
+          $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
+        }
+
+        // 9 - product 1 and one lorry and root and date range
+        if ($lorry != 'all' & $product != 'all' & $filter == 'all' & $root != 'all') {
+
+          $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
+          $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
+          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
+          $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
+        }
+
+        // 10 - product 1 and one customer and one lorry and root and date range
+        if ($lorry != 'all' & $product != 'all' & $filter == 'cus' & $root != 'all') {
+
+          $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
+          $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.cus_id = '$cus' AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
+          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
+          $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.cus_id = '$cus' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
+        }
+
+        // 11 - product 1 and one customer and root and date range
+        if ($lorry == 'all' & $product != 'all' & $filter == 'cus' & $root != 'all') {
+
+          $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
+          $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.cus_id = '$cus' AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
+          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
+          $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.cus_id = '$cus' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
+        }
+
+        // 12 - product 1  and root and date range
+        if ($lorry == 'all' & $product != 'all' & $filter == 'all' & $root != 'all') {
+
+          $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
+          $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
+          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.action='1' "; //main array creation
+          $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND (sales_list.product_id BETWEEN '$pro1' AND '$pro2') AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
+        }
+
+        // 13 - one customer and root and date range
+        if ($lorry == 'all' & $product == 'all' & $filter == 'cus' & $root != 'all') {
+
+          $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
+          $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
+          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
+          $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
+        }
+
+        // 14 - one customer and one lorry and root and date range
+        if ($lorry != 'all' & $product == 'all' & $filter == 'cus' & $root != 'all') {
+
+          $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
+          $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
+          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
+          $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND loading.root_id = '$root' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
+        }
+
+        // 14 - one customer and one lorry and date range
+        if ($lorry != 'all' & $product == 'all' & $filter == 'cus' & $root == 'all') {
+
+          $sql1 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.product_id > 9 AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get accessory
+          $sql2 = " SELECT *  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.action= 0  ORDER BY sales_list.product_id "; //get all sales list item
+          $sql3 = " SELECT *  FROM sales JOIN loading ON sales.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales.date BETWEEN '$d1' and '$d2') AND sales.customer_id = '$cus'  AND sales.action='1' "; //main array creation
+          $sql4 = " SELECT * , sum(sales_list.qty)  FROM sales_list JOIN loading ON sales_list.loading_id = loading.transaction_id WHERE loading.lorry_id = '$lorry' AND (sales_list.date BETWEEN '$d1' and '$d2') AND sales_list.cus_id = '$cus' AND sales_list.action = 0 GROUP BY sales_list.product_id "; //get all sales list item sum qty
         }
 
         ?>
@@ -572,6 +686,8 @@ include("connect.php");
   </div>
 
   <!-- ./wrapper -->
+
+  <!-- jQuery 2.2.3 -->
   <script src="../../plugins/jQuery/jquery-2.2.3.min.js"></script>
   <!-- Bootstrap 3.3.6 -->
   <script src="../../bootstrap/js/bootstrap.min.js"></script>
@@ -580,15 +696,25 @@ include("connect.php");
   <!-- DataTables -->
   <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
   <script src="../../plugins/datatables/dataTables.bootstrap.min.js"></script>
-  <!-- SlimScroll -->
+  <!-- date-range-picker -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+  <script src="../../plugins/daterangepicker/daterangepicker.js"></script>
+  <!-- bootstrap datepicker -->
+  <script src="../../plugins/datepicker/bootstrap-datepicker.js"></script>
+  <!-- SlimScroll 1.3.0 -->
   <script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
+  <!-- iCheck 1.0.1 -->
+  <script src="../../plugins/iCheck/icheck.min.js"></script>
   <!-- FastClick -->
   <script src="../../plugins/fastclick/fastclick.js"></script>
   <!-- AdminLTE App -->
   <script src="../../dist/js/app.min.js"></script>
   <!-- AdminLTE for demo purposes -->
   <script src="../../dist/js/demo.js"></script>
-  <script src="../../plugins/datepicker/bootstrap-datepicker.js"></script>
+  <!-- Dark Theme Btn-->
+  <script src="https://dev.colorbiz.org/ashen/cdn/main/dist/js/DarkTheme.js"></script>
+
+
   <!-- page script -->
   <script>
     $(function() {
@@ -603,7 +729,9 @@ include("connect.php");
       });
 
       $(".select2").select2();
-
+      $('.select2.hidden-search').select2({
+        minimumResultsForSearch: -1
+      });
     });
 
 

@@ -698,7 +698,16 @@
             </ul>
           </li>
 
-          <li class="treeview">
+          <?php $co = '';
+          $co0 = '';
+          $dis = 'none';
+          if ($f == 'sales_rp') {
+            $co = 'active';
+            $co0 = 'menu-open';
+            $dis = 'block';
+          } ?>
+
+          <li class="treeview <?php echo $co; ?>">
             <a href="#">
               <i class="fa fa-line-chart"></i>
               <span>Report</span>
@@ -706,8 +715,11 @@
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
             </a>
-            <ul class="treeview-menu">
-              <li><a href="sales_rp.php?d1=<?php echo date("Y-m-d"); ?>&d2=<?php echo date("Y-m-d"); ?>&cus=all"><i class="fa fa-circle-o text-aqua "></i> Sales Report</a></li>
+
+            <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
+              <li class="<?php if ($f == 'sales_rp') {
+                                echo 'active';
+                              } ?>"><a href="sales_rp.php?d1=<?php echo date("Y-m-d"); ?>&d2=<?php echo date("Y-m-d"); ?>&cus=all&lorry=all&filter=all&product=all"><i class="fa fa-circle-o text-aqua "></i> Sales Report</a></li>
 
             </ul>
           </li>
