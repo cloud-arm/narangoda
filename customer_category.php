@@ -43,12 +43,13 @@ include("connect.php");
             </div>
 
             <div class="box-body">
-              <table id="example1" class="table table-bordered table-striped">
+              <table id="example1" class="table table-bordered  table-hover">
                 <thead>
 
                   <tr>
                     <th>id</th>
                     <th>Category</th>
+                    <th>Customer Count</th>
                     <th>#</th>
                     <th>#</th>
                   </tr>
@@ -60,11 +61,20 @@ include("connect.php");
                   $result = $db->prepare("SELECT * FROM customer_category ");
                   $result->bindParam(':id', $d);
                   $result->execute();
-                  for ($i = 0; $row = $result->fetch(); $i++) { ?>
+                  for ($i = 0; $row = $result->fetch(); $i++) {
+                    $id = 0;
+                    $res = $db->prepare("SELECT * FROM customer WHERE category = :id ");
+                    $res->bindParam(':id', $row['id']);
+                    $res->execute();
+                    for ($i = 0; $ro = $res->fetch(); $i++) {
+                      $id = $i + 1;
+                    }
+                  ?>
                     <tr class="record">
 
                       <td><?php echo $row['id']; ?></td>
                       <td><?php echo $row['name']; ?></td>
+                      <td><?php echo $id; ?></td>
                       <td>
                         <a href="customer_group.php?id=<?php echo $row['id']; ?>" title="Click to ADD" class="btn btn-primary btn-sm">
                           Add Customer GROUP
@@ -191,7 +201,7 @@ include("connect.php");
             type: "GET",
             url: "customer_category_dll.php",
             data: info,
-            success: function() { }
+            success: function() {}
           });
           $(this).parents(".record").animate({
               backgroundColor: "#fbc7c7"
