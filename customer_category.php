@@ -5,7 +5,7 @@ include("head.php");
 include("connect.php");
 ?>
 
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-yellow sidebar-mini">
   <?php
   include_once("auth.php");
   $r = $_SESSION['SESS_LAST_NAME'];
@@ -33,55 +33,59 @@ include("connect.php");
 
     <section class="content">
 
-      <div class="box">
-        <div class="box-header">
-          <h3 class="box-title">Customer Category List</h3>
-          <small class="btn btn-success btn-sm mx-2" style="padding: 5px 10px;" title="Add New Category" onclick="click_open(1)">Add New Category</small>
+      <div class="row">
+        <div class="col-md-8">
+
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Customer Category List</h3>
+              <small class="btn btn-success btn-sm mx-2" style="padding: 5px 10px;" title="Add New Category" onclick="click_open(1)">Add New Category</small>
+            </div>
+
+            <div class="box-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+
+                  <tr>
+                    <th>id</th>
+                    <th>Category</th>
+                    <th>#</th>
+                    <th>#</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <?php
+
+                  $result = $db->prepare("SELECT * FROM customer_category ");
+                  $result->bindParam(':id', $d);
+                  $result->execute();
+                  for ($i = 0; $row = $result->fetch(); $i++) { ?>
+                    <tr class="record">
+
+                      <td><?php echo $row['id']; ?></td>
+                      <td><?php echo $row['name']; ?></td>
+                      <td>
+                        <a href="customer_group.php?id=<?php echo $row['id']; ?>" title="Click to ADD" class="btn btn-primary btn-sm">
+                          Add Customer GROUP
+                        </a>
+                      </td>
+                      <td>
+                        <a href="#" id="<?php echo $row['id']; ?>" title="Click to Delete" class="btn btn-danger btn-sm btn_dll">
+                          <i class="fa fa-trash"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  <?php  }  ?>
+                </tbody>
+
+
+              </table>
+
+            </div>
+            <!-- /.box-body -->
+          </div>
         </div>
-
-        <div class="box-body">
-          <table id="example1" class="table table-bordered table-striped">
-            <thead>
-
-              <tr>
-                <th>id</th>
-                <th>Category</th>
-                <th>#</th>
-                <th>#</th>
-              </tr>
-            </thead>
-
-
-            <tbody>
-              <?php
-
-              $result2 = $db->prepare("SELECT * FROM customer_category ");
-              $result2->bindParam(':userid', $d2);
-              $result2->execute();
-              for ($i = 0; $row2 = $result2->fetch(); $i++) { ?>
-                <tr class="record">
-
-                  <td><?php echo $row2['id']; ?></td>
-                  <td><?php echo $row2['name']; ?></td>
-                  <td>
-                    <a href="customer_group.php?id=<?php echo $row2['id']; ?>" title="Click to ADD" class="btn btn-info">
-                      Add Customer GROUP
-                    </a>
-                  </td>
-                  <td>
-                    <a href="#" id="<?php echo $row2['id']; ?>" class="" title="Click to Delete" class="btn btn-danger delbutton">
-                      <i class="fa fa-trash"></i>
-                    </a>
-                  </td>
-                </tr>
-              <?php  }  ?>
-            </tbody>
-
-
-          </table>
-
-        </div>
-        <!-- /.box-body -->
       </div>
 
     </section>
@@ -178,21 +182,16 @@ include("connect.php");
   <!-- page script -->
   <script>
     $(function() {
-      $(".delbutton").click(function() {
-        //Save the link in a variable called element
+      $(".btn_dll").click(function() {
         var element = $(this);
-        //Find the id of the link that was clicked
         var del_id = element.attr("id");
-        //Built a url to send
         var info = 'id=' + del_id;
-        if (confirm("Sure you want to delete this Special Price? There is NO undo!")) {
+        if (confirm("Sure you want to delete this Customer Category? There is NO undo!")) {
           $.ajax({
             type: "GET",
-            url: "special_price_dll.php",
+            url: "customer_category_dll.php",
             data: info,
-            success: function() {
-
-            }
+            success: function() { }
           });
           $(this).parents(".record").animate({
               backgroundColor: "#fbc7c7"
