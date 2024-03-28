@@ -19,6 +19,7 @@ if ($id > 0) {
     $vat_no = $_POST['vat_no'];
     $g12 = $_POST['g12'];
     $g5 = $_POST['g5'];
+    $g2 = $_POST['g2'];
     $g37 = $_POST['g37'];
 }
 
@@ -47,10 +48,10 @@ if ($id == 0) {
 } else {
 
     $sql = "UPDATE customer
-        SET customer_name=?, address=?, contact=?, area=?, root=?, root_id=?, acc_name=?, acc_no=?, type=?, credit_period=?, category=?, price_12=?, price_5=?, price_37=?, vat_no=?
+        SET customer_name=?, address=?, contact=?, area=?, root=?, root_id=?, acc_name=?, acc_no=?, type=?, credit_period=?, category=?, price_12=?, price_2=?, price_5=?, price_37=?, vat_no=?
 		WHERE customer_id=?";
     $q = $db->prepare($sql);
-    $q->execute(array($name, $address, $contact, $area, $root_name, $root, $acc_name, $acc_no, $type, $credit, $group, $g12, $g5, $g37, $vat_no, $id));
+    $q->execute(array($name, $address, $contact, $area, $root_name, $root, $acc_name, $acc_no, $type, $credit, $group, $g12, $g2, $g5, $g37, $vat_no, $id));
 }
 
 header("location: customer.php");

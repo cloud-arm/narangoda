@@ -253,6 +253,7 @@ include("connect.php");
               $type = $row['type'];
               $g12 = $row['price_12'];
               $g5 = $row['price_5'];
+              $g2 = $row['price_2'];
               $g37 = $row['price_37'];
             }
           }
@@ -387,12 +388,12 @@ include("connect.php");
 
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label>12.5kg price</label>
-                    <select class="form-control select2 hidden-search" name="g12" style="width: 100%;">
-                      <option <?php if ($g12 == '1') {
+                    <label>2kg price</label>
+                    <select class="form-control select2 hidden-search" name="g2" style="width: 100%;">
+                      <option <?php if ($g2 == '1') {
                                 echo 'selected';
                               } ?> value="1"> Sell </option>
-                      <option <?php if ($g12 == '0') {
+                      <option <?php if ($g2 == '0') {
                                 echo 'selected';
                               } ?> value="0"> Dealer </option>
                     </select>
@@ -407,6 +408,20 @@ include("connect.php");
                                 echo 'selected';
                               } ?> value="1"> Sell </option>
                       <option <?php if ($g5 == '0') {
+                                echo 'selected';
+                              } ?> value="0"> Dealer </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>12.5kg price</label>
+                    <select class="form-control select2 hidden-search" name="g12" style="width: 100%;">
+                      <option <?php if ($g12 == '1') {
+                                echo 'selected';
+                              } ?> value="1"> Sell </option>
+                      <option <?php if ($g12 == '0') {
                                 echo 'selected';
                               } ?> value="0"> Dealer </option>
                     </select>
