@@ -409,6 +409,14 @@
             </a>
           </li>
 
+          <li class="<?php if ($f == 'target') {
+                        echo 'active';
+                      } ?>">
+            <a href="target.php">
+              <i class="fa fa-bar-chart"></i> <span>Target</span>
+            </a>
+          </li>
+
           <?php $co = '';
           $co0 = '';
           $dis = 'none';
@@ -701,7 +709,7 @@
           <?php $co = '';
           $co0 = '';
           $dis = 'none';
-          if ($f == 'sales_rp') {
+          if ($f == 'sales_rp' || $f == 'target_rp') {
             $co = 'active';
             $co0 = 'menu-open';
             $dis = 'block';
@@ -718,9 +726,12 @@
 
             <ul class="treeview-menu  <?php echo $co0; ?>" style="display:  <?php echo $dis; ?>;">
               <li class="<?php if ($f == 'sales_rp') {
-                                echo 'active';
-                              } ?>"><a href="sales_rp.php?d1=<?php echo date("Y-m-d"); ?>&d2=<?php echo date("Y-m-d"); ?>&cus=all&lorry=all&filter=all&product=all&root=all"><i class="fa fa-circle-o text-aqua "></i> Sales Report</a></li>
+                            echo 'active';
+                          } ?>"><a href="sales_rp.php?d1=<?php echo date("Y-m-d"); ?>&d2=<?php echo date("Y-m-d"); ?>&cus=all&lorry=all&filter=all&product=all&root=all"><i class="fa fa-circle-o text-aqua "></i> Sales Report</a></li>
 
+              <li class="<?php if ($f == 'target_rp') {
+                            echo 'active';
+                          } ?>"><a href="target_rp.php?year=<?php echo date("Y"); ?>&month=<?php echo date("m"); ?>"><i class="fa fa-circle-o text-aqua"></i> Target Report</a></li>
             </ul>
           </li>
 
