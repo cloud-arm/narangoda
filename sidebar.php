@@ -678,7 +678,7 @@
 
               <li class="treeview <?php echo $co; ?>">
                 <a href="#">
-                  <i class="fa fa-random text-aqua"></i>
+                  <i class="fa fa-random"></i>
                   <span>Trust</span>
                   <span class="pull-right-container">
                     <i class="fa fa-angle-left pull-right"></i>
